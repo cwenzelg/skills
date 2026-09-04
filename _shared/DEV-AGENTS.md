@@ -68,9 +68,17 @@ ask for the architect, approve the spec, ask for the designer if the spec needs 
 implementer, the tester, the reviewer. What you change in the prompts afterwards is the real
 content of the process and belongs in these files, not in orchestrator code.
 
-First hand-run (2026-09-04): Loop Studio, frontend bug "Use this idea button dead on the
-community post detail" (`design/CHECKLIST.md`), branch `fix/community-post-use-idea-button`
-from `dev`, no design step. Architect ran; spec on hold at gate 1 until the project's open
-feature branches merge (the bug may change shape). Implementer, Tester, and Reviewer are still
-untested by a real run. Second: the competitors screen (approved handoff `3a`, partially
-built) through all five roles.
+First hand-run, completed 2026-09-04: Loop Studio, frontend bug "Use this idea button dead on
+the community post detail" (`design/CHECKLIST.md`), branch `fix/community-post-use-idea-button`
+cut from `feature/competitor-account-dashboard` (the most up-to-date branch; Christian's call
+after the first spec, written against `dev`, turned out to predate a route rename living only
+on feature branches). Architect (two rounds: the second reused an existing composable found on
+the new base) → gate 1 → Implementer (1 commit, 1 file) → Tester (13 tests, proved they fail
+without the change, found the suite's root cause: `vitest.config.ts` boots Nuxt from the repo
+root) → Reviewer (approve; one should-fix from a mutation check, applied by the Tester) →
+local branch, no push. Learnings folded into the prompts: fail-without-change proof and
+pre-existing-failure reporting (tester), mutation checks on guards (reviewer). Learnings for
+the Dev Manager: the task brief must carry a test command that actually runs on this OS
+(`yarn test` used POSIX env syntax), and cutting the base branch is a per-task decision, not
+always `dev`. Second hand-run: the competitors screen (approved handoff `3a`, partially built)
+through all five roles.
