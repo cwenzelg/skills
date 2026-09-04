@@ -67,9 +67,9 @@ hand per "First-time setup".
   `venture-labs/core` for Venture Labs GmbH; `venture-labs/<company>` for one venture.
   The moment a shared skill mentions a company, it moves. `_shared` plus one company folder is
   what could be handed to a client unchanged.
-- **English first, German second.** Skills are written in English. Content defaults to English;
-  German only when a brief, a client profile, or the audience calls for it. Never mixed in one
-  piece. (Company policy, 2026-09-04.)
+- **Two language rules (2026-09-04).** Code, docs, and skill files: English first. Published
+  content (posts, outreach, client documents): German first, English translation second, unless
+  a client profile says otherwise. Never mixed in one piece.
 - **Standard format, always.** A skill is a folder with `SKILL.md` (YAML frontmatter `name` +
   `description`, then the body) and optional `references/`, `scripts/`, `assets/`. `name` equals
   the folder name. Holds for local-model-only skills too, so any skill is one `git mv` from the

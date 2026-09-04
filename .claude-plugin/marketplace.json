@@ -1,0 +1,41 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "vl-skills",
+  "description": "Christian Wenzel's skill library: shared tooling skills and dev subagents, personal context, and per-company scopes (Venture Labs, Loop Studio, MachineMaster). Local marketplace over C:\\ai\\skills; plugin sources are the scope folders in place, so edits are live.",
+  "owner": {
+    "name": "Christian Wenzel",
+    "email": "christian.wenzel@venturelabs.team"
+  },
+  "plugins": [
+    {
+      "name": "shared",
+      "description": "Company-neutral skills (skill authoring, docx/pptx/pdf/xlsx, doc-coauthoring, webapp-testing, frontend-design, mcp-builder, skill-creator) and the dev subagents architect/implementer/tester/reviewer. Enable everywhere.",
+      "source": "./_shared",
+      "category": "productivity"
+    },
+    {
+      "name": "personal",
+      "description": "Christian's own voice and context (personal-branding). Enable in Christian's own sessions only.",
+      "source": "./personal",
+      "category": "productivity"
+    },
+    {
+      "name": "vl-core",
+      "description": "Venture Labs GmbH: the AI Pulse offer, target customer, outreach rules, brand (pulse-offer-context).",
+      "source": "./venture-labs/core",
+      "category": "productivity"
+    },
+    {
+      "name": "vl-loopstudio",
+      "description": "Loop Studio: content style and platform rules. Enable in the Loop Studio workspace.",
+      "source": "./venture-labs/loopstudio",
+      "category": "productivity"
+    },
+    {
+      "name": "vl-machinemaster",
+      "description": "MachineMaster project context. Empty until the dev branch needs it.",
+      "source": "./venture-labs/machinemaster",
+      "category": "productivity"
+    }
+  ]
+}

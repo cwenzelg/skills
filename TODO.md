@@ -13,7 +13,7 @@ right scope, own it (do not add to `_shared/upstream.json`).
       (see `pulse-offer-context`), and a personal variant in `personal/` if the personal account's
       look diverges.
 - [ ] `internal-comms` → `venture-labs/core/skills/corporate-comms`: how Venture Labs writes
-      status updates, client updates, and announcements. English first, German second.
+      status updates, client updates, and announcements. German first, English translation second.
 - [ ] `corporate-comms` (from Christian's original design doc, `_shared/corporate-comms`): decide
       whether this is the same skill as the one above or a company-neutral template. Probably one
       skill in `venture-labs/core` plus a stripped template in `_shared` later.
@@ -23,15 +23,15 @@ right scope, own it (do not add to `_shared/upstream.json`).
 - [ ] Loop Studio voice extraction: ten best-performing client posts → rules → Christian's
       corrections → `venture-labs/loopstudio/skills/content-style` Voice section and
       `references/hooks-that-worked.md`. Procedure in `evals/README.md`.
-- [ ] Series tag language: "KI-Implementierungs-Serie · Tag X/90" vs "AI Implementation Series ·
-      Day X/90" under the English-first policy. Christian decides before Episode 1 ships.
-      Tracked in `personal/skills/personal-branding`.
+- [x] Series tag language, resolved 2026-09-04: German tag on the German cut, English equivalent on
+      the translated cut (recorded in `personal/skills/personal-branding`).
 - [ ] Eval cases for `content-style`: five to eight from real briefs (two starters exist).
 - [ ] Eval cases for `personal-branding`.
 
 ## Dev branch (phase 2 of the plan)
 
-- [ ] `_shared/agents/{architect,implementer,tester,reviewer}.md`.
+- [x] `_shared/agents/{architect,implementer,tester,reviewer}.md` — written 2026-09-04; a Designer
+      agent (`designer.md`) is planned next, see the plan page.
 - [ ] First company scope with real project context (`venture-labs/machinemaster` is empty).
 
 ## Loader (phase 4)
