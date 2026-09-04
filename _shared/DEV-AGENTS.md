@@ -1,4 +1,7 @@
-# Dev subagents
+# Dev subagents (`_shared/agents/*.md`)
+
+This file lives outside `agents/` on purpose: Claude Code treats every `.md` in a plugin's
+`agents/` folder as an agent definition, README included.
 
 Four Claude Code subagent definitions that together form the development process the Dev
 Manager will orchestrate (phase 2 and 3 of the "Skills and Dev Branch Plan", see the plan link

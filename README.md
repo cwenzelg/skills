@@ -18,7 +18,7 @@ skills/
     .claude-plugin/plugin.json
     skills/<name>/SKILL.md     skill authoring, docx, pptx, pdf, xlsx, doc-coauthoring,
                                webapp-testing, frontend-design, mcp-builder, skill-creator
-    agents/<name>.md           dev subagents (architect, implementer, tester, reviewer) — phase 2
+    agents/<name>.md           dev subagents: architect, implementer, tester, reviewer (see _shared/DEV-AGENTS.md)
   personal/                    plugin "personal": Christian only — his voice, his accounts,
     skills/personal-branding   context for his management agents
   venture-labs/                the company layer (a grouping, not a plugin itself)
