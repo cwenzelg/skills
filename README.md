@@ -55,9 +55,10 @@ regenerate their manifest (loading skills into an agent needs no tools). The man
 descends into a nested repo. The local-tier loader (agent-cluster `agents/skill-loader/`, phase 4)
 reads all three manifests under `SKILLS_ROOT`.
 
-Remotes are not set up yet. When they are (GitHub, same account as agent-cluster), the nested
-checkouts can become git submodules of this repo so one `git clone --recurse-submodules` restores
-the whole tree; until then, clone them by hand per "First-time setup".
+Remotes (GitHub, 2026-09-04): `cwenzelg/skills` (this repo), `cwenzelg/personal-skills`,
+`venture-labs/vl-skills`. The nested checkouts can become git submodules of this repo so one
+`git clone --recurse-submodules` restores the whole tree (`TODO.md`); until then, clone them by
+hand per "First-time setup".
 
 ## Rules
 
