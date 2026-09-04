@@ -354,7 +354,28 @@
           }
         }
       ],
-      "agents": []
+      "agents": [
+        {
+          "name": "architect",
+          "description": "Designs a change before anyone codes it. Use at the start of any development task to turn a goal into a written spec with acceptance criteria and a file-level plan, grounded in the actual repository and its knowledge base. Never edits code.",
+          "path": "_shared/agents/architect.md"
+        },
+        {
+          "name": "implementer",
+          "description": "Implements an approved spec in the repository, on the task's branch, in small commits. Use after a spec exists and has been approved; give it the spec path. Does not design, does not widen scope, does not touch tests beyond keeping them compiling.",
+          "path": "_shared/agents/implementer.md"
+        },
+        {
+          "name": "reviewer",
+          "description": "Reviews a finished change against its spec before a human sees it. Use last, after tests pass; give it the spec path and the branch. Read-only. Produces ranked findings, each with a concrete failure scenario, and a verdict. Never edits anything.",
+          "path": "_shared/agents/reviewer.md"
+        },
+        {
+          "name": "tester",
+          "description": "Proves an implementation meets its spec. Use after the implementer finishes; give it the spec path and the test command. Writes or extends tests for every acceptance criterion, runs the suite, and reports failures with output. Edits test files only, never production code.",
+          "path": "_shared/agents/tester.md"
+        }
+      ]
     }
   }
 }

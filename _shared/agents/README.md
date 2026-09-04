@@ -1,12 +1,38 @@
-# Dev subagents (phase 2 of the plan)
+# Dev subagents
 
-This folder will hold the four development subagents as Claude Code agent files:
+Four Claude Code subagent definitions that together form the development process the Dev
+Manager will orchestrate (phase 2 and 3 of the "Skills and Dev Branch Plan", see the plan link
+in the root README). They are company-neutral; company context comes from the company's skill
+scope and the repo's own `CLAUDE.md`.
 
-- `architect.md` - reads repo + knowledge base, writes `docs/specs/<task>.md`; never edits code
-- `implementer.md` - implements the spec on an `agent/<task-id>` branch
-- `tester.md` - writes/extends tests for the acceptance criteria, runs the suite; test files only
-- `reviewer.md` - reads the diff against the spec, ranked findings with failure scenarios
+| Agent | Job | Tools | Writes |
+|---|---|---|---|
+| `architect` | goal -> spec with testable acceptance criteria and a file-level plan | Read, Glob, Grep, Write | `docs/specs/<task-id>.md` only |
+| `implementer` | approved spec -> code on `agent/<task-id>`, small commits | Read, Edit, Write, Glob, Grep, Bash | production code |
+| `tester` | one test per acceptance criterion, runs the suite, reports | Read, Edit, Write, Glob, Grep, Bash | test files only |
+| `reviewer` | diff vs spec -> ranked findings with scenarios, verdict | Read, Glob, Grep, Bash | nothing |
 
-Format: YAML frontmatter (`name`, `description`, `tools`, `model`) followed by the prompt. They
-are loaded through the `vl-shared` plugin like any skill, by the Dev Manager and by interactive
-Claude Code sessions alike. Not written yet; see the plan page linked from the root README.
+Flow: architect -> **Christian approves the spec** (every task, decided 2026-09-04) -> implementer
+-> tester (failures go back to the implementer, max 2 loops) -> reviewer (blocking findings go
+back once) -> local branch + Slack report -> **Christian merges**. Delivery is a local branch and
+a Slack DM, no push, no PR, so the agent process needs no GitHub credentials.
+
+Format: YAML frontmatter (`name`, `description`, `tools`) and the prompt. `model` is omitted so
+each inherits the session's model (`claude-quality` through LiteLLM); the orchestrator can
+override per agent later (the reviewer is the candidate for `claude-quality-opus`).
+
+## Limits these files cannot enforce
+
+Frontmatter restricts tools, not paths. "Architect writes only the spec file" and "Tester edits
+only test files" are prompt rules here; the Dev Manager enforces them mechanically with a
+pre-tool-use hook on file paths and a denied-paths list per company (`companies.json`). Until
+the Dev Manager exists, an interactive session relies on the prompt rules plus the human
+watching.
+
+## Trying them without an orchestrator
+
+Open Claude Code in a company repo with the `_shared` plugin directory loaded (Claude Code's
+local plugin option; the Dev Manager passes the same path through the SDK's `plugins`). Then
+run one small real task by hand: ask for the architect, approve the spec, ask for the
+implementer, the tester, the reviewer. What you change in the prompts afterwards is the real
+content of the process and belongs in these files, not in orchestrator code.
