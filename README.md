@@ -117,9 +117,24 @@ plugins: SKILL_SCOPES.map((s) => ({ type: 'local' as const, path: join(SKILLS_RO
 skills: 'all',                                                       // or a string[] to narrow
 ```
 
-Interactive Claude Code in any repo can load a scope the same way through its local plugin
-directory option, which is how the dev subagents in `_shared/agents/` get tested before any
-orchestrator exists.
+### Interactive Claude Code (terminal, VS Code)
+
+`.claude-plugin/marketplace.json` at the root declares this library as a local marketplace named
+`vl-skills`, one plugin per scope. Register once and enable the scopes you want user-wide:
+
+```
+claude plugin marketplace add C:aiskills
+claude plugin install shared@vl-skills
+claude plugin install personal@vl-skills
+claude plugin install vl-core@vl-skills
+```
+
+Company scopes go per project instead: `claude plugin install vl-loopstudio@vl-skills --scope
+project` inside that repo (or `enabledPlugins` in its `.claude/settings.json`). A directory
+marketplace is loaded **from these folders directly**, so edits here are live in the next
+session; the copy under `~/.claude/plugins/cache/` is not what runs. Do not also link these
+folders into `~/.claude/skills/`, that would load every skill twice. `claude plugin details
+shared@vl-skills` shows the component inventory and token cost of a scope.
 
 ### Local-tier workers (loader)
 
