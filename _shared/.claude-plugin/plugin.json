@@ -1,0 +1,8 @@
+{
+  "name": "shared",
+  "version": "0.1.0",
+  "description": "Skills usable by every agent, personal or company: skill authoring, document output, testing, design, MCP building, and the dev subagents. Nothing in here names a company, client, or person.",
+  "author": {
+    "name": "Christian Wenzel"
+  }
+}

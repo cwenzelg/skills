@@ -1,0 +1,10 @@
+# Nested repositories: cloned into this folder by hand, tracked by their own git.
+# See README "Repositories". Never add them to this repo.
+/personal/
+/venture-labs/
+
+node_modules/
+.tmp/
+*.log
+.DS_Store
+Thumbs.db

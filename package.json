@@ -1,0 +1,15 @@
+{
+  "name": "skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Skill library for Christian Wenzel's agents: personal, shared, and per-company (Venture Labs and its ventures)",
+  "type": "module",
+  "scripts": {
+    "manifest": "node tools/build-manifest.mjs",
+    "check": "node tools/build-manifest.mjs --check",
+    "fork": "node tools/fork-upstream.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

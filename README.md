@@ -1,0 +1,160 @@
+# skills
+
+Skill library for Christian Wenzel's agents: the agent cluster (venturelabs.team), his
+management agents, his personal social media, and the companies he founded or co-founded.
+One repo, one plugin folder per scope, every agent pulls the scopes it needs.
+
+Concept and build order: https://claude.ai/code/artifact/c39e8d4f-bc5a-4e29-89ec-05312d0c313e
+(the "Skills and Dev Branch Plan", 2026-09-04). This README is the operational half of that page.
+Open work is in `TODO.md`.
+
+## Layout
+
+```
+skills/
+  manifest.json                generated index of every skill and agent — never hand-edit
+  TODO.md                      open work, including upstream skills to adapt rather than fork
+  _shared/                     plugin "shared": usable by every agent, names no company or person
+    .claude-plugin/plugin.json
+    skills/<name>/SKILL.md     skill authoring, docx, pptx, pdf, xlsx, doc-coauthoring,
+                               webapp-testing, frontend-design, mcp-builder, skill-creator
+    agents/<name>.md           dev subagents (architect, implementer, tester, reviewer) — phase 2
+  personal/                    plugin "personal": Christian only — his voice, his accounts,
+    skills/personal-branding   context for his management agents
+  venture-labs/                the company layer (a grouping, not a plugin itself)
+    core/                      plugin "vl-core": Venture Labs GmbH — offer, ICP, outreach, brand
+    loopstudio/                plugin "vl-loopstudio": content style, calendar, client intake
+    machinemaster/             plugin "vl-machinemaster": empty until the dev branch needs it
+  evals/<skill>/cases.yaml     test briefs + traits for _shared skills; nested repos have their own evals/
+  tools/build-manifest.mjs     walks every scope → manifest.json; --check for CI/pre-commit
+  tools/fork-upstream.mjs      copies a skill out of an upstream repo and writes UPSTREAM.md
+  .githooks/pre-commit         regenerates the manifest on every commit
+```
+
+Three layers, top to bottom: **shared** (tools and methods anyone may use), **personal**
+(Christian himself), **companies** (Venture Labs and its ventures). A scope is any folder with
+`.claude-plugin/plugin.json`; it is a valid Claude Code plugin, so a Claude-tier agent loads it
+with one SDK option. `venture-labs/` itself has no plugin.json: it groups the company scopes.
+
+## Repositories
+
+Three git repositories, nested on disk so agents see one tree, separated so they can be shared
+differently:
+
+| Repo | Path | Holds | Sharing |
+|---|---|---|---|
+| `skills` (this one) | `C:\ai\skills` | `_shared/`, `tools/`, `evals/` for shared skills | could be handed to a client or published; mostly downloaded upstream skills plus house rules |
+| `personal` | `C:\ai\skills\personal` | Christian's own skills | never shared |
+| `venture-labs` | `C:\ai\skills\venture-labs` | `core/`, `loopstudio/`, `machinemaster/`, their evals | company-internal |
+
+The base repo ignores `personal/` and `venture-labs/` (see `.gitignore`); each nested repo has
+its own history, hook, and `manifest.json`. `tools/` lives only here; the nested repos call it
+as `../tools/build-manifest.mjs --root .`, so they must be checked out inside this folder to
+regenerate their manifest (loading skills into an agent needs no tools). The manifest tool never
+descends into a nested repo. The local-tier loader (agent-cluster `agents/skill-loader/`, phase 4)
+reads all three manifests under `SKILLS_ROOT`.
+
+Remotes are not set up yet. When they are (GitHub, same account as agent-cluster), the nested
+checkouts can become git submodules of this repo so one `git clone --recurse-submodules` restores
+the whole tree; until then, clone them by hand per "First-time setup".
+
+## Rules
+
+- **Where a skill lives.** `_shared` if it names no company, client, product, or person.
+  `personal` if it is about Christian: his voice, his accounts, his management agents.
+  `venture-labs/core` for Venture Labs GmbH; `venture-labs/<company>` for one venture.
+  The moment a shared skill mentions a company, it moves. `_shared` plus one company folder is
+  what could be handed to a client unchanged.
+- **English first, German second.** Skills are written in English. Content defaults to English;
+  German only when a brief, a client profile, or the audience calls for it. Never mixed in one
+  piece. (Company policy, 2026-09-04.)
+- **Standard format, always.** A skill is a folder with `SKILL.md` (YAML frontmatter `name` +
+  `description`, then the body) and optional `references/`, `scripts/`, `assets/`. `name` equals
+  the folder name. Holds for local-model-only skills too, so any skill is one `git mv` from the
+  other tier.
+- **The description is the trigger.** Only part always in context. Say what the skill does *and*
+  when to use it, slightly pushy: models under-trigger. House rules in
+  `_shared/skills/skill-authoring/SKILL.md`.
+- **Progressive disclosure.** Frontmatter always (~100 words), body on trigger (under 500 lines),
+  references only when the body says so. Twice as important for the local models.
+- **Forked upstream skills carry `UPSTREAM.md`** (repo, path, commit), written by
+  `tools/fork-upstream.mjs`. Note every local edit there. Upstream skills built for someone
+  else's brand or comms (brand-guidelines, internal-comms) are **not** forked as-is; they are
+  rewritten into the right scope. See `TODO.md`.
+- **`manifest.json` is generated.** `npm run manifest`, or let the pre-commit hook do it.
+  `npm run check` proves the committed manifest matches the tree.
+- **Version by git tag**, e.g. `v2026.09`. Agents pin to a tag, never to `main`.
+- **No secrets, no prospect data, ever.** Skill files are readable by every tool of every agent
+  that loads the scope. The SDK's skill filter hides listings, not files.
+
+## Who loads what
+
+| Agent | Scopes | Why |
+|---|---|---|
+| Manager (and planning sessions like this one) | `_shared`, `personal`, `venture-labs/core` | company context plus skill authoring; it scaffolds agents and skills |
+| Content Studio | `_shared`, `personal`, `venture-labs/core`; `venture-labs/loopstudio` when Loop Studio content is in play | Christian's voice and the offer facts; Loop Studio rules only for Loop Studio work |
+| Dev Manager (phase 3) | `_shared` + the scope of the task's company | dev subagents and project context, nothing else |
+| Prospector | none yet | `pulse-offer-context` is a candidate once it is wired for plugins |
+| Moltbook scout | none | local-only, sparse participation; a skill would go through the loader |
+
+Scope per agent, not everything for everyone: each skill description sits in context
+permanently, so irrelevant skills are mis-trigger opportunities.
+
+## Consuming skills
+
+### Claude-tier agents (native)
+
+Every agent in agent-cluster runs the Claude Agent SDK with `settingSources: []`. Plugins load
+independently of that, so a scope list is two lines in the agent's `baseQueryOptions`:
+
+```ts
+// agents/<name>/src/env.ts — SKILLS_ROOT comes from .env, e.g. C:\ai\skills
+const SKILL_SCOPES = ['_shared', 'personal', 'venture-labs/core'];   // this agent's scopes
+...
+plugins: SKILL_SCOPES.map((s) => ({ type: 'local' as const, path: join(SKILLS_ROOT, s) })),
+skills: 'all',                                                       // or a string[] to narrow
+```
+
+Interactive Claude Code in any repo can load a scope the same way through its local plugin
+directory option, which is how the dev subagents in `_shared/agents/` get tested before any
+orchestrator exists.
+
+### Local-tier workers (loader)
+
+n8n worker flows and Content Studio's ideation call ask the loader service for a system prompt
+instead of assembling one. The loader is phase 4 and lives in agent-cluster, not here; its
+contract is in the plan page. Until it exists, a worker flow can inline a SKILL.md body by hand.
+
+## Adding a skill
+
+1. `mkdir <scope>/skills/<name>` and write `SKILL.md` following `skill-authoring`.
+2. Slow-changing detail in `references/`, deterministic steps in `scripts/`, templates in
+   `assets/`. Body under 500 lines.
+3. Add `evals/<name>/cases.yaml` if output quality matters (it usually does).
+4. `npm run manifest` (or just commit; the hook runs it). `npm run check` must pass.
+
+## Forking an upstream skill
+
+```
+node tools/fork-upstream.mjs --skill mcp-builder                       # anthropics/skills → _shared
+node tools/fork-upstream.mjs --skill foo --scope venture-labs/core
+node tools/fork-upstream.mjs --skill foo --repo org/repo --path path/in/repo/foo
+```
+
+Shallow sparse clone, copy, `UPSTREAM.md`, done. `--force` refreshes from upstream and
+overwrites local edits, so diff first.
+
+## First-time setup
+
+```
+git clone <skills remote> C:\ai\skills
+cd C:\ai\skills
+git clone <personal remote> personal              # nested repos, ignored by this one
+git clone <venture-labs remote> venture-labs
+for /d %r in (. personal venture-labs) do git -C %r config core.hooksPath .githooks
+npm run check                                     # this repo
+npm --prefix personal run check                   # each nested repo
+npm --prefix venture-labs run check
+```
+
+No `npm install` needed: the tools are dependency-free Node scripts.
