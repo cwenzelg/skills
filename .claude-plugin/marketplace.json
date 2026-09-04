@@ -11,31 +11,36 @@
       "name": "shared",
       "description": "Company-neutral skills (skill authoring, docx/pptx/pdf/xlsx, doc-coauthoring, webapp-testing, frontend-design, mcp-builder, skill-creator) and the dev subagents architect/implementer/tester/reviewer. Enable everywhere.",
       "source": "./_shared",
-      "category": "productivity"
+      "category": "productivity",
+      "version": "0.1.0"
     },
     {
       "name": "personal",
       "description": "Christian's own voice and context (personal-branding). Enable in Christian's own sessions only.",
       "source": "./personal",
-      "category": "productivity"
+      "category": "productivity",
+      "version": "0.1.1"
     },
     {
       "name": "vl-core",
       "description": "Venture Labs GmbH: the AI Pulse offer, target customer, outreach rules, brand (pulse-offer-context).",
       "source": "./venture-labs/core",
-      "category": "productivity"
+      "category": "productivity",
+      "version": "0.1.0"
     },
     {
       "name": "vl-loopstudio",
       "description": "Loop Studio: content style and platform rules. Enable in the Loop Studio workspace.",
       "source": "./venture-labs/loopstudio",
-      "category": "productivity"
+      "category": "productivity",
+      "version": "0.1.0"
     },
     {
       "name": "vl-machinemaster",
       "description": "MachineMaster project context. Empty until the dev branch needs it.",
       "source": "./venture-labs/machinemaster",
-      "category": "productivity"
+      "category": "productivity",
+      "version": "0.1.0"
     }
   ]
 }
