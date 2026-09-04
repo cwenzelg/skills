@@ -5,8 +5,9 @@ Open work on the skill library, in rough priority order. Dated when added. Remov
 ## Adapt, don't fork as-is (2026-09-04)
 
 These upstream skills from anthropics/skills are templates written for Anthropic's own brand and
-comms. Forking them unchanged into an active scope would make agents apply the wrong brand, so
-they are listed here instead of copied. For each: fork into a scratch branch, rewrite, place.
+comms. Vendoring them unchanged into an active scope would make agents apply the wrong brand, so
+they are listed here instead of copied. For each: read upstream, rewrite under a new name in the
+right scope, own it (do not add to `_shared/upstream.json`).
 
 - [ ] `brand-guidelines` → `venture-labs/core/skills/brand` with the real palette and Poppins
       (see `pulse-offer-context`), and a personal variant in `personal/` if the personal account's
@@ -39,12 +40,11 @@ they are listed here instead of copied. For each: fork into a scratch branch, re
 
 ## Repositories (2026-09-04)
 
-- [ ] Create the three remotes on GitHub (same account as agent-cluster): `skills`, a private
-      `skills-personal`, a private `skills-venture-labs`. Then `git remote add origin` in each
-      nested checkout and push.
-- [ ] Once remotes exist: register `personal/` and `venture-labs/` as submodules of the base repo
-      so `git clone --recurse-submodules` restores the whole tree. Remove them from `.gitignore`
-      at that point.
+- [x] Remotes created and pushed 2026-09-04: `cwenzelg/skills`, `cwenzelg/personal-skills`,
+      `venture-labs/vl-skills`.
+- [ ] Register `personal/` and `venture-labs/` as submodules of the base repo so
+      `git clone --recurse-submodules` restores the whole tree. Remove them from `.gitignore` at
+      that point.
 - [ ] First tag `v2026.09` on each repo once the Manager loads them successfully (phase 1 test).
 
 ## Later

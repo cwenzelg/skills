@@ -234,7 +234,7 @@
           "scope": "_shared",
           "description": "House rules for writing, reviewing, or restructuring a skill in the C:\\ai\\skills repo (SKILL.md folders, scopes, references, evals, manifest). All skills are written in English. Use this whenever a task creates or edits a SKILL.md, adds a skill to a scope, forks an upstream skill, or asks whether something should become a skill at all, even if the word \"skill\" is not used.",
           "path": "_shared/skills/skill-authoring/SKILL.md",
-          "bodyLines": 78,
+          "bodyLines": 79,
           "references": [],
           "scripts": [],
           "assets": [],

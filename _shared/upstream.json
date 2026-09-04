@@ -1,0 +1,68 @@
+{
+  "$comment": "Vendored upstream skills. Managed by tools/upstream.mjs - see README \"Upstream skills\".",
+  "skills": {
+    "doc-coauthoring": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/doc-coauthoring",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "docx": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/docx",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "frontend-design": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/frontend-design",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "mcp-builder": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/mcp-builder",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "pdf": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/pdf",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "pptx": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/pptx",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "skill-creator": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/skill-creator",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "webapp-testing": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/webapp-testing",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    },
+    "xlsx": {
+      "scope": "_shared",
+      "repo": "anthropics/skills",
+      "path": "skills/xlsx",
+      "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
+      "added": "2026-09-04"
+    }
+  }
+}

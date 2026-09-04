@@ -7,7 +7,9 @@
   "scripts": {
     "manifest": "node tools/build-manifest.mjs",
     "check": "node tools/build-manifest.mjs --check",
-    "fork": "node tools/fork-upstream.mjs"
+    "upstream:add": "node tools/upstream.mjs add",
+    "upstream:sync": "node tools/upstream.mjs sync",
+    "upstream:update": "node tools/upstream.mjs update"
   },
   "engines": {
     "node": ">=20"

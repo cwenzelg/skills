@@ -1,13 +1,9 @@
 # Upstream
 
-This skill was copied from an upstream repository by tools/fork-upstream.mjs.
-Diff against upstream before pulling changes; note every local edit below.
+Vendored copy managed by tools/upstream.mjs (lockfile: _shared/upstream.json). Do not edit this
+skill in place - to adapt it, copy it under a new name in the right scope. Refresh with
+`npm run upstream:update frontend-design`; review the diff before committing.
 
 repo: https://github.com/anthropics/skills.git
 path: skills/frontend-design
 commit: 41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f
-forked: 2026-09-04
-
-## Local edits
-
-- none yet

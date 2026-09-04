@@ -26,8 +26,9 @@ skills/
     loopstudio/                plugin "vl-loopstudio": content style, calendar, client intake
     machinemaster/             plugin "vl-machinemaster": empty until the dev branch needs it
   evals/<skill>/cases.yaml     test briefs + traits for _shared skills; nested repos have their own evals/
+  _shared/upstream.json        lockfile for vendored upstream skills (repo, path, commit)
   tools/build-manifest.mjs     walks every scope → manifest.json; --check for CI/pre-commit
-  tools/fork-upstream.mjs      copies a skill out of an upstream repo and writes UPSTREAM.md
+  tools/upstream.mjs           add / sync / update vendored upstream skills from the lockfile
   .githooks/pre-commit         regenerates the manifest on every commit
 ```
 
@@ -77,10 +78,10 @@ the whole tree; until then, clone them by hand per "First-time setup".
   `_shared/skills/skill-authoring/SKILL.md`.
 - **Progressive disclosure.** Frontmatter always (~100 words), body on trigger (under 500 lines),
   references only when the body says so. Twice as important for the local models.
-- **Forked upstream skills carry `UPSTREAM.md`** (repo, path, commit), written by
-  `tools/fork-upstream.mjs`. Note every local edit there. Upstream skills built for someone
-  else's brand or comms (brand-guidelines, internal-comms) are **not** forked as-is; they are
-  rewritten into the right scope. See `TODO.md`.
+- **Upstream skills are vendored and pinned** in `_shared/upstream.json`, never edited in place.
+  See "Upstream skills" below. Upstream skills built for someone else's brand or comms
+  (brand-guidelines, internal-comms) are **not** vendored as-is; they are rewritten into the
+  right scope. See `TODO.md`.
 - **`manifest.json` is generated.** `npm run manifest`, or let the pre-commit hook do it.
   `npm run check` proves the committed manifest matches the tree.
 - **Version by git tag**, e.g. `v2026.09`. Agents pin to a tag, never to `main`.
@@ -133,16 +134,26 @@ contract is in the plan page. Until it exists, a worker flow can inline a SKILL.
 3. Add `evals/<name>/cases.yaml` if output quality matters (it usually does).
 4. `npm run manifest` (or just commit; the hook runs it). `npm run check` must pass.
 
-## Forking an upstream skill
+## Upstream skills
+
+Skills downloaded from other repositories (today: anthropics/skills) are **vendored**: the copy is
+committed, and the lockfile `_shared/upstream.json` records where each came from and the exact
+commit. Committed rather than fetched on clone because a skill is a prompt: an upstream change
+changes agent behavior, and that should arrive as a reviewable `git diff`, not silently. A fresh
+clone works offline and every agent sees the same tree.
 
 ```
-node tools/fork-upstream.mjs --skill mcp-builder                       # anthropics/skills → _shared
-node tools/fork-upstream.mjs --skill foo --scope venture-labs/core
-node tools/fork-upstream.mjs --skill foo --repo org/repo --path path/in/repo/foo
+npm run upstream:add -- --skill docx                    # vendor a new one at upstream HEAD (default repo anthropics/skills, scope _shared)
+npm run upstream:add -- --skill foo --repo org/repo --path dir/in/repo/foo --scope venture-labs/core
+npm run upstream:sync                                   # restore every vendored skill exactly at its pinned commit
+npm run upstream:update                                 # bump every pin to upstream HEAD and re-copy; then git diff, review, commit
+npm run upstream:update docx                            # same, one skill
 ```
 
-Shallow sparse clone, copy, `UPSTREAM.md`, done. `--force` refreshes from upstream and
-overwrites local edits, so diff first.
+Rules: a vendored skill is never edited in place (the next update would overwrite it). To adapt
+one, copy it under a new name in the right scope and make it yours; `TODO.md` lists the ones
+waiting for that. Each vendored folder carries a generated `UPSTREAM.md` with repo, path, and
+commit, and its upstream `LICENSE.txt` stays with it.
 
 ## First-time setup
 

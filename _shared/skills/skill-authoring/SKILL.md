@@ -65,11 +65,12 @@ When a skill will also run on the local tier (`local-drafter`, an 8B to 30B mode
 must be mechanically testable in v1 (regex, max length, required substring). Soft traits like
 tone wait for an LLM judge.
 
-## Forking upstream
+## Upstream skills
 
-Use `node tools/fork-upstream.mjs --skill <name>`. It writes `UPSTREAM.md` with repo, path, and
-commit. Record every local edit under "Local edits" in that file, so the fork can be diffed and
-refreshed later.
+Use `npm run upstream:add -- --skill <name>` to vendor a skill from another repo; it is pinned in
+`_shared/upstream.json` and carries a generated `UPSTREAM.md`. Never edit a vendored skill in
+place: `npm run upstream:update` overwrites it. To adapt one, copy it under a new name in the
+right scope and own it from then on.
 
 ## Done checklist
 
