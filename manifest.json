@@ -285,6 +285,17 @@
           }
         },
         {
+          "name": "video-post",
+          "scope": "_shared",
+          "description": "Post-production for recorded talking-head video (interviews, series episodes, personal-branding clips) - finding new footage in the channel's shoot folder, mapping takes and restarts from audio and transcript, choosing cut points, building the vertical 9:16 cut with an on-screen tag, and QA. Use whenever footage was recorded, a clip needs cutting, trimming, reviewing or checking, a take needs picking, or a test clip should be verified before a shoot, even if the user only says \"I recorded something\", \"check the video\" or \"new footage\".",
+          "path": "_shared/skills/video-post/SKILL.md",
+          "bodyLines": 61,
+          "references": [],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "webapp-testing",
           "scope": "_shared",
           "description": "Toolkit for interacting with and testing local web applications using Playwright. Supports verifying frontend functionality, debugging UI behavior, capturing browser screenshots, and viewing browser logs.",

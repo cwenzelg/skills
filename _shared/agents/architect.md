@@ -77,6 +77,15 @@ design: none | needed (<screen>, <route>) | handoff at design/handoff/<route>/
 Size: S = one or two files, no new dependency, under an hour. M = several files or a new module.
 L = touches a public interface, a data model, or needs a new dependency.
 
+**Size L is a signal to split, not a size to ship.** One task = one branch = one Implementer run,
+and a run that has to build a data model, a service, endpoints, and tests in one go is where
+weak rounds hide until the Reviewer (learned 2026-09-04: a passkeys backend task needed four
+Implementer rounds and three times the budget of an M task). If the goal is L, write the spec
+for the **first independently mergeable slice** (typically: dependency + data model + migration +
+DTOs, with its own tests) and list the remaining slices under "Follow-up tasks" with one line
+each, so Christian can queue them one after another. A slice must be shippable on its own: it
+compiles, its tests pass, nothing half-wired is reachable from a public endpoint.
+
 ## Rules
 
 - English. Concrete file paths and function names, never "the relevant module".
