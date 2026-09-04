@@ -70,5 +70,7 @@ content of the process and belongs in these files, not in orchestrator code.
 
 First hand-run (2026-09-04): Loop Studio, frontend bug "Use this idea button dead on the
 community post detail" (`design/CHECKLIST.md`), branch `fix/community-post-use-idea-button`
-from `dev`, no design step. Second: the competitors screen (approved handoff `3a`, partially
+from `dev`, no design step. Architect ran; spec on hold at gate 1 until the project's open
+feature branches merge (the bug may change shape). Implementer, Tester, and Reviewer are still
+untested by a real run. Second: the competitors screen (approved handoff `3a`, partially
 built) through all five roles.
