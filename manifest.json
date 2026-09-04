@@ -230,6 +230,21 @@
           }
         },
         {
+          "name": "screen-design",
+          "scope": "_shared",
+          "description": "Company-neutral screen-design process for any project that keeps a design/ folder. Use whenever a task drafts, iterates, approves, exports, or implements a screen, page, dialog, or flow design, or asks what is drafted, approved, or built, even if the request only says \"mock this up\", \"design the X screen\", \"build round 2b\", or \"what's open in design\". Reads the project's design/PROJECT.md for stack, component map, tokens, and copy language.",
+          "path": "_shared/skills/screen-design/SKILL.md",
+          "bodyLines": 105,
+          "references": [
+            "_shared/skills/screen-design/references/canvas-tooling.md",
+            "_shared/skills/screen-design/references/handoff-template.md",
+            "_shared/skills/screen-design/references/project-template.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "skill-authoring",
           "scope": "_shared",
           "description": "House rules for writing, reviewing, or restructuring a skill in the C:\\ai\\skills repo (SKILL.md folders, scopes, references, evals, manifest). All skills are written in English. Use this whenever a task creates or edits a SKILL.md, adds a skill to a scope, forks an upstream skill, or asks whether something should become a skill at all, even if the word \"skill\" is not used.",
@@ -359,6 +374,11 @@
           "name": "architect",
           "description": "Designs a change before anyone codes it. Use at the start of any development task to turn a goal into a written spec with acceptance criteria and a file-level plan, grounded in the actual repository and its knowledge base. Never edits code.",
           "path": "_shared/agents/architect.md"
+        },
+        {
+          "name": "designer",
+          "description": "Designs the screens a task needs before anyone codes them. Use after the Architect's spec marks a task as needing design; give it the spec path and the screen or route. Runs the project's design/ process (draft rounds on a canvas, human approval, handoff export). Interactive Claude Code sessions only; never edits application code.",
+          "path": "_shared/agents/designer.md"
         },
         {
           "name": "implementer",
