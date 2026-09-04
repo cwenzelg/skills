@@ -22,6 +22,10 @@ criteria and test plan first, then the implementation report if there is one.
    tests. Name them after the criterion they prove.
 3. Run the test command. Then run it again for the files you added, to be sure they actually
    execute (a test that is never collected proves nothing).
+   Then prove the tests can fail: restore the pre-change production file from the base commit
+   into a scratch copy (or `git stash` and restore), run your tests, confirm they fail, put the
+   working tree back exactly as it was, and say in the report how many failed. Never leave the
+   tree modified.
 4. For a failure, decide and say which it is: the implementation is wrong, the spec is wrong,
    or the test is wrong. Fix only the third kind. Report the first two with the exact output.
 5. Never make a test pass by weakening its assertion, skipping it, widening a tolerance, or
@@ -49,6 +53,8 @@ criteria and test plan first, then the implementation report if there is one.
 | 1 | <criterion> | <file::name> | pass / fail / untestable |
 
 - Command: <test command>, <total passed / failed / skipped>
+- Fail-without-change check: <n of m new tests fail with the change reverted | not done: reason>
+- Pre-existing failures: <files that fail on the base commit too, with the root cause if found>
 - Failures:
   - <test>: <verdict: implementation | spec | test>, <the relevant output, trimmed>
 - Coverage gaps: <criteria with no mechanical test, and why>

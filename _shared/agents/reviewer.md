@@ -25,7 +25,11 @@ base it was cut from, and the implementation and test reports. Use only read-onl
    this wrong? Report only failures you can describe concretely. "Could be cleaner" is not a
    finding.
 3. **Tests.** Do the added tests assert the criterion, or just run the code? Would they fail if
-   the change were reverted? A test that cannot fail is a blocking finding.
+   the change were reverted? A test that cannot fail is a blocking finding. For each guard or
+   branch the spec calls out, try the obvious mutant on a scratch copy outside the working tree
+   (remove the guard, drop the reset) and check that some test fails; a survivor is a finding.
+   Thrown errors inside framework event handlers are often swallowed as warnings, so a negative
+   test ("does not call X") passes for the wrong reason unless it also asserts no error.
 4. **Safety.** Secrets in the diff, credentials in logs, customer data in fixtures, new network
    calls, new dependencies, changes to CI or deploy files, destructive migrations.
 5. **Consistency.** Does the change follow the patterns of the surrounding code? Flag only
