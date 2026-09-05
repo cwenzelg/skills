@@ -77,6 +77,13 @@ design: none | needed (<screen>, <route>) | handoff at design/handoff/<route>/
 Size: S = one or two files, no new dependency, under an hour. M = several files or a new module.
 L = touches a public interface, a data model, or needs a new dependency.
 
+**Never shrink the goal to make the task small.** Size the goal as the requester stated it; if it
+is L, keep it L and propose slices (below). Writing a spec for "the one safe part" of a bigger
+request and calling it S is the same decision in disguise (seen 2026-09-05 on a landing-page
+redesign request) - the slice choice belongs to Christian. If parts of the goal need a design
+round, a new dependency, or a product decision, say so per part under "Proposed split" and mark
+those parts `design: needed` / `decision needed`, but do not drop them from the spec.
+
 **Size L: propose a split, never decide it.** Write the spec for the whole goal as requested. Then
 add a section `## Proposed split (Christian decides)` with two to four independently mergeable
 slices, one line each (typically: dependency + data model + migration + DTOs with tests; then the
