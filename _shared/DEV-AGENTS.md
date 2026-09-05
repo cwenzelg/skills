@@ -51,6 +51,12 @@ exists, and `design/PROJECT.md` + `design/STATUS.md` + `design/CHECKLIST.md` + t
 themselves in the project's `design/` folder. A new project (for example MachineMaster) gets
 the same folder shape and its own `PROJECT.md`; nothing about it goes into `_shared`.
 
+Knowledge bases are linked, not just filed (Christian, 2026-09-06): `knowledge-base/README.md` is
+the index of every document, and every document ends with a `## Related` section of 2 to 5
+relative Markdown links (never wikilinks) to the docs it depends on. A role that adds or changes
+a knowledge-base file or an ADR adds it to the index and keeps the links current, so the next
+reader, human in Obsidian or agent in a session, finds the neighbouring files without a search.
+
 ## Limits these files cannot enforce
 
 Frontmatter restricts tools, not paths. "Architect writes only the spec file", "Designer writes
