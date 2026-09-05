@@ -17,12 +17,14 @@ skills/
   _shared/                     plugin "shared": usable by every agent, names no company or person
     .claude-plugin/plugin.json
     skills/<name>/SKILL.md     skill authoring, docx, pptx, pdf, xlsx, doc-coauthoring,
-                               webapp-testing, frontend-design, mcp-builder, skill-creator
+                               webapp-testing, frontend-design, mcp-builder, skill-creator,
+                               video-post (talking-head post-production, pipeline in C:\ai\video-pipeline)
     agents/<name>.md           dev subagents: architect, implementer, tester, reviewer (see _shared/DEV-AGENTS.md)
-  personal/                    plugin "personal": Christian only — his voice, his accounts,
-    skills/personal-branding   context for his management agents
+  personal/                    plugin "personal": Christian only — genuinely private things (empty
+                               since 2026-09-04; a private Instagram account may land here later)
   venture-labs/                the company layer (a grouping, not a plugin itself)
-    core/                      plugin "vl-core": Venture Labs GmbH — offer, ICP, outreach, brand
+    core/                      plugin "vl-core": Venture Labs GmbH — offer, ICP, outreach, brand, and
+                               personal-branding (Christian's voice + Series; business, moved from personal/ 2026-09-04)
     loopstudio/                plugin "vl-loopstudio": content style, calendar, client intake
     machinemaster/             plugin "vl-machinemaster": empty until the dev branch needs it
   evals/<skill>/cases.yaml     test briefs + traits for _shared skills; nested repos have their own evals/

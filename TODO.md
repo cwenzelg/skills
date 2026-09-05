@@ -24,7 +24,7 @@ right scope, own it (do not add to `_shared/upstream.json`).
       corrections → `venture-labs/loopstudio/skills/content-style` Voice section and
       `references/hooks-that-worked.md`. Procedure in `evals/README.md`.
 - [x] Series tag language, resolved 2026-09-04: German tag on the German cut, English equivalent on
-      the translated cut (recorded in `personal/skills/personal-branding`).
+      the translated cut (recorded in `venture-labs/core/skills/personal-branding`).
 - [ ] Eval cases for `content-style`: five to eight from real briefs (two starters exist).
 - [ ] Eval cases for `personal-branding`.
 

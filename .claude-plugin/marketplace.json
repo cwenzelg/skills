@@ -9,21 +9,21 @@
   "plugins": [
     {
       "name": "shared",
-      "description": "Company-neutral skills (skill authoring, docx/pptx/pdf/xlsx, doc-coauthoring, webapp-testing, frontend-design, mcp-builder, skill-creator) and the dev subagents architect/implementer/tester/reviewer. Enable everywhere.",
+      "description": "Company-neutral skills (skill authoring, docx/pptx/pdf/xlsx, doc-coauthoring, webapp-testing, frontend-design, mcp-builder, skill-creator, video-post) and the dev subagents architect/implementer/tester/reviewer. Enable everywhere.",
       "source": "./_shared",
       "category": "productivity",
       "version": "0.1.0"
     },
     {
       "name": "personal",
-      "description": "Christian's own voice and context (personal-branding). Enable in Christian's own sessions only.",
+      "description": "Christian's genuinely private context (empty since 2026-09-04; personal-branding moved to vl-core). Enable in Christian's own sessions only.",
       "source": "./personal",
       "category": "productivity",
       "version": "0.1.1"
     },
     {
       "name": "vl-core",
-      "description": "Venture Labs GmbH: the AI Pulse offer, target customer, outreach rules, brand (pulse-offer-context).",
+      "description": "Venture Labs GmbH: the AI Pulse offer, target customer, outreach rules, brand (pulse-offer-context) and Christian's personal-branding voice, pillars and Series rules (personal-branding).",
       "source": "./venture-labs/core",
       "category": "productivity",
       "version": "0.1.0"
