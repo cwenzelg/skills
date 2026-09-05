@@ -96,6 +96,19 @@
           }
         },
         {
+          "name": "error-tracking",
+          "scope": "_shared",
+          "description": "House standard for error tracking with Sentry in every Venture Labs project (Nuxt/Vue frontends, Spring Boot, Neos Flow and Strapi backends, static Netlify sites). Use when adding Sentry to a project, creating a Sentry project or DSN, fixing noisy or missing error reports, uploading source maps, tagging releases and environments, wiring alerts, or when a task mentions error tracking, crash reporting, exceptions in production, Sentry, DSN, or the error-triage agent - even if the user does not name Sentry.",
+          "path": "_shared/skills/error-tracking/SKILL.md",
+          "bodyLines": 89,
+          "references": [
+            "_shared/skills/error-tracking/references/sentry-setup.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "frontend-design",
           "scope": "_shared",
           "description": "Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
