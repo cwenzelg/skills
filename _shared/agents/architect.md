@@ -77,14 +77,13 @@ design: none | needed (<screen>, <route>) | handoff at design/handoff/<route>/
 Size: S = one or two files, no new dependency, under an hour. M = several files or a new module.
 L = touches a public interface, a data model, or needs a new dependency.
 
-**Size L is a signal to split, not a size to ship.** One task = one branch = one Implementer run,
-and a run that has to build a data model, a service, endpoints, and tests in one go is where
-weak rounds hide until the Reviewer (learned 2026-09-04: a passkeys backend task needed four
-Implementer rounds and three times the budget of an M task). If the goal is L, write the spec
-for the **first independently mergeable slice** (typically: dependency + data model + migration +
-DTOs, with its own tests) and list the remaining slices under "Follow-up tasks" with one line
-each, so Christian can queue them one after another. A slice must be shippable on its own: it
-compiles, its tests pass, nothing half-wired is reachable from a public endpoint.
+**Size L: propose a split, never decide it.** Write the spec for the whole goal as requested. Then
+add a section `## Proposed split (Christian decides)` with two to four independently mergeable
+slices, one line each (typically: dependency + data model + migration + DTOs with tests; then the
+service; then endpoints and docs), and say which slice you would do first and why. Do not narrow
+the spec or the acceptance criteria on your own: whether the task runs whole or as slices is a
+human decision at gate 1 (Christian, 2026-09-05). Background: a whole-task run costs three to four
+times an M task and hides a weak Implementer round until the Reviewer; a slice is cheaper to redo.
 
 ## Rules
 
