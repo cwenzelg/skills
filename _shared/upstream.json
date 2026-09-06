@@ -1,6 +1,27 @@
 {
   "$comment": "Vendored upstream skills. Managed by tools/upstream.mjs - see README \"Upstream skills\".",
   "skills": {
+    "api-and-interface-design": {
+      "scope": "_shared",
+      "repo": "addyosmani/agent-skills",
+      "path": "skills/api-and-interface-design",
+      "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
+      "added": "2026-09-06"
+    },
+    "constraint-driven-development": {
+      "scope": "_shared",
+      "repo": "addyosmani/agent-skills",
+      "path": "skills/constraint-driven-development",
+      "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
+      "added": "2026-09-06"
+    },
+    "debugging-and-error-recovery": {
+      "scope": "_shared",
+      "repo": "addyosmani/agent-skills",
+      "path": "skills/debugging-and-error-recovery",
+      "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
+      "added": "2026-09-06"
+    },
     "doc-coauthoring": {
       "scope": "_shared",
       "repo": "anthropics/skills",
@@ -22,6 +43,13 @@
       "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
       "added": "2026-09-04"
     },
+    "interview-me": {
+      "scope": "_shared",
+      "repo": "addyosmani/agent-skills",
+      "path": "skills/interview-me",
+      "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
+      "added": "2026-09-06"
+    },
     "mcp-builder": {
       "scope": "_shared",
       "repo": "anthropics/skills",
@@ -42,6 +70,13 @@
       "path": "skills/pptx",
       "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
       "added": "2026-09-04"
+    },
+    "security-and-hardening": {
+      "scope": "_shared",
+      "repo": "addyosmani/agent-skills",
+      "path": "skills/security-and-hardening",
+      "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
+      "added": "2026-09-06"
     },
     "skill-creator": {
       "scope": "_shared",
