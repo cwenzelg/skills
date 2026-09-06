@@ -332,6 +332,21 @@
           "upstream": null
         },
         {
+          "name": "review-checklists",
+          "scope": "_shared",
+          "description": "Standing checklists for whether a change is really done, secure and accessible - the definition of done every change must clear, the security checklist (OWASP top 10 plus the LLM top 10 for anything that calls a model), and the WCAG 2.1 AA list for screens. Use when reviewing or testing a change for completeness, security or accessibility, when asked \"is this done?\", \"can we ship this?\" or \"is this safe?\", or when a diff touches auth, user input, uploads, personal data, a dependency, an LLM call, a form or a screen, even without naming a checklist.",
+          "path": "_shared/skills/review-checklists/SKILL.md",
+          "bodyLines": 55,
+          "references": [
+            "_shared/skills/review-checklists/references/accessibility-checklist.md",
+            "_shared/skills/review-checklists/references/definition-of-done.md",
+            "_shared/skills/review-checklists/references/security-checklist.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "screen-design",
           "scope": "_shared",
           "description": "Company-neutral screen-design process for any project that keeps a design/ folder. Use whenever a task drafts, iterates, approves, exports, or implements a screen, page, dialog, or flow design, or asks what is drafted, approved, or built, even if the request only says \"mock this up\", \"design the X screen\", \"build round 2b\", or \"what's open in design\". Reads the project's design/PROJECT.md for stack, component map, tokens, and copy language.",

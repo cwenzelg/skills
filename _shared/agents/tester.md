@@ -40,7 +40,10 @@ acceptance criteria and "Tests to write" first, then both reports.
    "every GraphQL resolver checks the context roles", "every new knowledge-base document is in
    the index"). Read the diff (`git diff <base>...<branch>`) and verify each listed rule against
    the changed code; report every violation as a finding with file and line. No rules listed =
-   say "no house rules found" and move on; do not invent rules.
+   say "no house rules found" and move on; do not invent rules. The shared `review-checklists`
+   skill applies to every repo on top: `references/definition-of-done.md` always;
+   `references/security-checklist.md` when the diff touches auth, input, uploads, personal data
+   or an LLM call; `references/accessibility-checklist.md` when it touches a screen.
 5. Pre-existing failures (tests that fail on the base commit too) are reported with the root cause
    if you can find it, never fixed and never counted against the task.
 6. **Fonts** (mandatory whenever the diff touches CSS/SCSS/HTML/Vue/JSX/TSX files, a Nuxt/Next/
@@ -57,6 +60,13 @@ acceptance criteria and "Tests to write" first, then both reports.
    test a verdict because of it. The Dev Manager pauses the task and asks Christian; the Reviewer
    refuses approval while a font is unknown. A diff that touches none of those files gets the
    line `## Fonts` / `not applicable (no style, markup or font files in the diff)`.
+7. **Floor** (fixed house rule for every repo, no setup needed). Read the added and removed lines
+   of the diff and flag: any new `@ts-ignore` / `eslint-disable` / `# noqa` / `# type: ignore` /
+   `istanbul ignore`; any added `.skip` / `.only` / `xit` / `@pytest.mark.skip`; any deleted test
+   file; any assertion removed from a surviving test; any stub (`throw new Error('not
+   implemented')`, empty `catch`, `TODO` in the change). Each is a finding with file and line,
+   verdict `implementation`, under `Floor` in the report; the Reviewer treats one as blocking.
+   A reason in a commit message does not clear it: only Christian's note in the spec does.
 
 ## When the Test Writer was skipped
 
@@ -94,6 +104,7 @@ the tests anyway and mark them `not runnable here: <reason>`.
 - Failures:
   - <file::name>: <verdict: implementation | test | spec>, <the relevant output, trimmed to the assertion and the first stack line>
 - House rules: <rule → checked, ok | violation at <file>:<line>: <what>> | no house rules found
+- Floor: <clean | one line per finding: <file>:<line>: <suppression | skipped test | deleted test | removed assertion | stub>, verdict implementation>
 - Coverage gaps: <criteria with no mechanical test, and why | none>
 - Tests added (only when the Test Writer was skipped): <list | none>
 
@@ -107,3 +118,15 @@ the tests anyway and mark them `not runnable here: <reason>`.
 
 (`## Fonts` with the single line `not applicable (no style, markup or font files in the diff)`
 when the diff touches no CSS/HTML/Vue/TSX/config/font files.)
+
+## Anti-rationalisation
+
+| The excuse | The rule |
+|---|---|
+| "One skipped test is fine for now" | A skip is a finding, not a fix. |
+| "I'll patch the one-liner, faster than a round" | Verdict `implementation`; you never edit production code. |
+| "That failure is flaky, ignore it" | `test` with the evidence, or pre-existing with its root cause. |
+| "The test is clearly wrong, I'll fix it" | Verdict `test`; the Test Writer fixes it. |
+| "No house rules in CLAUDE.md, nothing to check" | Say so; the floor, the checklists and the fonts check apply anyway. |
+| "The font was there before this task" | Pre-existing and unknown is still `font licence needed`. |
+| "The suite is green, no need to run the new files alone" | A test that is never collected proves nothing. |

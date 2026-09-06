@@ -1,0 +1,10 @@
+# Trigger evals for _shared/skills/interview-me (vendored, addyosmani/agent-skills).
+# positive: should rank this skill first. negative: must not rank it first. Run: npm run triggers
+positive:
+  - "Interview me about this before we plan anything, my ask is underspecified"
+  - "Grill me on this request, one question at a time, until you're sure what I mean"
+  - "Stress-test my thinking on the new onboarding flow before we write a spec"
+  - "Before we start: are we sure what problem we're solving here?"
+negative:
+  - "Run the whole test suite and tell me what fails"
+  - "Add Sentry to the Nuxt app and upload the source maps"

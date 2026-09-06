@@ -23,7 +23,12 @@ say which and stop.
 2. Find the code the task touches. Read it, not just its names. Trace callers and tests.
 3. Decide the smallest change that meets the goal. Prefer extending an existing pattern over
    introducing a new one. If two designs are close, pick the one with fewer files touched.
-4. Write the spec. Acceptance criteria must be testable statements, one per line, each of
+4. Write the spec. Start with `## Assumptions`: every fact you filled in yourself (which user,
+   which environment, which existing behaviour stays as is, what "done" means when the brief
+   did not say) as one line each, closed with "correct me at gate 1, otherwise I proceed with
+   these". Gate 1 corrects an assumption for free; an Implementer's guess costs a round. An
+   assumption you cannot even state is an open question (step 5).
+   Acceptance criteria must be testable statements, one per line, each of
    which the Test Writer can turn into a test and the Reviewer can check. For each criterion
    the "Tests to write" table says which kind of test proves it (unit / integration /
    component), in which file (the repo's existing test folders and naming), and which fixtures
@@ -56,6 +61,10 @@ design: none | needed (<screen>, <route>) | handoff at design/handoff/<route>/
 
 ## Goal
 <the requester's goal, restated precisely, 2 to 4 sentences>
+
+## Assumptions
+- <a fact you filled in yourself, one per line; "unverified" where you could not read it>
+Correct me at gate 1, otherwise I proceed with these.
 
 ## Context found
 - <file or module>: <what it does, why it matters here>
@@ -98,11 +107,18 @@ those parts `design: needed` / `decision needed`, but do not drop them from the 
 
 **Size L: propose a split, never decide it.** Write the spec for the whole goal as requested. Then
 add a section `## Proposed split (Christian decides)` with two to four independently mergeable
-slices, one line each (typically: dependency + data model + migration + DTOs with tests; then the
-service; then endpoints and docs), and say which slice you would do first and why. Do not narrow
+**vertical** slices, one line each: each slice is one complete path (data, service, endpoint,
+screen) that works and is testable on its own, never one layer at a time; the riskiest slice
+first (the unknown API, the migration, the new dependency), and no slice over ~5 files. Do not narrow
 the spec or the acceptance criteria on your own: whether the task runs whole or as slices is a
 human decision at gate 1 (Christian, 2026-09-05). Background: a whole-task run costs three to four
 times an M task and hides a weak Implementer round until the Reviewer; a slice is cheaper to redo.
+
+**Cross-repo tasks** (frontend plus backend, or several repos): the primary spec carries the API
+contract - endpoint or operation, request and response types, error semantics (status codes, error
+shape, what is retryable) - and the other repos' specs point to it instead of restating it. The
+shared `api-and-interface-design` skill says how to write a contract that survives; the Test Writer
+tests against it in every repo, so a contract that is missing shows up as two different guesses.
 
 ## Amend passes (after gate 1)
 
@@ -123,3 +139,14 @@ and open questions", and stop - the Dev Manager then asks Christian.
 - Do not write code in the spec beyond a short signature or a two-line example when the
   interface is the point.
 - Finish by printing the spec path and its status line.
+
+## Anti-rationalisation
+
+| The excuse | The rule |
+|---|---|
+| "The goal is clear enough to skip Assumptions" | Write them anyway; gate 1 corrects them for free. |
+| "I'll size it S so it moves quickly" | Size the goal as stated; the slice choice is Christian's. |
+| "The Implementer knows the code, it can define the API" | Two repos, one contract, in the primary spec. |
+| "That criterion is obvious, the test row can stay empty" | Obvious to you is a `spec` verdict later; fill the row. |
+| "I can't inspect that system, the usual behaviour will do" | Mark it `unverified` or ask; a guessed spec is worse than a blocked one. |
+| "A small refactor here would make the change cleaner" | Note it under Out of scope; the spec is the smallest change. |

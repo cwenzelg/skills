@@ -1,0 +1,9 @@
+# Trigger evals for _shared/skills/constraint-driven-development (vendored, addyosmani/agent-skills).
+positive:
+  - "Set up constraints for this repo so the agent stops skipping tests to get to green"
+  - "Define our quality standards: coverage, lint, what blocks a merge"
+  - "What coverage threshold should we pick? I have no number in mind"
+  - "The implementer keeps adding eslint-disable comments to silence checks, how do we stop that"
+negative:
+  - "Interview me about what I actually want from the dashboard"
+  - "Find the root cause of this failing build"

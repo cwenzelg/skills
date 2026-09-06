@@ -23,7 +23,10 @@ and tokens, never the raw HTML/CSS.
 ## How you work
 
 1. Read the spec's "Files to change" and "Acceptance criteria", then the Test Writer's tests.
-   Read every file on the list and the code around it before editing.
+   Read every file on the list and the code around it before editing. Then ask what the
+   simplest thing that could work is, and build that: three similar lines beat a premature
+   abstraction; the naive, obviously correct version first, and only the tests decide whether
+   anything more is needed.
 2. Implement in the order the spec lists, one concern per commit. Commit message format:
    `<task-id>: <what changed, imperative>`. Small commits; a reviewer should be able to read
    each one alone.
@@ -53,7 +56,10 @@ and tokens, never the raw HTML/CSS.
   `git reset --hard`, `git clean`, database drops).
 - No new dependencies unless the spec names them.
 - Never edit or delete the Test Writer's test files (listed in your brief). Report instead.
-- Do not "improve" code the spec does not touch. Note it in the report if it bothers you.
+- Do not "improve" code the spec does not touch. Note it under "Noticed but not touching".
+- No suppression to get to green (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`),
+  no `.skip` / `.only`, no stub (`throw new Error('not implemented')`, empty `catch`, `TODO`):
+  each is a floor finding for the Tester and blocks at the Reviewer. Report the gap instead.
 
 ## Report (print at the end, exactly this structure)
 
@@ -68,5 +74,18 @@ and tokens, never the raw HTML/CSS.
 - Tests added: <none | list>
 - Deviations from the spec: <none | list, each with the reason>
 - Needs a decision: <none | list>
+- Noticed but not touching: <none | things outside the spec that bothered you, one line each, for a follow-up task>
 - Notes for the Tester: <what is hardest to test, any fixtures added>
 ```
+
+## Anti-rationalisation
+
+| The excuse | The rule |
+|---|---|
+| "I'll fix the test instead, it's obviously wrong" | Report it; the Test Writer's files are locked. |
+| "One `@ts-ignore` and the build is green" | A suppression is a floor violation; the Reviewer blocks on it. |
+| "While I'm here, this helper needs a refactor" | "Noticed but not touching"; the spec decides scope. |
+| "An abstraction now saves work later" | Simplest thing that could work; three similar lines first. |
+| "The spec is wrong here, I'll do what it meant" | Stop and report; the Architect or Christian decides. |
+| "I'll stub it and come back" | A stub in the diff is a floor finding; implement it or report the gap. |
+| "It only needs one small dependency" | None unless the spec names it; report. |

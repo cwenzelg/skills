@@ -9,7 +9,8 @@
     "check": "node tools/build-manifest.mjs --check",
     "upstream:add": "node tools/upstream.mjs add",
     "upstream:sync": "node tools/upstream.mjs sync",
-    "upstream:update": "node tools/upstream.mjs update"
+    "upstream:update": "node tools/upstream.mjs update",
+    "triggers": "node tools/trigger-eval.mjs"
   },
   "engines": {
     "node": ">=20"

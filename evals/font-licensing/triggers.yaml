@@ -1,0 +1,9 @@
+# Trigger evals for _shared/skills/font-licensing.
+positive:
+  - "Can we use this typeface commercially on the client's site?"
+  - "The designer added a new @font-face rule, check the licence"
+  - "Is Sofia Pro from Adobe Fonts still valid for venturelabs.team?"
+  - "Which Google Fonts are free for the landing page"
+negative:
+  - "Design the pricing page layout on a canvas"
+  - "Add the missing alt text to the hero image"

@@ -1,0 +1,10 @@
+# Trigger evals for _shared/skills/security-and-hardening (vendored, addyosmani/agent-skills).
+positive:
+  - "Harden the login and session handling against attacks"
+  - "We accept file uploads from users, what do I need to validate"
+  - "Audit our npm dependencies for known vulnerabilities before the release"
+  - "We call a third-party payment API from the backend, what can go wrong in that integration"
+  - "We store customer personal data, what does GDPR require in the code"
+negative:
+  - "Can we use this typeface commercially on the client's site?"
+  - "Cut the new interview footage into a vertical clip"

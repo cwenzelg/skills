@@ -1,0 +1,9 @@
+# Trigger evals for _shared/skills/debugging-and-error-recovery (vendored, addyosmani/agent-skills).
+positive:
+  - "The build breaks after my last change and I can't see why"
+  - "Tests fail intermittently on CI, find the root cause instead of guessing"
+  - "This behaviour doesn't match what I expected, help me debug it"
+  - "Unexpected error in production, walk me through a systematic diagnosis"
+negative:
+  - "Design the REST endpoints for the orders module"
+  - "Create a Sentry project and DSN for the honey app"

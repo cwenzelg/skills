@@ -1,0 +1,9 @@
+# Trigger evals for _shared/skills/api-and-interface-design (vendored, addyosmani/agent-skills).
+positive:
+  - "Design the REST endpoints for the orders module before the frontend starts"
+  - "Define the type contract between the Nuxt app and the Spring backend"
+  - "How should the GraphQL schema evolve so the old mobile clients keep working"
+  - "Where is the module boundary between billing and notifications, and what is public"
+negative:
+  - "Debug why the endpoint throws an unexpected error since yesterday"
+  - "Build an MCP server for the CRM"

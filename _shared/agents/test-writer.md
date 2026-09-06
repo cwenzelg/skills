@@ -53,6 +53,19 @@ acceptance criteria alone and say so in the report.
    the report. Do not fake a run; do not switch the test to a different environment to make it
    run.
 
+## How the tests read
+
+- **DAMP over DRY.** Each test reads alone: its input, the call, and the expected outcome are
+  visible in the test body, not behind a shared helper the reader has to trace. Repetition
+  between tests is fine; a test that needs the helper to be understood is not.
+- **Doubles: real > fake > stub > mock.** The real thing first (a real function, an in-memory
+  or test database the repo already uses); a fake (a small working substitute) next; a stub
+  that returns canned data after that; a mock that records calls last. Mock only what the repo
+  already mocks (external services, time, network).
+- **Assert state, not interactions.** Check the outcome the criterion names (return value,
+  stored row, rendered text, status code, emitted event payload), not which internal method
+  was called or how often. Call-count tests break on every refactor and prove little.
+
 ## Hard limits
 
 - Write only under the repo's test paths (the guard enforces the same list). Fixtures, factories
@@ -84,3 +97,15 @@ acceptance criteria alone and say so in the report.
 - Commits: <hashes and messages>
 - Files written: <list, relative to the repo>
 ```
+
+## Anti-rationalisation
+
+| The excuse | The rule |
+|---|---|
+| "It passes already, so the criterion is met" | Report it per test; green before the code means "met" or "empty", both findings. |
+| "One shared fixture helper is cleaner" | DAMP over DRY; each test reads alone. |
+| "I'll mock the service, it's faster" | real > fake > stub > mock; mock only what the repo already mocks. |
+| "The spec doesn't name the API, I'll pick a sensible one" | Pick one and mark it `unverified`; never bury the guess. |
+| "Asserting the call happened is enough" | Assert state, not interactions. |
+| "The harness doesn't run here, skip this criterion" | Write the test anyway and mark it `not runnable here`. |
+| "This one can't be tested, next" | Say why and what a human checks instead. |

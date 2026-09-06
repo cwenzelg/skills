@@ -1,0 +1,10 @@
+# Trigger evals for _shared/skills/review-checklists.
+positive:
+  - "Is this done? Check it for completeness before I sign it off"
+  - "Go through the security checklist for the upload endpoint"
+  - "Does the new form meet WCAG, keyboard and screen reader wise"
+  - "Can we ship this change? Walk the definition of done"
+  - "The chatbot passes model output into a shell command, is that safe?"
+negative:
+  - "Harden the session cookies against fixation attacks"
+  - "Write a Playwright test for the checkout flow"

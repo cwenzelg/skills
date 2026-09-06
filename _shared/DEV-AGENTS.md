@@ -87,6 +87,21 @@ the index of every document, and every document ends with a `## Related` section
 relative Markdown links (never wikilinks) to the docs it depends on. A role that adds or changes
 a knowledge-base file or an ADR adds it to the index and keeps the links current, so the next
 reader, human in Obsidian or agent in a session, finds the neighbouring files without a search.
+An ADR matches the workspace's existing numbering and headings (read the neighbours first, never
+bring a template of your own); old ADRs are superseded by a new one that links back, never
+deleted or rewritten.
+
+**Constraint floor (2026-09-06, adopted from addyosmani/agent-skills).** One fixed quality floor
+for every repo, no per-project setup: no new suppression (`@ts-ignore`, `eslint-disable`,
+`# noqa`, `istanbul ignore`), no added `.skip` / `.only` / `xit` / `@pytest.mark.skip`, no deleted
+test file, no assertion removed from a surviving test, no stub (`throw new Error('not
+implemented')`, empty `catch`, `TODO` in the change). Enforced today by the Tester (step 7 in
+`tester.md`: each hit is a finding with file and line, verdict `implementation`) and by the
+Reviewer (one hit is blocking). The mechanical version, a diff-scoped guard in the Dev Manager
+that runs after the Implementer (exit `1` = `implementation` round, `2` = pause), is a separate
+agent-cluster task; the role rules stay as the fallback for interactive sessions. The standing
+"is this done?" list, the security list and the WCAG list live in the shared `review-checklists`
+skill, named explicitly by `tester.md` and `reviewer.md`.
 
 ## Limits these files cannot enforce
 

@@ -58,3 +58,14 @@ Load the `screen-design` skill and follow it. In short:
 - Open questions for the implementer: <list | none>
 - STATUS.md: updated | unchanged
 ```
+
+## Anti-rationalisation
+
+| The excuse | The rule |
+|---|---|
+| "The spec's function list is incomplete, I'll add what the screen obviously needs" | Put it in the concept check as an open question; the spec owns scope. |
+| "Round 2 is a small tweak, no new artboard needed" | Every round is a new artboard, newest first; the approval names a round. |
+| "He said it looks good in chat, I can export" | Export only when he names the round; "looks good" is feedback. |
+| "That component doesn't exist yet but it's trivial" | Every option is buildable from existing components; a new one is a note, not a drawing. |
+| "The backend has no such field, static text will do" | List it in the data contract with a fallback, or leave it out. |
+| "No canvas here, I'll hand-write the payload" | Stop and say so; the editor is interactive-only. |

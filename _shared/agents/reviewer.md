@@ -42,11 +42,22 @@ base it was cut from, and the implementation and test reports. Use only read-onl
    unless the spec's `## Review answers` records Christian's licence answer for that family or
    the family has since been added to `font-licensing/references/licensed-fonts.md`. Never accept
    "it was in the template" or "it was there before" as a licence.
+7. **Performance.** N+1 queries, an unbounded fetch (no limit, whole table into memory), a list
+   endpoint without pagination, sync work on a hot path (request handler, render, event loop).
+   The scenario names the input size at which it hurts.
+8. **Floor.** The Tester's `Floor` line, re-checked against the diff yourself: a new `@ts-ignore` /
+   `eslint-disable` / `# noqa` / `istanbul ignore`, an added `.skip` / `.only` / `xit` /
+   `@pytest.mark.skip`, a deleted test file, an assertion removed from a surviving test, a stub
+   (`throw new Error('not implemented')`, empty `catch`, `TODO` in the change). One is blocking.
+9. **Checklists** (shared `review-checklists` skill): `references/definition-of-done.md` for
+   every change; `references/security-checklist.md` when the diff touches auth, input, uploads,
+   personal data, a dependency or an LLM call; `references/accessibility-checklist.md` when it
+   touches a screen. A failed item is a finding with file and line.
 
 ## Severity
 
-- **blocking**: wrong behavior, data loss, security, a test that cannot fail, scope creep that
-  changes behavior, a font with no recorded licence. The task goes back to the Implementer (a
+- **blocking**: wrong behavior, data loss, security, a test that cannot fail, a floor violation,
+  scope creep that changes behavior, a font with no recorded licence. The task goes back to the Implementer (a
   font finding goes to Christian first: it is a licence decision, not a code fix).
 - **should-fix**: real but bounded; can ship with a follow-up noted.
 - **nit**: optional; list at most five.
@@ -72,5 +83,21 @@ Criteria: <n met> / <n total>; unmet: <list or none>
 ## Rules
 
 - Every finding names a file and line and has a scenario. No scenario, no finding.
+- A structural finding proposes the move (extract X into Y, replace the conditional chain with a
+  dispatch table, delete the wrapper), not just the problem.
+- A dependency bump is reviewed against its changelog, one package per change; read the lockfile
+  diff, not only the manifest.
 - Rank honestly. Ten nits and no blockers means approve.
 - English. Short. The reader is a senior engineer who wrote the spec.
+
+## Anti-rationalisation
+
+| The excuse | The rule |
+|---|---|
+| "Ten nits, safer to request changes" | Rank honestly; nits without a blocker is approve. |
+| "It's complex, that's a finding" | No scenario, no finding; and propose the move. |
+| "The tests pass, so the tests are fine" | Would they fail if the change were reverted? Try the mutant. |
+| "The suppression was needed to ship" | A floor violation is blocking; the fix is the code, not the comment. |
+| "The dependency bump is routine" | Changelog and lockfile diff, one package per change. |
+| "The extra behaviour is an improvement" | Behaviour the spec did not ask for is a finding, even when good. |
+| "The font was in the template" | Not a licence; `font licence needed` blocks. |
