@@ -41,6 +41,27 @@
       "source": "./venture-labs/machinemaster",
       "category": "productivity",
       "version": "0.1.0"
+    },
+    {
+      "name": "vl-tap2link",
+      "description": "Tap2Link (NFC cards and profiles; Venture Labs subsidiary): project context and rules for C:/code/tap2link.",
+      "source": "./venture-labs/tap2link",
+      "category": "productivity",
+      "version": "0.1.0"
+    },
+    {
+      "name": "vl-honey-analysis",
+      "description": "Honey analysis / honiguntersuchung.de (Digital Bee Services): project context and rules for C:/code/honey-analysis.",
+      "source": "./venture-labs/honey-analysis",
+      "category": "productivity",
+      "version": "0.1.0"
+    },
+    {
+      "name": "vl-bienenwanderung",
+      "description": "Bienenwanderung / bienenwanderung.de (Digital Bee Services): project context and rules for C:/code/bienenwanderung.",
+      "source": "./venture-labs/bienenwanderung",
+      "category": "productivity",
+      "version": "0.1.0"
     }
   ]
 }
