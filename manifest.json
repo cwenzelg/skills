@@ -6,6 +6,53 @@
       "version": "0.1.0",
       "skills": [
         {
+          "name": "api-and-interface-design",
+          "scope": "_shared",
+          "description": "Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend.",
+          "path": "_shared/skills/api-and-interface-design/SKILL.md",
+          "bodyLines": 364,
+          "references": [],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/addyosmani/agent-skills.git",
+            "path": "skills/api-and-interface-design",
+            "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
+          }
+        },
+        {
+          "name": "constraint-driven-development",
+          "scope": "_shared",
+          "description": "Establishes a project's quality bar as a written contract and stops agents quietly lowering it. Interviews the user on which dimensions matter, supplies sane default thresholds when they have no number in mind, records everything in CONSTRAINTS.md, and watches the diff for a weakened bar — new @ts-ignore or eslint-disable suppressions, skipped or deleted tests, assertions stripped out, unimplemented stubs, thresholds edited down. Use when no quality bar is written down, when the user says \"set up constraints\" or \"define our standards\", when an agent keeps silencing checks or skipping tests to get to green, when you need a coverage or performance threshold and don't know what number to pick, or when an agent writes more code than anyone will read.",
+          "path": "_shared/skills/constraint-driven-development/SKILL.md",
+          "bodyLines": 308,
+          "references": [
+            "_shared/skills/constraint-driven-development/references/floor-guard.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/addyosmani/agent-skills.git",
+            "path": "skills/constraint-driven-development",
+            "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
+          }
+        },
+        {
+          "name": "debugging-and-error-recovery",
+          "scope": "_shared",
+          "description": "Guides systematic root-cause debugging. Use when tests fail, builds break, behavior doesn't match expectations, or you encounter any unexpected error. Use when you need a systematic approach to finding and fixing the root cause rather than guessing.",
+          "path": "_shared/skills/debugging-and-error-recovery/SKILL.md",
+          "bodyLines": 297,
+          "references": [],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/addyosmani/agent-skills.git",
+            "path": "skills/debugging-and-error-recovery",
+            "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
+          }
+        },
+        {
           "name": "doc-coauthoring",
           "scope": "_shared",
           "description": "Guide users through a structured workflow for co-authoring documentation. Use when user wants to write documentation, proposals, technical specs, decision docs, or similar structured content. This workflow helps users efficiently transfer context, refine content through iteration, and verify the doc works for readers. Trigger when user mentions writing docs, creating proposals, drafting specs, or similar documentation tasks.",
@@ -138,6 +185,21 @@
           }
         },
         {
+          "name": "interview-me",
+          "scope": "_shared",
+          "description": "Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified (\"build me X\" without \"for whom\" or \"why now\"), when the user explicitly invokes (\"interview me\", \"grill me\", \"are we sure?\", \"stress-test my thinking\"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.",
+          "path": "_shared/skills/interview-me/SKILL.md",
+          "bodyLines": 222,
+          "references": [],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/addyosmani/agent-skills.git",
+            "path": "skills/interview-me",
+            "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
+          }
+        },
+        {
           "name": "mcp-builder",
           "scope": "_shared",
           "description": "Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",
@@ -261,7 +323,7 @@
           "scope": "_shared",
           "description": "How to set up a company or client project workspace under C:\\code (the Loop Studio layout) - inventory the GitHub org, decide the folder layout per backend stack (Neos Flow composer distributions are NESTED inside their docker compose base, Java/Node backends are siblings), clone, scaffold the root repo with CLAUDE.md, knowledge-base and design, register it for the Dev Manager (companies.json), the skill scope and the Notion findings database, and write the summary. Use whenever a task says set up / create / scaffold / onboard a workspace, project folder, knowledge base or root repo for a company, client or product, clone a company's repos, or \"do the same as for MachineMaster\", even if the user does not say \"workspace\".",
           "path": "_shared/skills/project-workspace-setup/SKILL.md",
-          "bodyLines": 105,
+          "bodyLines": 108,
           "references": [
             "_shared/skills/project-workspace-setup/references/flow-backend-nesting.md"
           ],
@@ -283,6 +345,23 @@
           "scripts": [],
           "assets": [],
           "upstream": null
+        },
+        {
+          "name": "security-and-hardening",
+          "scope": "_shared",
+          "description": "Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
+          "path": "_shared/skills/security-and-hardening/SKILL.md",
+          "bodyLines": 521,
+          "references": [
+            "_shared/skills/security-and-hardening/references/security-checklist.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/addyosmani/agent-skills.git",
+            "path": "skills/security-and-hardening",
+            "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
+          }
         },
         {
           "name": "skill-authoring",

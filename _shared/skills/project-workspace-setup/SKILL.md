@@ -96,9 +96,12 @@ C:\code\machinemaster\
         ├── Configuration/Settings.yaml                       local settings, gitignored
         └── Packages/Application/Moerschen.Main/              the package - work HERE (branch dev, remote composer = origin)
 ```
-`composer install` runs inside the private PHP base image with the host SSH key and
-`preferred-install … source` so the org's packages become git working copies — the exact commands
-are in `references/flow-backend-nesting.md` and `C:\code\machinemaster\README.md` §4.
+`composer install` runs inside the private PHP base image with a host-side mirror cache of the
+private packages mounted in (no SSH key inside the container) and `preferred-install … source` so
+the org's packages become git working copies — the exact commands, the port-override rule, the
+`Routes.yaml` and gitlink gotchas and the PHPUnit baseline for the Dev Manager are in
+`references/flow-backend-nesting.md`; `C:\code\honey-analysis\README.md` §3 is the full proven run
+(2026-09-06), `C:\code\machinemaster\README.md` §4 the earlier one.
 
 ## Never
 
