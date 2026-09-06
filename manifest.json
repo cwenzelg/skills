@@ -243,6 +243,19 @@
           }
         },
         {
+          "name": "project-workspace-setup",
+          "scope": "_shared",
+          "description": "How to set up a company or client project workspace under C:\\code (the Loop Studio layout) - inventory the GitHub org, decide the folder layout per backend stack (Neos Flow composer distributions are NESTED inside their docker compose base, Java/Node backends are siblings), clone, scaffold the root repo with CLAUDE.md, knowledge-base and design, register it for the Dev Manager (companies.json), the skill scope and the Notion findings database, and write the summary. Use whenever a task says set up / create / scaffold / onboard a workspace, project folder, knowledge base or root repo for a company, client or product, clone a company's repos, or \"do the same as for MachineMaster\", even if the user does not say \"workspace\".",
+          "path": "_shared/skills/project-workspace-setup/SKILL.md",
+          "bodyLines": 105,
+          "references": [
+            "_shared/skills/project-workspace-setup/references/flow-backend-nesting.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "screen-design",
           "scope": "_shared",
           "description": "Company-neutral screen-design process for any project that keeps a design/ folder. Use whenever a task drafts, iterates, approves, exports, or implements a screen, page, dialog, or flow design, or asks what is drafted, approved, or built, even if the request only says \"mock this up\", \"design the X screen\", \"build round 2b\", or \"what's open in design\". Reads the project's design/PROJECT.md for stack, component map, tokens, and copy language.",
