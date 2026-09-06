@@ -8,7 +8,7 @@ description: House standard for error tracking with Sentry in every Venture Labs
 Every production service reports to the Sentry organisation `venturelabs`, and the cluster's
 **error-triage agent** (`agent-cluster/agents/error-triage`) reads Sentry every 15 minutes:
 it classifies new issues, turns small real bugs into Dev Manager fix tasks, files bigger ones
-in the company's Notion ideas database and posts a daily digest to Slack `#errors`. **Nothing
+in the company's Notion ideas database and posts a daily digest to Slack `#dev-info`. **Nothing
 sends e-mail.** A project is "done" when it looks like this:
 
 ```
