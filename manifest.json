@@ -419,7 +419,7 @@
         },
         {
           "name": "implementer",
-          "description": "Implements an approved spec in the repository, on the task's branch, in small commits. Use after a spec exists and has been approved; give it the spec path. Does not design, does not widen scope, does not touch tests beyond keeping them compiling.",
+          "description": "Implements an approved spec in the repository, on the task's branch, in small commits. Use after a spec exists and has been approved and the Test Writer has committed its failing tests; give it the spec path. Makes the Test Writer's tests pass, may add tests, never edits or deletes the Test Writer's test files. Does not design, does not widen scope.",
           "path": "_shared/agents/implementer.md"
         },
         {
@@ -428,8 +428,13 @@
           "path": "_shared/agents/reviewer.md"
         },
         {
+          "name": "test-writer",
+          "description": "Turns an approved spec's acceptance criteria into failing tests before anyone codes. Use after the spec is approved (and the design handoff exists, when one is needed) and before the Implementer; give it the spec path, the test command and the test paths. Writes test files only, commits them on the task branch, proves they fail on the current branch, and reports a criterion-to-test table. Never edits production code.",
+          "path": "_shared/agents/test-writer.md"
+        },
+        {
           "name": "tester",
-          "description": "Proves an implementation meets its spec. Use after the implementer finishes; give it the spec path and the test command. Writes or extends tests for every acceptance criterion, runs the suite, and reports failures with output. Edits test files only, never production code.",
+          "description": "Runs the whole test suite after the Implementer and reports the evidence. Use after the implementer finishes; give it the spec path, the test command, and whether the Test Writer ran. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules; never edits the Test Writer's tests and never edits production code.",
           "path": "_shared/agents/tester.md"
         }
       ]
