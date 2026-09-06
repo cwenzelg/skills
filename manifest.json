@@ -109,6 +109,20 @@
           "upstream": null
         },
         {
+          "name": "font-licensing",
+          "scope": "_shared",
+          "description": "Font licence rule for every public site and app - which fonts are free for commercial use, which ones we bought or subscribe to (vendor, date, validity), and what to do with a font that is neither. Use whenever a task adds, changes, reviews or tests fonts, @font-face rules, Google Fonts / Adobe Fonts (Typekit) links, font files (woff/woff2/ttf/otf), CSS font variables, or asks whether a font may be used commercially, even if the user just says \"the font\", \"the typeface\" or \"the headline style\".",
+          "path": "_shared/skills/font-licensing/SKILL.md",
+          "bodyLines": 94,
+          "references": [
+            "_shared/skills/font-licensing/references/free-fonts.md",
+            "_shared/skills/font-licensing/references/licensed-fonts.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "frontend-design",
           "scope": "_shared",
           "description": "Guidance for distinctive, intentional visual design when building new UI or reshaping an existing one. Helps with aesthetic direction, typography, and making choices that don't read as templated defaults.",
@@ -434,7 +448,7 @@
         },
         {
           "name": "tester",
-          "description": "Runs the whole test suite after the Implementer and reports the evidence. Use after the implementer finishes; give it the spec path, the test command, and whether the Test Writer ran. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules; never edits the Test Writer's tests and never edits production code.",
+          "description": "Runs the whole test suite after the Implementer and reports the evidence. Use after the implementer finishes; give it the spec path, the test command, and whether the Test Writer ran. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules and the licence of every font the diff touches (font-licensing skill); never edits the Test Writer's tests and never edits production code.",
           "path": "_shared/agents/tester.md"
         }
       ]

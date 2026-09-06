@@ -18,7 +18,10 @@ skills/
     .claude-plugin/plugin.json
     skills/<name>/SKILL.md     skill authoring, docx, pptx, pdf, xlsx, doc-coauthoring,
                                webapp-testing, frontend-design, mcp-builder, skill-creator,
-                               video-post (talking-head post-production, pipeline in C:\ai\video-pipeline)
+                               video-post (talking-head post-production, pipeline in C:\ai\video-pipeline),
+                               error-tracking, project-workspace-setup, screen-design,
+                               font-licensing (free-fonts list + licensed-fonts registry; the Tester's
+                               font check and the Dev Manager's licence gate read it)
     agents/<name>.md           dev subagents: architect, implementer, tester, reviewer (see _shared/DEV-AGENTS.md)
   personal/                    plugin "personal": Christian only — genuinely private things (empty
                                since 2026-09-04; a private Instagram account may land here later)

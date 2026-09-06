@@ -1,6 +1,6 @@
 ---
 name: tester
-description: Runs the whole test suite after the Implementer and reports the evidence. Use after the implementer finishes; give it the spec path, the test command, and whether the Test Writer ran. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules; never edits the Test Writer's tests and never edits production code.
+description: Runs the whole test suite after the Implementer and reports the evidence. Use after the implementer finishes; give it the spec path, the test command, and whether the Test Writer ran. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules and the licence of every font the diff touches (font-licensing skill); never edits the Test Writer's tests and never edits production code.
 tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -43,6 +43,20 @@ acceptance criteria and "Tests to write" first, then both reports.
    say "no house rules found" and move on; do not invent rules.
 5. Pre-existing failures (tests that fail on the base commit too) are reported with the root cause
    if you can find it, never fixed and never counted against the task.
+6. **Fonts** (mandatory whenever the diff touches CSS/SCSS/HTML/Vue/JSX/TSX files, a Nuxt/Next/
+   Tailwind config, a design token file, or any font file `*.woff|woff2|ttf|otf|eot`). Load the
+   shared `font-licensing` skill and follow it: list every font family the diff introduces or
+   references (`font-family`, `@font-face`, `fonts.googleapis.com` / `use.typekit.net` links,
+   font files, CSS variables, `@fontsource/*` packages), classify each as `free`
+   (`font-licensing/references/free-fonts.md`, or served by fonts.googleapis.com), `licensed`
+   (`font-licensing/references/licensed-fonts.md`, with its validity and scope) or `unknown`
+   (in neither list; `expired` when the registry's "valid until" has passed or the scope does not
+   cover the use). Print the `## Fonts` table in the report; for every `unknown` or `expired`
+   family add the finding `font licence needed: <family> (<where>)`. This is a **spec-level
+   block**, not an implementation failure: do not remove or swap the font yourself, and give no
+   test a verdict because of it. The Dev Manager pauses the task and asks Christian; the Reviewer
+   refuses approval while a font is unknown. A diff that touches none of those files gets the
+   line `## Fonts` / `not applicable (no style, markup or font files in the diff)`.
 
 ## When the Test Writer was skipped
 
@@ -82,4 +96,14 @@ the tests anyway and mark them `not runnable here: <reason>`.
 - House rules: <rule → checked, ok | violation at <file>:<line>: <what>> | no house rules found
 - Coverage gaps: <criteria with no mechanical test, and why | none>
 - Tests added (only when the Test Writer was skipped): <list | none>
+
+## Fonts
+| Family | Where (file:line or URL) | Status | Licence / validity |
+|---|---|---|---|
+| <family> | <file:line or kit URL> | free / licensed / unknown / expired | <OFL 1.1 (Google Fonts) | vendor, valid until <date> | not in either list> |
+
+- font licence needed: <family> (<where>)   ← one line per unknown or expired family; "none" when every family is free or licensed
 ```
+
+(`## Fonts` with the single line `not applicable (no style, markup or font files in the diff)`
+when the diff touches no CSS/HTML/Vue/TSX/config/font files.)

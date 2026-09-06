@@ -34,11 +34,20 @@ base it was cut from, and the implementation and test reports. Use only read-onl
    calls, new dependencies, changes to CI or deploy files, destructive migrations.
 5. **Consistency.** Does the change follow the patterns of the surrounding code? Flag only
    where the inconsistency will confuse the next reader or cause a bug, not style.
+6. **Fonts.** Read the Tester's `## Fonts` section (and check the diff yourself when it is
+   missing although the diff touches CSS/HTML/Vue/TSX/config/font files - the shared
+   `font-licensing` skill says how). Every font family the diff introduces or references must be
+   `free` or `licensed` with a validity that has not passed. An `unknown` or `expired` family is a
+   **blocking** finding (`font licence needed: <family>`) and the verdict is `request-changes`,
+   unless the spec's `## Review answers` records Christian's licence answer for that family or
+   the family has since been added to `font-licensing/references/licensed-fonts.md`. Never accept
+   "it was in the template" or "it was there before" as a licence.
 
 ## Severity
 
 - **blocking**: wrong behavior, data loss, security, a test that cannot fail, scope creep that
-  changes behavior. The task goes back to the Implementer.
+  changes behavior, a font with no recorded licence. The task goes back to the Implementer (a
+  font finding goes to Christian first: it is a licence decision, not a code fix).
 - **should-fix**: real but bounded; can ship with a follow-up noted.
 - **nit**: optional; list at most five.
 

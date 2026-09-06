@@ -42,6 +42,19 @@ Anything still failing after its round, or a `decision: needed`, pauses the task
 answers `spec` / `test` / `code` (or free text). Christian's reply is appended to the spec and
 the task continues from the Test Writer step.
 
+**Fonts (Christian, 2026-09-06).** The Tester checks every font family a diff introduces or
+references (CSS/HTML/Vue/TSX/config/font files) against the shared `font-licensing` skill:
+`references/free-fonts.md` (OFL / Apache / UFL; anything from fonts.googleapis.com is free) and
+`references/licensed-fonts.md` (bought or subscribed fonts with vendor, date, validity, scope).
+The report gets a `## Fonts` table and one finding `font licence needed: <family>` per `unknown`
+or `expired` family - a spec-level block, not an implementation failure: the Tester never swaps a
+font, the Reviewer never approves while one is open, and no role assumes a licence. The Dev
+Manager pauses the task as `awaiting-review` and asks Christian: `licensed: <vendor>, bought
+<date>, valid until <date|subscription>, scope <web/desktop>` (row appended to the registry and
+committed in the skills repo, then on to the Reviewer), `replace with <free font>`, or `drop`
+(instruction into the spec, Implementer + Tester again). A font gets into the registry only that
+way or through Christian directly, always with its validity period.
+
 The Designer is interactive-only for now: the canvas editor is a Claude Code built-in that
 SDK-run sessions do not get (see `skills/screen-design/references/canvas-tooling.md`). The Dev
 Manager treats "needs design" as a pause: Christian runs the Designer in the project workspace,
