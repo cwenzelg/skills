@@ -124,3 +124,10 @@ show the functions the task needs. Both answers come from the human.
 - No emoji as icons; inline SVG in the app's icon style, or the app's icon component names.
 - Design files are readable by every agent: no credentials, no customer data, no production
   screenshots of real users.
+- **The Designer's own process can be wrong, not just the screen.** When a task surfaces a gap
+  in this method itself — a source that didn't help, a question that should have been asked
+  earlier, a step that produced a bad result — don't fix the method mid-task and don't ignore
+  it either. Log one line to this project's findings backlog (a Notion "Feature ideas" database,
+  a `BOARD.md`, whatever the project actually keeps — `PROJECT.md` says which), owner
+  `design-agent`, saying what happened and what should change about the method. A human reviews
+  it later; the current task keeps moving.

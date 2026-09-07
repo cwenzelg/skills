@@ -42,4 +42,8 @@ needs to know about *this* app. Keep it short; point at files rather than copyin
 
 ## Local viewing
 - Serve `design/handoff/<route>/` with: `<command>`
+
+## Findings backlog
+- Process/method findings (not this screen's issues) go to: `<Notion "Feature ideas · X" DB,
+  BOARD.md, or whatever this project keeps>`, owner `design-agent`.
 ```
