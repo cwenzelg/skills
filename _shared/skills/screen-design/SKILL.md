@@ -52,17 +52,35 @@ are pulled back into the source files, never the other way round: see
    control heights) from source; never round to a grid or invent tokens. If a live screen exists
    at the target route, read it and treat the work as a redesign relative to it: what is wrong,
    what is kept.
-2. **Concept check before pixels.** State in one paragraph which user job the screen serves and
+2. **Ground a screen that has no live route to anchor on.** A genuinely new screen — nothing
+   live at the target route — is never drafted from nothing; that produces the generic, "AI
+   slop" result this step exists to prevent.
+   - Search for 2 to 4 real, relevant examples and present them as links with a one-line reason
+     each; the human picks 1-3 before any artboard is made. Default sources: refero.design (a
+     searchable gallery of real production design systems with exact tokens per entry; use its
+     MCP if this project has it configured, otherwise WebFetch/WebSearch it) and 21st.dev (a
+     copy-paste component registry — only useful when the stack is React + Tailwind + shadcn,
+     skip it otherwise). A plain web search for comparable products fills any gap. Picks are
+     reference for direction and craft, never a layout or copy to port wholesale.
+   - If the brief or spec does not already say what the screen must contain — headlines, copy
+     points, real data shown, not just the job it does — ask for that too, as specific
+     questions, not one open "any thoughts?".
+   - **If there isn't enough to ground the work yet — no examples picked, no content answered —
+     stop and ask. Do not draft speculative options hoping one sticks, and do not fill a gap
+     with an assumption because something is due.** Say plainly what's missing and what you need
+     to proceed.
+3. **Concept check before pixels.** State in one paragraph which user job the screen serves and
    which functions from the brief or spec it must expose. A screen that looks right but hides a
    required function fails the human review; list the functions as a checklist in the canvas
    notes so the reviewer can tick them.
-3. Create or extend `draft/<Screen Name>.dc.html` with the built-in `design` skill (interactive
+4. Create or extend `draft/<Screen Name>.dc.html` with the built-in `design` skill (interactive
    Claude Code only; see `references/canvas-tooling.md` for what runs where). First round:
    2 to 4 genuinely different directions as separate artboards, each with a one-line motivation
-   and its main trade-off. Later rounds: one artboard per feedback round, stacked above the
-   previous ones, named `2a`, `2b`, `3a`. Never renumber or rename an existing round.
-4. Reuse `draft/assets/` across screens; extract a new asset from the app only when none exists.
-5. Publish the canvas, hand over the link, and record the round in `STATUS.md`.
+   and its main trade-off — grounded in whichever examples were picked in step 2, when there
+   were any. Later rounds: one artboard per feedback round, stacked above the previous ones,
+   named `2a`, `2b`, `3a`. Never renumber or rename an existing round.
+5. Reuse `draft/assets/` across screens; extract a new asset from the app only when none exists.
+6. Publish the canvas, hand over the link, and record the round in `STATUS.md`.
 
 ## 2. Approving
 

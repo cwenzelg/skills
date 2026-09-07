@@ -351,7 +351,7 @@
           "scope": "_shared",
           "description": "Company-neutral screen-design process for any project that keeps a design/ folder. Use whenever a task drafts, iterates, approves, exports, or implements a screen, page, dialog, or flow design, or asks what is drafted, approved, or built, even if the request only says \"mock this up\", \"design the X screen\", \"build round 2b\", or \"what's open in design\". Reads the project's design/PROJECT.md for stack, component map, tokens, and copy language.",
           "path": "_shared/skills/screen-design/SKILL.md",
-          "bodyLines": 105,
+          "bodyLines": 123,
           "references": [
             "_shared/skills/screen-design/references/canvas-tooling.md",
             "_shared/skills/screen-design/references/handoff-template.md",
