@@ -200,6 +200,23 @@
           }
         },
         {
+          "name": "marketing-site-compliance",
+          "scope": "_shared",
+          "description": "Standing checklist for every public marketing website (landing pages, company sites, product pages) - SEO and technical basics (robots, sitemap, canonical/hreflang, titles, Open Graph, Core Web Vitals, broken links, redirects, TLS, 404, favicon), German legal-page presence (Impressum with the §5 DDG fields, Datenschutzerklaerung naming every third party the page really loads, cookie banner only where non-essential storage exists and only if it blocks until consent, AGB/Widerruf where something is sold, contact-form privacy notice), accessibility spot checks and cross-page consistency. Use whenever a task audits, checks, reviews or \"goes over\" a website or landing page, asks whether a site needs a cookie banner, whether the Impressum or Datenschutz is complete, whether the SEO basics are in place, before a DNS cutover or launch, or for a recurring site check - even if the user does not say compliance, SEO, or name a law. Legal checks are presence and consistency checks, never legal advice.",
+          "path": "_shared/skills/marketing-site-compliance/SKILL.md",
+          "bodyLines": 139,
+          "references": [
+            "_shared/skills/marketing-site-compliance/references/browser-snippets.md",
+            "_shared/skills/marketing-site-compliance/references/legal-pages-de.md",
+            "_shared/skills/marketing-site-compliance/references/third-parties.md"
+          ],
+          "scripts": [
+            "_shared/skills/marketing-site-compliance/scripts/check-links.mjs"
+          ],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "mcp-builder",
           "scope": "_shared",
           "description": "Guide for creating high-quality MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed tools. Use when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/TypeScript (MCP SDK).",

@@ -1,0 +1,12 @@
+# Trigger evals for _shared/skills/marketing-site-compliance.
+positive:
+  - "Check whether loopstudio.app needs a cookie banner"
+  - "Is the Impressum on the new landing page complete?"
+  - "Run the site checklist before we switch the DNS to the new marketing site"
+  - "SEO basics and legal pages for the retailer website, robots, sitemap, Datenschutz"
+  - "Do our marketing sites name Google Fonts and Calendly in the privacy policy?"
+  - "Audit the website - Open Graph, Core Web Vitals, broken links, redirects"
+negative:
+  - "Add Sentry error tracking to the Nuxt frontend"
+  - "Is this pull request done and secure? Walk the definition of done"
+  - "Can we use this typeface commercially on the client's site?"
