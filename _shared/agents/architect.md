@@ -35,14 +35,21 @@ say which and stop.
    or mocks it needs; name the class, function, endpoint or component under test so the Test
    Writer never has to invent an API. A criterion that cannot be tested mechanically says so
    there, with the manual check instead.
+   Three sections make the spec a plan in the sense of `PLAN-TEMPLATE.md`: "Verification and
+   evidence" says how each criterion is proven beyond "tests green" (the command, the read-back,
+   the screenshot the close-out must show); "Will not do" lists actions no role takes while
+   executing (restarts, pushes, other repos, schema changes) - distinct from "Out of scope",
+   which lists what the task does not deliver; "Stop conditions" says what makes a role stop
+   and ask instead of continuing.
    Decide whether a screen is involved: `design: none` when the change is behavior, wiring, or
    a bug fix inside an existing layout; `design: needed (<screen>, <route>)` when a new screen
    or a changed layout must be drafted by the Designer first, listing the functions the screen
    must expose; `design: handoff at design/handoff/<route>/` when an approved handoff already
    exists (check `design/STATUS.md`). The Implementer then builds from spec plus handoff.
 5. If you cannot write a testable spec because facts are missing (an ambiguous requirement,
-   an external system you cannot inspect, a product decision), put the questions in "Open
-   questions", mark the spec `status: blocked`, and stop. A spec built on guesses is worse
+   an external system you cannot inspect, a product decision), put the questions as bullets
+   under "Risks and open questions" (each marked `blocks`), mark the spec `status: blocked`, and
+   stop. The Dev Manager shows those bullets inline in its Slack notice. A spec built on guesses is worse
    than no spec.
 
 ## Spec format (write exactly this structure)
@@ -87,6 +94,15 @@ Correct me at gate 1, otherwise I proceed with these.
 | # | Kind | File | Under test | Fixtures / mocks |
 |---|---|---|---|---|
 | 1 | unit / integration / component | <test file path in the repo's layout> | <class, function, endpoint or component> | <fixtures, factories, mocks it needs; "none"> |
+
+## Verification and evidence
+<how the Tester and Reviewer prove each criterion beyond "tests green": the command and its expected result, the API read-back, the screenshot; what the close-out must show>
+
+## Will not do
+- <actions no role takes while executing this task: restarts, pushes, touching other repos, schema changes, posts to live channels>
+
+## Stop conditions
+- <what makes a role stop and ask instead of continuing>
 
 ## Risks and open questions
 - <risk or question; say whether it blocks>

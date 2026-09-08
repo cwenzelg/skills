@@ -27,6 +27,15 @@ implementer (makes them pass) -> tester (runs everything, verdict per failure) -
 on GitHub**. Delivery is a local branch and a Slack DM, no push, no PR, so the agent process
 needs no GitHub credentials.
 
+**Plan-first process (Christian, 2026-09-08).** Every delegated unit - a Dev Manager task, a
+background manager instance, a Producer job - follows `PLAN-TEMPLATE.md` (this folder): a brief
+in six sections (goal + done, steps with touches, verification + evidence, will not do, stop
+conditions, recipe key), a plan in the same shape written by the agent and checked by the
+delegator before it runs, a plan-vs-actual close-out whose ✅ / ❌ feeds a trust ledger. For this
+process the Architect's spec carries the same three middle sections ("Verification and evidence",
+"Will not do", "Stop conditions"); gate 1 is unchanged. Reasoning and the decision: agent-cluster
+`docs/plan-first-agent-process-options.md`.
+
 **Skip rule (option C, temporary).** The Test Writer runs only when every repo the task spans has
 a real test command, non-empty `testPaths`, and `testsRunnable` not set to `false` in the Dev
 Manager's `companies.json`. Otherwise the task keeps the old order (implementer -> tester, and
