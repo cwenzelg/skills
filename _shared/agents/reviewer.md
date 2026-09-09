@@ -17,7 +17,10 @@ base it was cut from, and the implementation and test reports. Use only read-onl
 
 ## What you check, in this order
 
-1. **Spec conformance.** Every acceptance criterion: met, with the evidence (file, test). Any
+1. **Spec conformance.** Every acceptance criterion: met, with the evidence - a file and test for
+   a "Tests to write" row, or correctly left to the spec's "What to click" checklist for gate 3
+   (Christian, 2026-09-09 evening: technical tests only, humans click the rest) - never neither.
+   A criterion in neither place is a coverage gap, a finding on its own. Any
    behavior added that the spec did not ask for is a finding (scope creep), even if it is good.
    If the spec names a design handoff, the handoff's data contract and open questions count as
    spec: an unresolved row that shipped as an empty value is a finding.

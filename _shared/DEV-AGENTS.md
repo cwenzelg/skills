@@ -10,22 +10,25 @@ scope, the repo's own `CLAUDE.md`, and the project's `design/PROJECT.md`.
 
 | Agent | Job | Tools | Writes |
 |---|---|---|---|
-| `architect` | goal -> spec with testable acceptance criteria, a "Tests to write" table, a file-level plan, and a "needs design?" call | Read, Glob, Grep, Write | `docs/specs/<task-id>.md` only |
+| `architect` | goal -> spec with testable acceptance criteria, a gate-1 test table (technical tests only) plus a "What to click" checklist, a file-level plan, and a "needs design?" call | Read, Glob, Grep, Write | `docs/specs/<task-id>.md` only |
 | `designer` | screen design per the shared `screen-design` skill: draft rounds on a canvas, human approval, handoff export | Read, Glob, Grep, Write, Edit, Bash, Artifact, Skill | `design/` only |
-| `test-writer` | acceptance criteria -> one failing test each, committed before any code; bug fixes first answer "why did no existing test catch this?" | Read, Glob, Grep, Write, Edit, Bash | test files only |
+| `test-writer` | approved gate-1 test rows -> one failing test each, committed before any code (never for a greenfield repo); bug fixes first answer "why did no existing test catch this?" | Read, Glob, Grep, Write, Edit, Bash | test files only |
 | `implementer` | approved spec (+ handoff) -> code that makes the Test Writer's tests pass, small commits; may add tests, never edits the Test Writer's | Read, Edit, Write, Glob, Grep, Bash | production code (+ own tests) |
-| `tester` | runs the whole suite, verdict per failing test (`implementation` / `test` / `spec`), checks the repo's house rules; writes tests only when the Test Writer was skipped | Read, Edit, Write, Glob, Grep, Bash | test files only, never the Test Writer's |
+| `tester` | runs the whole suite, build/lint/type-check, verdict per failing test (`implementation` / `test` / `spec`), checks the repo's house rules and fonts; browser measurement only when a criterion is explicitly about it; writes tests only when the Test Writer was skipped | Read, Edit, Write, Glob, Grep, Bash | test files only, never the Test Writer's |
 | `reviewer` | diff vs spec -> ranked findings with scenarios, verdict | Read, Glob, Grep, Bash | nothing |
 
-Flow (Christian, 2026-09-04; test-first since 2026-09-06): architect -> **gate 1: Christian
-approves the spec** (every task, first month; skipped for fixes from an error report) -> if the
-spec says `design: needed`: designer drafts -> **gate 2: Christian approves a round** (layout,
-and whether the screen shows the functions the task needs) -> designer exports the handoff ->
-**test writer** (the spec's acceptance criteria become failing tests on the branch) ->
-implementer (makes them pass) -> tester (runs everything, verdict per failure) -> reviewer
-(blocking findings go back once) -> local branch + Slack report -> **gate 3: Christian merges
-on GitHub**. Delivery is a local branch and a Slack DM, no push, no PR, so the agent process
-needs no GitHub credentials.
+Flow (Christian, 2026-09-04; test-first since 2026-09-06; test scope narrowed 2026-09-09
+evening, see "Tests are technical, humans click the rest" below): architect -> **gate 1: Christian
+approves the spec**, including its gate-1 test table and its "What to click" checklist (every
+task, first month; skipped for fixes from an error report) -> if the spec says `design: needed`:
+designer drafts -> **gate 2: Christian approves a round** (layout, and whether the screen shows
+the functions the task needs) -> designer exports the handoff -> **test writer** (the spec's
+approved gate-1 test rows become failing tests on the branch, technical only, only where a suite
+already exists) -> implementer (makes them pass) -> tester (runs the suite, build, lint,
+type-check and house rules; no browser round unless a criterion calls for one) -> reviewer
+(blocking findings go back once) -> local branch + Slack report -> **gate 3: Christian on the
+deploy preview against the spec's "What to click" checklist, then merges on GitHub**. Delivery is
+a local branch and a Slack DM, no push, no PR, so the agent process needs no GitHub credentials.
 
 **Plan-first process (Christian, 2026-09-08).** Every delegated unit - a Dev Manager task, a
 background manager instance, a Producer job - follows `PLAN-TEMPLATE.md` (this folder): a brief
@@ -36,28 +39,65 @@ process the Architect's spec carries the same three middle sections ("Verificati
 "Will not do", "Stop conditions"); gate 1 is unchanged. Reasoning and the decision: agent-cluster
 `docs/plan-first-agent-process-options.md`.
 
-**Skip rule (option C, temporary).** The Test Writer runs only when every repo the task spans has
-a real test command, non-empty `testPaths`, and `testsRunnable` not set to `false` in the Dev
-Manager's `companies.json`. Otherwise the task keeps the old order (implementer -> tester, and
-the Tester writes the tests) and the Slack thread says why. The suites are to be made runnable
-in worktrees over the following days (board `20260906-runnable-test-suites`).
+**Skip rule (option C, temporary; narrowed 2026-09-09 evening).** The Test Writer runs only when
+every repo the task spans has a real test command, non-empty `testPaths`, and `testsRunnable` not
+set to `false` in the Dev Manager's `companies.json` **and** the spec's gate-1 test table has
+approved rows. Otherwise the task keeps the old order (implementer -> tester, and the Tester
+writes only what the "no suite" path in the tester role calls for) and the Slack thread says why.
+Never for a greenfield repo, regardless of `testPaths`. The suites are to be made runnable in
+worktrees over the following days (board `20260906-runnable-test-suites`).
 
-**Tests are defined together at gate 1 (Christian, 2026-09-09).** The planned tests were the
-part of specs that read least useful ("a lot of the described tests always sound not really helpful
-for the context"), and Tester rounds are the largest cost of a task (three full 25-criterion
-Playwright rounds, $8-10 each, for a ~160-line change on 2026-09-09). So the spec's test table is
-now a gate-1 deliverable, not a Test Writer decision: the Architect lists every planned test as
-one row (criterion -> test -> what breaks for a user or operator if it fails -> cost class:
-unit / API / browser), the front desk pre-checks each row before Christian sees the spec, and
-Christian's approval note prunes or adds rows; the Test Writer writes only the approved rows and
-the Tester measures only those. Front-desk check per row, cut on any "no": (1) would a user,
-operator or the next developer notice if this broke; (2) is the test cheaper than the bug it
-prevents (no per-round full-page geometry diffs for a copy change, no browser test where an HTTP
-read-back proves the same thing); (3) will it stay in the repo and run there without the Dev
-Manager. Later Tester rounds re-run only the criteria the last fix touched plus the house-rule
-checks - full re-measurement only once, in round 1. Until the Dev Manager carries this in its
-briefs, the front desk writes the approved table into the gate-1 note. Christian's alternative,
-switching the Test Writer off entirely, stays on the table if the tables do not get better.
+**Tests are technical, humans click the rest (Christian, 2026-09-09 evening) — supersedes "Tests
+are defined together at gate 1" from the same morning.** The morning rule kept the test table a
+gate-1 deliverable but did not change what got tested or how; two same-day cost reviews
+(agent-cluster `.state/tasks/20260908-loopstudio-compliance-cost-review/review.md` and
+`.state/tasks/20260909-cluster-console-app-cost-review/review.md`) showed Tester rounds were still
+the largest cost of a task: three full 25-criterion Playwright rounds at $8-10 each for a
+~160-line change, twelve tests against a guessed socket shape that missed the real bug, a Tester
+spending half its round writing tests. Christian: "things go to a test environment and are human-
+tested anyway for now; too many random tests just slow down the implementation time." Five points:
+
+1. Agents write **technical tests only**: unit and contract tests for what a human cannot see by
+   clicking - parsers, adapters, guards (read-only, bind address, allowlists), contract/version
+   checks, error paths. Ten to thirty per task, one row per test in the spec's gate-1 test table
+   (criterion / test / what breaks for a user, operator or the next developer if it fails / cost
+   class: unit / API / browser), pruned by Christian in the approval note. Front-desk pre-check
+   per row, same three questions as before: would someone notice if it broke; is the test cheaper
+   than the bug it prevents; will it stay in the repo and run there without the Dev Manager.
+2. The **Tester does not measure in a browser** for behaviour Christian will click through on the
+   deploy preview anyway. Its job: run the suite, build, lint and type-check, the house rules and
+   the font check (unchanged), and an evidence table with the preview/branch URLs. Geometry,
+   contrast, screenshots and tab-walks only when an acceptance criterion is explicitly about them.
+   The Tester never writes a test suite; where a repo has none, it says so in one line and runs
+   the build/lint/type-check instead.
+3. **Human test is an explicit step**, not implied by "tests green": the Architect writes a "What
+   to click" checklist of at most five lines into the spec as a new section; **gate 3** is
+   Christian on the deploy preview against that checklist, and the spec says so.
+4. The **Test Writer runs only where a suite already exists** (`companies.json` `testPaths`)
+   **and** the gate-1 table has approved rows; never for a greenfield repo, even one with
+   `testPaths` set for another part of the task. See the updated skip rule above.
+5. **Later Tester rounds re-run only the tests and files the last fix touched**, plus the
+   mechanical checks (suite, build, lint, type-check, floor, fonts); the full run happens once, in
+   round 1.
+
+Expected effect: Tester rounds from about $8 to $2-3 (about $1 on Haiku), usually one round fewer
+per task, shorter implementation time. Accepted risk: behaviour regressions are now caught by
+Christian on the deploy preview instead of an automated browser round - revisit once a product
+carries paying users' live flows.
+
+**Code follow-ups (not implemented by this rewrite - flagged for a Dev Manager task, no code
+touched here):**
+- The Test Writer's run condition (point 4) needs a check against the gate-1 table's approved
+  rows, not just `testPaths`/`testsRunnable` (`agents/dev-manager/src/testFirst.ts` and its
+  orchestrator call site).
+- A re-test round (point 5) needs a "touched scope" brief: the orchestrator passes the last fix's
+  changed files (or the failing criteria) to the Tester instead of the full criterion set.
+- The Architect's "What to click" checklist needs to reach gate 3: today gate 3 is "Christian
+  merges the PR" with no checklist attached in the Slack/PR flow.
+- The cost-cap and verdict-parsing bugs the two reviews found (`parseTesterVerdicts` treating
+  "pass (N, 0 failing)" as a failure; the ceiling checked after a role finishes; a prose "no test
+  failed" bullet still setting `anyFailure`) are separate, already-filed defects, not part of this
+  rewrite.
 
 **Escalation rule.** The Tester never patches; it labels each failing test and the Dev Manager
 routes: `implementation` -> Implementer, then Tester again (max 2 rounds); `test` -> Test Writer

@@ -555,12 +555,12 @@
         },
         {
           "name": "test-writer",
-          "description": "Turns an approved spec's acceptance criteria into failing tests before anyone codes. Use after the spec is approved (and the design handoff exists, when one is needed) and before the Implementer; give it the spec path, the test command and the test paths. Writes test files only, commits them on the task branch, proves they fail on the current branch, and reports a criterion-to-test table. Never edits production code.",
+          "description": "Turns an approved spec's approved gate-1 test-table rows into failing tests before anyone codes. Use only where a runnable suite already exists in the repo and the spec's gate-1 test table has approved rows (never for a greenfield repo) - after the spec is approved (and the design handoff exists, when one is needed) and before the Implementer; give it the spec path, the test command and the test paths. Writes test files only, commits them on the task branch, proves they fail on the current branch, and reports a row-to-test table. Never edits production code.",
           "path": "_shared/agents/test-writer.md"
         },
         {
           "name": "tester",
-          "description": "Runs the whole test suite after the Implementer and reports the evidence. Use after the implementer finishes; give it the spec path, the test command, and whether the Test Writer ran. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules and the licence of every font the diff touches (font-licensing skill); never edits the Test Writer's tests and never edits production code.",
+          "description": "Runs the suite, build, lint and type-check after the Implementer and reports the evidence - not a browser round. Use after the implementer finishes; give it the spec path, the test command, whether the Test Writer ran, and the preview/branch URL. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules and the licence of every font the diff touches (font-licensing skill); measures in a browser only when an acceptance criterion is explicitly about geometry/contrast/focus; never edits the Test Writer's tests, never writes a suite, never edits production code.",
           "path": "_shared/agents/tester.md"
         }
       ]
