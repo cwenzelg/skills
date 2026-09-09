@@ -14,7 +14,7 @@ listed as "unknown - identify before the audit closes" and counts as unnamed unt
 | host pattern | vendor | what it does | essential? | name in text | typical keys |
 |---|---|---|---|---|---|
 | `fonts.googleapis.com`, `fonts.gstatic.com` | Google Fonts (remote) | web fonts from Google's CDN; visitor IP reaches Google | no (self-hosting avoids the transfer) | "Google Fonts", "fonts.googleapis" | none |
-| `google-analytics.com`, `analytics.google.com`, `googletagmanager.com`, `g.doubleclick.net` | Google Analytics / Tag Manager / Ads | analytics, tag container, ads | no | "Google Analytics", "Tag Manager", "Google Ads" | `_ga`, `_ga_*`, `_gid`, `_gat`, `_gcl_au` |
+| `google-analytics.com`, `analytics.google.com`, `googletagmanager.com`, `*.doubleclick.net`, `www.google.com/pagead`, `www.google.com/ccm` | Google Analytics / Tag Manager / Ads | analytics, tag container, ads, conversion pixels | no | "Google Analytics", "Tag Manager", "Google Ads" | `_ga`, `_ga_*`, `_gid`, `_gat`, `_gcl_au`, `_gcl_ls` |
 | `www.google.com/recaptcha`, `www.gstatic.com/recaptcha` | Google reCAPTCHA | bot check on forms | no | "reCAPTCHA" | `_GRECAPTCHA` |
 | `maps.googleapis.com`, `maps.gstatic.com` | Google Maps | embedded map | no | "Google Maps" | `NID` (google.com) |
 | `plausible.io`, `*.plausible.io` | Plausible Analytics | cookieless analytics (EU) | no, but sets no identifier | "Plausible" | none |
@@ -24,14 +24,20 @@ listed as "unknown - identify before the audit closes" and counts as unnamed unt
 | `clarity.ms`, `www.clarity.ms` | Microsoft Clarity | session recording | no | "Clarity" | `_clck`, `_clsk` |
 | `bat.bing.com` | Microsoft Ads UET | marketing pixel | no | "Microsoft Advertising" | `_uetsid`, `_uetvid` |
 | `calendly.com`, `assets.calendly.com` | Calendly | booking widget / embed | no (a link instead of an embed avoids it) | "Calendly" | none before interaction |
-| `www.youtube.com`, `www.youtube-nocookie.com`, `i.ytimg.com`, `s.ytimg.com` | YouTube (Google) | video embed | no (nocookie + click-to-load is the usual fix) | "YouTube" | `VISITOR_INFO1_LIVE`, `YSC` |
+| `www.youtube.com`, `www.youtube-nocookie.com`, `i.ytimg.com`, `s.ytimg.com`, `yt3.ggpht.com`, `jnn-pa.googleapis.com`, `www.google.com/js/th`, `www.gstatic.com/youtube` | YouTube (Google) | video embed (player, thumbnails, avatar, bot-guard script + attestation call) | no (nocookie + click-to-load is the usual fix) | "YouTube" | `VISITOR_INFO1_LIVE`, `YSC` |
 | `player.vimeo.com`, `i.vimeocdn.com`, `f.vimeocdn.com` | Vimeo | video embed | no | "Vimeo" | `vuid` |
 | `*.netlify.app`, `*.netlify.com`, `netlify-forms` | Netlify | hosting, forms, edge | yes (hosting) | "Netlify" | none (`nf_*` only with identity) |
 | `*.cloudflare.com`, `cdnjs.cloudflare.com`, `challenges.cloudflare.com` | Cloudflare | CDN / bot check / Turnstile | yes for CDN and challenge | "Cloudflare" | `__cf_bm`, `cf_clearance` |
 | `cdn.jsdelivr.net`, `unpkg.com` | jsDelivr / unpkg | script CDN; visitor IP reaches the CDN | no (bundle locally) | "jsDelivr" / "unpkg" | none |
 | `use.typekit.net`, `p.typekit.net` | Adobe Fonts (Typekit) | web fonts | no | "Adobe Fonts", "Typekit" | none |
-| `assets.website-files.com`, `*.webflow.io`, `d3e54v103j8qbb.cloudfront.net` | Webflow (assets / jQuery CDN) | asset hosting for Webflow exports | no (assets can be self-hosted) | "Webflow" | none |
-| `js.hs-scripts.com`, `*.hubspot.com`, `*.hsforms.com` | HubSpot | forms, chat, tracking | no | "HubSpot" | `hubspotutk`, `__hstc` |
+| `*.website-files.com`, `*.webflow.io`, `d3e54v103j8qbb.cloudfront.net` | Webflow (assets / jQuery CDN) | asset hosting for Webflow sites and exports (`cdn.prod.website-files.com`, `assets.website-files.com`) | no (assets can be self-hosted) | "Webflow" | none |
+| `accounts.finsweet.com` | Finsweet | Webflow component library licence check (`/v1/components/verify` on every load) | no | "Finsweet" | none |
+| `cdn.weglot.com` | Weglot | website translation layer (proxies the page text, loads its switcher) | no | "Weglot" | `wglang` |
+| `*.hs-scripts.com`, `*.hubspot.com`, `*.hsforms.com` | HubSpot | forms, chat, tracking | no | "HubSpot" | `hubspotutk`, `__hstc` |
+| `tracker.metricool.com` | Metricool | social-media / web analytics tracker | no | "Metricool" | none |
+| `ajax.googleapis.com` | Google Hosted Libraries | script CDN (jQuery, webfont.js); visitor IP reaches Google | no (bundle locally) | "Google Hosted Libraries", "ajax.googleapis" | none |
+| `*.imgix.net` | imgix | image CDN / processing (a project-specific subdomain, e.g. `<project>.imgix.net`) | no (self-host or name it) | "imgix" | none |
+| `browser-update.org` | Browser-Update.org | outdated-browser notice script | no | "browser-update" | none |
 | `*.list-manage.com`, `chimpstatic.com` | Mailchimp | newsletter forms | no | "Mailchimp" | none |
 | `js.stripe.com`, `m.stripe.com`, `m.stripe.network` | Stripe | payments | only in a checkout | "Stripe" | `__stripe_mid`, `__stripe_sid` |
 | `www.paypal.com`, `www.paypalobjects.com` | PayPal | payments | only in a checkout | "PayPal" | many |

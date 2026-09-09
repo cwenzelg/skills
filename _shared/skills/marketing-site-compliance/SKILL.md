@@ -67,12 +67,43 @@ and whether a conditional field applies.
    its reason, never dropped. Record every command and its raw output (an `evidence.md` with one
    anchor per check id, screenshots and JSON next to it).
 
+## Automated subset (`scripts/site-audit.mjs`)
+
+Twenty of the 27 checks need no human reading and run as one script over a site list - S1-S11,
+L1, L3, L4 (host list + name search), L5, L6 (hosts before consent only), A1-A3, C2 - with the
+same pass criteria and severities as the tables below, applied literally:
+
+```
+node --env-file=<repo>/.env scripts/site-audit.mjs --sites <sites.json> --out <run dir> \
+     --playwright-dir <a node_modules with playwright> [--diff <previous run dir>] [--only site.de]
+```
+
+The site list lives with the owner, not in this skill (agent-cluster: `config/marketing-sites.json`
+- per site: `origin`, `apex`, `languages`, `germanLaw`, `sellsOnline`, `legalHints`,
+`plausibleSiteId`). Output: `<run dir>/<site>.json` (schema `site-audit/1`: `checks[]` with id,
+verdict, severity, summary, structured evidence, evidence files; `humanOnly[]`; `notJudged[]`;
+optional `plausible` block), the raw outputs under `<run dir>/<site>/`, `summary.md` in the output
+shape above, and with `--diff` a `diff.md` (per site: check, previous, now, changed? = same /
+verdict / severity / detail). `--diff-only` re-diffs an existing run. The browser part uses the
+Playwright library from an existing install (one fresh context per site, the pre-consent listing
+before any click, never clicks accept); without one, the `[browser]` rows are `not-run`. Keys from
+the environment only: `PAGESPEED_API_KEY` (S6, else `not-run`), `PLAUSIBLE_API_KEY` (optional 7-day
+visitors/pageviews per site). The vendor and cookie tables are parsed from
+`references/third-parties.md` at run time.
+
+**Stays human, every time** - the script lists them as `humanOnly` and never judges them: L2
+(Impressum fields), L7 (selling online), L8 (form privacy notice), A4 (focus), A5 (contrast), C1
+(identity consistency), C3 (phone), L6's after-accept diff and "reject as easy as accept", A2's
+"is this `alt=""` image decorative or content", and every wording / "lawyer" item. A script row is
+a presence measurement; the human read on those seven is the audit.
+
 ## The checks
 
 Tool tags: `[curl]` `[openssl]` `[node]` (the script or a `node -e` one-liner) `[psi]` (PageSpeed
 Insights API, free, no key for low volume) `[browser]` (Playwright MCP: `browser_navigate`,
 `browser_evaluate`, `browser_network_requests`, `browser_take_screenshot`, `browser_press_key`,
-`browser_click`) `[read]` (a human or model reads the page text against a field list) `[dns]` (`nslookup`).
+`browser_click`; `scripts/site-audit.mjs` runs the same snippets through the Playwright library)
+`[read]` (a human or model reads the page text against a field list) `[dns]` (`nslookup`).
 
 ### (a) SEO & technical
 
