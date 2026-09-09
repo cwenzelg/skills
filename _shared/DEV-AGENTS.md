@@ -42,6 +42,23 @@ Manager's `companies.json`. Otherwise the task keeps the old order (implementer 
 the Tester writes the tests) and the Slack thread says why. The suites are to be made runnable
 in worktrees over the following days (board `20260906-runnable-test-suites`).
 
+**Tests are defined together at gate 1 (Christian, 2026-09-09).** The planned tests were the
+part of specs that read least useful ("a lot of the described tests always sound not really helpful
+for the context"), and Tester rounds are the largest cost of a task (three full 25-criterion
+Playwright rounds, $8-10 each, for a ~160-line change on 2026-09-09). So the spec's test table is
+now a gate-1 deliverable, not a Test Writer decision: the Architect lists every planned test as
+one row (criterion -> test -> what breaks for a user or operator if it fails -> cost class:
+unit / API / browser), the front desk pre-checks each row before Christian sees the spec, and
+Christian's approval note prunes or adds rows; the Test Writer writes only the approved rows and
+the Tester measures only those. Front-desk check per row, cut on any "no": (1) would a user,
+operator or the next developer notice if this broke; (2) is the test cheaper than the bug it
+prevents (no per-round full-page geometry diffs for a copy change, no browser test where an HTTP
+read-back proves the same thing); (3) will it stay in the repo and run there without the Dev
+Manager. Later Tester rounds re-run only the criteria the last fix touched plus the house-rule
+checks - full re-measurement only once, in round 1. Until the Dev Manager carries this in its
+briefs, the front desk writes the approved table into the gate-1 note. Christian's alternative,
+switching the Test Writer off entirely, stays on the table if the tables do not get better.
+
 **Escalation rule.** The Tester never patches; it labels each failing test and the Dev Manager
 routes: `implementation` -> Implementer, then Tester again (max 2 rounds); `test` -> Test Writer
 fixes that test, then Tester (max 1); `spec` -> Architect amends the spec in one pass (or marks
