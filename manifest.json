@@ -341,7 +341,7 @@
           "scope": "_shared",
           "description": "How to set up a company or client project workspace under C:\\code (the Loop Studio layout) - inventory the GitHub org, decide the folder layout per backend stack (Neos Flow composer distributions are NESTED inside their docker compose base, Java/Node backends are siblings), clone, scaffold the root repo with CLAUDE.md, knowledge-base and design, register it for the Dev Manager (companies.json), the skill scope and the Notion findings database, and write the summary. Use whenever a task says set up / create / scaffold / onboard a workspace, project folder, knowledge base or root repo for a company, client or product, clone a company's repos, or \"do the same as for MachineMaster\", even if the user does not say \"workspace\".",
           "path": "_shared/skills/project-workspace-setup/SKILL.md",
-          "bodyLines": 108,
+          "bodyLines": 109,
           "references": [
             "_shared/skills/project-workspace-setup/references/flow-backend-nesting.md"
           ],
