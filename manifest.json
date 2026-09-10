@@ -437,6 +437,17 @@
           }
         },
         {
+          "name": "testable-capabilities",
+          "scope": "_shared",
+          "description": "What checks are even possible for a given stack (lint, test, type-check, build) - a general reference so \"no house rules found\" and \"no lint configured\" are never guessed or invented, and a pointer to where each company's own tracked reality (what is actually implemented and wired up today) belongs. Use whenever a task checks, tests, or reviews a repo and needs to know what tooling that stack should have, when a repo has no lint/test command configured and you need to say whether that is expected or a gap, or when writing/updating a company's own skill scope with facts about its tooling.",
+          "path": "_shared/skills/testable-capabilities/SKILL.md",
+          "bodyLines": 57,
+          "references": [],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
           "name": "video-post",
           "scope": "_shared",
           "description": "Post-production for recorded talking-head video (interviews, series episodes, personal-branding clips) - finding new footage in the channel's shoot folder, mapping takes and restarts from audio and transcript, choosing cut points, building the vertical 9:16 cut with an on-screen tag, and QA. Use whenever footage was recorded, a clip needs cutting, trimming, reviewing or checking, a take needs picking, or a test clip should be verified before a shoot, even if the user only says \"I recorded something\", \"check the video\" or \"new footage\".",
@@ -547,6 +558,11 @@
           "name": "implementer",
           "description": "Implements an approved spec in the repository, on the task's branch, in small commits. Use after a spec exists and has been approved and the Test Writer has committed its failing tests; give it the spec path. Makes the Test Writer's tests pass, may add tests, never edits or deletes the Test Writer's test files. Does not design, does not widen scope.",
           "path": "_shared/agents/implementer.md"
+        },
+        {
+          "name": "judgment-tester",
+          "description": "The judgment-requiring half of testing a change - a verdict per failing test, house rules, the judgment sections of the definition of done, the manual halves of security and accessibility, and coverage gaps against the spec. Scaffolded 2026-09-10 (Dev Process Concept §4), off by default while the mechanical/judgment split beds in. Use after the Technical Tester (src/technicalTester.ts) and the Tester have both run; give it the spec path, the Technical Tester's report, and the Tester's report. Never re-runs the mechanical checks (suite, build, floor, secrets, fonts, pre-existing-vs-new) - reads their result instead. Never edits anything.",
+          "path": "_shared/agents/judgment-tester.md"
         },
         {
           "name": "reviewer",
