@@ -10,7 +10,7 @@ scope, the repo's own `CLAUDE.md`, and the project's `design/PROJECT.md`.
 
 | Agent | Job | Tools | Writes |
 |---|---|---|---|
-| `architect` | goal -> spec with testable acceptance criteria, a gate-1 test table (technical tests only) plus a "What to click" checklist, a file-level plan, and a "needs design?" call | Read, Glob, Grep, Write | `docs/specs/<task-id>.md` only |
+| `architect` | goal -> spec with testable acceptance criteria (no gate-1 test table since 2026-09-10 - that decision moved downstream) plus a "What to click" checklist, a file-level plan, and a "needs design?" call | Read, Glob, Grep, Write | `docs/specs/<task-id>.md` only |
 | `designer` | screen design per the shared `screen-design` skill: draft rounds on a canvas, human approval, handoff export | Read, Glob, Grep, Write, Edit, Bash, Artifact, Skill | `design/` only |
 | `test-writer` | approved gate-1 test rows -> one failing test each, committed before any code (never for a greenfield repo); bug fixes first answer "why did no existing test catch this?" | Read, Glob, Grep, Write, Edit, Bash | test files only |
 | `implementer` | approved spec (+ handoff) -> code that makes the Test Writer's tests pass, small commits; may add tests, never edits the Test Writer's | Read, Edit, Write, Glob, Grep, Bash | production code (+ own tests) |
@@ -18,8 +18,9 @@ scope, the repo's own `CLAUDE.md`, and the project's `design/PROJECT.md`.
 | `reviewer` | diff vs spec -> ranked findings with scenarios, verdict | Read, Glob, Grep, Bash | nothing |
 
 Flow (Christian, 2026-09-04; test-first since 2026-09-06; test scope narrowed 2026-09-09
-evening, see "Tests are technical, humans click the rest" below): architect -> **gate 1: Christian
-approves the spec**, including its gate-1 test table and its "What to click" checklist (every
+evening, see "Tests are technical, humans click the rest" below; the gate-1 test table itself
+dropped 2026-09-10, see `architect.md`): architect -> **gate 1: Christian
+approves the spec**, including its "What to click" checklist (every
 task, first month; skipped for fixes from an error report) -> if the spec says `design: needed`:
 designer drafts -> **gate 2: Christian approves a round** (layout, and whether the screen shows
 the functions the task needs) -> designer exports the handoff -> **test writer** (the spec's
@@ -41,9 +42,12 @@ process the Architect's spec carries the same three middle sections ("Verificati
 
 **Skip rule (option C, temporary; narrowed 2026-09-09 evening).** The Test Writer runs only when
 every repo the task spans has a real test command, non-empty `testPaths`, and `testsRunnable` not
-set to `false` in the Dev Manager's `companies.json` **and** the spec's gate-1 test table has
-approved rows. Otherwise the task keeps the old order (implementer -> tester, and the Tester
-writes only what the "no suite" path in the tester role calls for) and the Slack thread says why.
+set to `false` in the Dev Manager's `companies.json`. (Its second condition used to be "and the
+spec's gate-1 test table has approved rows" - moot since 2026-09-10, the table no longer exists;
+also moot in practice already, since the Test Writer stays deactivated cluster-wide regardless,
+per `DEV_MANAGER_TEST_WRITER_ENABLED`.) Otherwise the task keeps the old order (implementer ->
+tester, and the Tester writes only what the "no suite" path in the tester role calls for) and the
+Slack thread says why.
 Never for a greenfield repo, regardless of `testPaths`. The suites are to be made runnable in
 worktrees over the following days (board `20260906-runnable-test-suites`).
 

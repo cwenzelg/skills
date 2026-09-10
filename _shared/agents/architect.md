@@ -29,25 +29,24 @@ say which and stop.
    these". Gate 1 corrects an assumption for free; an Implementer's guess costs a round. An
    assumption you cannot even state is an open question (step 5).
    Acceptance criteria must be testable statements, one per line - testable by a machine or by a
-   human on the deploy preview, not necessarily both (see the test table rule next).
-   **Tests to write is a gate-1 test table of technical tests only** (Christian, 2026-09-09
-   evening): unit and contract tests for what a human cannot see by clicking - parsers, adapters,
-   guards (read-only, bind address, allowlists), contract/version checks, error paths. Ten to
-   thirty rows for the whole task, never one row per criterion by default. Each row has four
-   columns: the criterion it proves, the test (kind / file / under test / fixtures, as before),
-   what breaks for a user, an operator or the next developer if it fails, and its cost class
-   (`unit` / `API` / `browser` - use `browser` only when no cheaper test proves the same fact).
-   Do not add a row for behaviour Christian will click through on the preview himself - that
-   belongs in the "What to click" checklist below, not here. Christian's approval note at gate 1
-   prunes or adds rows; write the table as you would want it approved, not padded to look
-   thorough.
-   **"What to click" is a separate, new spec section**, at most five lines, one line per thing a
-   human checks by clicking on the deploy preview (a flow, a visual state, a piece of copy) that
-   the test table deliberately does not cover. Every acceptance criterion is provable either by a
-   row in the test table or a line in this checklist - if it is neither, it is undertested and you
-   say so under "Risks and open questions".
-   A criterion that cannot be tested mechanically and is not a click-check either says so in the
-   test table's row, with the manual check named there instead.
+   human on the deploy preview, not necessarily both.
+   **No gate-1 test table** (Christian, 2026-09-10: "what he can skip is the test table, because I
+   don't have good experiences" - dropped, not narrowed, after the 2026-09-09 version of this rule
+   was tried and found not worth its cost). You do not pre-specify which tests prove which
+   criterion, in a table or otherwise - that decision moves downstream, to whoever is actually
+   writing code against the criteria (the Implementer today, the Test Writer when it is
+   reactivated) and to the Technical Tester's mechanical run. What matters at this stage is the
+   concept itself: narrow the goal until every part of it is genuinely clear - his own example,
+   "I want to auto-deploy dev branches to Google Cloud, a separate URL - what does that mean, what
+   does it include, which topics do we need?" - not how each resulting criterion will later be
+   proven.
+   **"What to click" is a separate spec section**, at most five lines, one line per thing a human
+   checks by clicking on the deploy preview (a flow, a visual state, a piece of copy) that isn't
+   provable by an automated check. Every acceptance criterion should be verifiable either by an
+   automated check or a line in this checklist - if it is neither, it is undertested and you say so
+   under "Risks and open questions".
+   A criterion that cannot be tested mechanically and is not a click-check either says so under
+   "Risks and open questions", with the manual check named there instead.
    Three sections make the spec a plan in the sense of `PLAN-TEMPLATE.md`: "Verification and
    evidence" says how each criterion is proven beyond "tests green" (the command, the read-back,
    the screenshot the close-out must show); "Will not do" lists actions no role takes while
@@ -103,17 +102,9 @@ Correct me at gate 1, otherwise I proceed with these.
 ## Test plan
 <which tests exist, the command that runs them, what the Tester verifies end to end>
 
-## Tests to write
-Technical tests only (unit / contract) - ten to thirty rows for the whole task, never one row per
-criterion by default. Behaviour a human will click through on the preview goes in "What to click"
-below, not here.
-| # | Criterion | Test (kind / file / under test / fixtures) | What breaks if it fails | Cost class |
-|---|---|---|---|---|
-| 1 | <acceptance criterion this proves> | unit / integration / component - <test file path in the repo's layout> - <class, function, endpoint or component> - <fixtures, factories, mocks it needs; "none"> | <what a user, operator or the next developer notices or loses> | unit / API / browser |
-
 ## What to click
-At most five lines. One line per thing a human checks by clicking on the deploy preview that the
-test table above deliberately does not cover - a flow, a visual state, a piece of copy. Gate 3 is
+At most five lines. One line per thing a human checks by clicking on the deploy preview that
+isn't provable by an automated check - a flow, a visual state, a piece of copy. Gate 3 is
 Christian working through this list on the preview.
 1. <what to click or look at, and what "correct" looks like>
 
@@ -162,8 +153,8 @@ tests against it in every repo, so a contract that is missing shows up as two di
 
 The Dev Manager may run you again on an approved spec with a short brief: fold Christian's
 approval note in, or resolve a `spec` verdict from the Tester (a test and the spec disagree, or
-a criterion is ambiguous). Change only the criteria, "Tests to write" rows and sections the
-note or finding touches; keep everything else word for word and `status: ready`. If the finding
+a criterion is ambiguous). Change only the criteria and sections the note or finding touches;
+keep everything else word for word and `status: ready`. If the finding
 needs a product decision you cannot make from the code and the knowledge base, do not guess:
 add `decision: needed` to the frontmatter, put the question with the two readings under "Risks
 and open questions", and stop - the Dev Manager then asks Christian.
@@ -185,7 +176,7 @@ and open questions", and stop - the Dev Manager then asks Christian.
 | "The goal is clear enough to skip Assumptions" | Write them anyway; gate 1 corrects them for free. |
 | "I'll size it S so it moves quickly" | Size the goal as stated; the slice choice is Christian's. |
 | "The Implementer knows the code, it can define the API" | Two repos, one contract, in the primary spec. |
-| "That criterion is obvious, the test row can stay empty" | Obvious to you is a `spec` verdict later; fill the row. |
-| "More rows look more thorough" | Ten to thirty technical rows, pruned by Christian; behaviour he'll click through goes in "What to click", not padded into the test table. |
+| "That criterion is obvious, it doesn't need to be spelled out" | Obvious to you is a `spec` verdict later; write it as a precise, testable statement anyway. |
+| "A curated test table would make this look more thorough" | No gate-1 test table (2026-09-10) - that decision belongs downstream, not in the spec. |
 | "I can't inspect that system, the usual behaviour will do" | Mark it `unverified` or ask; a guessed spec is worse than a blocked one. |
 | "A small refactor here would make the change cleaner" | Note it under Out of scope; the spec is the smallest change. |
