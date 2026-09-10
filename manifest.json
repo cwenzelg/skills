@@ -439,9 +439,9 @@
         {
           "name": "testable-capabilities",
           "scope": "_shared",
-          "description": "What checks are even possible for a given stack (lint, test, type-check, build) - a general reference so \"no house rules found\" and \"no lint configured\" are never guessed or invented, and a pointer to where each company's own tracked reality (what is actually implemented and wired up today) belongs. Use whenever a task checks, tests, or reviews a repo and needs to know what tooling that stack should have, when a repo has no lint/test command configured and you need to say whether that is expected or a gap, or when writing/updating a company's own skill scope with facts about its tooling.",
+          "description": "What checks are even possible for a given stack (lint, test, type-check, build) - a general reference so \"no house rules found\" and \"no lint configured\" are never guessed or invented. Use whenever a task checks, tests, or reviews a repo and needs to know what tooling that stack should have, or when a repo has no lint/test command configured and you need to say whether that is expected or a gap.",
           "path": "_shared/skills/testable-capabilities/SKILL.md",
-          "bodyLines": 57,
+          "bodyLines": 59,
           "references": [],
           "scripts": [],
           "assets": [],

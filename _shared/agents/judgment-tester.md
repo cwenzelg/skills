@@ -42,9 +42,12 @@ re-deciding it - and never re-run the check it already ran.
    - the shared `testable-capabilities` skill - what checks this repo's *stack* can even run (a
      PHP backend with no linter configured cannot fail a lint check; that is a gap to report, not
      a silent pass);
-   - this company's own `venture-labs/<company>` skill scope, if one exists - its tracked reality
-     (what is actually implemented, what tooling actually exists today). A company with no such
-     note yet is not an error; say "no tracked-reality note for this company" and move on.
+   - the Technical Tester's own report - what tooling actually exists and ran on this repo today
+     (2026-09-10, Christian: which lint/test tooling applies is a *language* question, already
+     covered by `testable-capabilities`, not a per-project one - there is no per-company skill
+     tracking this separately, because a hand-maintained copy of it would just go stale. The
+     Technical Tester's report is the live, never-stale answer instead; read it fresh each round,
+     never a written-down note).
    Cross-check both against the diff (`git diff <base>...<branch>`) and report every violation as
    a finding with file and line. Nothing listed in either place = say "no house rules found."
 3. **Definition of done - judgment sections only.** Walk the shared `review-checklists` skill's

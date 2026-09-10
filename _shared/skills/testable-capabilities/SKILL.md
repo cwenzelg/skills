@@ -1,14 +1,19 @@
 ---
 name: testable-capabilities
-description: What checks are even possible for a given stack (lint, test, type-check, build) - a general reference so "no house rules found" and "no lint configured" are never guessed or invented, and a pointer to where each company's own tracked reality (what is actually implemented and wired up today) belongs. Use whenever a task checks, tests, or reviews a repo and needs to know what tooling that stack should have, when a repo has no lint/test command configured and you need to say whether that is expected or a gap, or when writing/updating a company's own skill scope with facts about its tooling.
+description: What checks are even possible for a given stack (lint, test, type-check, build) - a general reference so "no house rules found" and "no lint configured" are never guessed or invented. Use whenever a task checks, tests, or reviews a repo and needs to know what tooling that stack should have, or when a repo has no lint/test command configured and you need to say whether that is expected or a gap.
 ---
 
 # Testable capabilities
 
 Two different questions get confused constantly: "what CAN this stack check" (this file - general,
-company-neutral) and "what DOES this specific repo actually have wired up today" (the company's own
-`venture-labs/<company>` skill scope - specific, factual, and only as current as its last update).
-Never answer the second from this file, and never put company-specific facts in this file.
+company-neutral, a question of the programming language) and "what DOES this specific repo actually
+have wired up today" (a live fact about one repo on one date). The second is deliberately **not**
+answered by a hand-maintained skill file per company (tried once, reverted the same night - Christian,
+2026-09-10: "it's more a question of the programming language I use in the backend and on the
+frontend, so I don't think we should put rules for testing in project-specific folders" - and a
+written-down fact like that just goes stale). It is answered instead by the Technical Tester's own
+report, generated fresh on every round from the actual repo, never from a note someone has to
+remember to update.
 
 ## The standard tool per stack
 
@@ -33,21 +38,16 @@ inventing a command that does not exist, and rather than treating "nothing confi
 
 ## Where a company's own tracked reality lives
 
-This file never says "Loop Studio's backend has no Checkstyle" or "MachineMaster's frontend uses
-ESLint 9" - that is a fact about one company's repos on one date, and it belongs in that company's
-own skill scope (`venture-labs/<company>`), not here. When you learn a fact like that by actually
-reading a repo (not by inference from this table), the two ways it should land are:
+Nowhere, as a written file - and that is deliberate, not a gap. This file never says "Loop Studio's
+backend has no Checkstyle" or "MachineMaster's frontend uses ESLint 9"; neither does any per-company
+skill. That fact is re-derived by the Technical Tester every round, straight from the repo
+(`package.json` / `build.gradle` / `composer.json` / CI config), and printed in its report - it is
+never guessed, and it can never go stale, because nothing wrote it down ahead of time.
 
-1. **A short, dated note in the company's own skill scope** (a `<company>-context` skill if one
-   exists, or a new one if a task creates it) - "backend: test suite yes (`./gradlew test`), no
-   lint tool configured as of 2026-09-10" is useful forever until someone adds one; a guess is not.
-2. **Nothing at all**, when you have not actually verified it - "probably has ESLint" is worse than
-   silence; check `package.json` / `build.gradle` / `composer.json` before writing anything down.
-
-The Judgment Tester and Tester both read this file for the general rule, then the company's own
-scope for what that company actually has, in that order - replacing the older "check CLAUDE.md for
-house rules" instruction (2026-09-10: "there's nothing to do in CLAUDE.md with this information -
-it needs to be handed to the agent").
+The Judgment Tester and Tester both read this file for the general rule (what the stack *could*
+have), then the Technical Tester's own report for what this repo *does* have - replacing the older
+"check CLAUDE.md for house rules" instruction (2026-09-10: "there's nothing to do in CLAUDE.md with
+this information - it needs to be handed to the agent").
 
 ## Always / never
 
@@ -58,3 +58,5 @@ it needs to be handed to the agent").
 - Never copy a fact from this file into a report as if it were verified for the specific repo in
   front of you - re-check the actual repo (`package.json`, `build.gradle`, `composer.json`, CI
   config) before saying what it has.
+- Never write a company-specific tooling fact into a skill file, even a short dated one - it is a
+  live check the Technical Tester repeats every round, not a note that ages.
