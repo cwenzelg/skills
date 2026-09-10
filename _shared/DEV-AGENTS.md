@@ -3,33 +3,40 @@
 This file lives outside `agents/` on purpose: Claude Code treats every `.md` in a plugin's
 `agents/` folder as an agent definition, README included.
 
-Six Claude Code subagent definitions that together form the development process the Dev
+Claude Code subagent definitions that together form the development process the Dev
 Manager orchestrates (phase 2 and 3 of the "Skills and Dev Branch Plan", see the plan link
 in the root README). They are company-neutral; company context comes from the company's skill
-scope, the repo's own `CLAUDE.md`, and the project's `design/PROJECT.md`.
+scope, the repo's own `CLAUDE.md`, and the project's `design/PROJECT.md`. **No Test Writer today**
+(removed 2026-09-10, Christian: the old gate-1-test-table design no longer fits now that the
+Architect stopped producing one, and it needs a genuinely new concept when it comes back, not this
+file's old design re-enabled) - the Implementer and Tester between them cover what it used to do,
+per the roster below. A **Judgment Tester** exists (scaffolded 2026-09-10, off by default) as the
+judgment-requiring half of the Tester role once the mechanical half (the Technical Tester,
+`agents/dev-manager/src/technicalTester.ts` - plain code, not a subagent definition, so not listed
+here) is trusted enough to split off for real.
 
 | Agent | Job | Tools | Writes |
 |---|---|---|---|
 | `architect` | goal -> spec with testable acceptance criteria (no gate-1 test table since 2026-09-10 - that decision moved downstream) plus a "What to click" checklist, a file-level plan, and a "needs design?" call | Read, Glob, Grep, Write | `docs/specs/<task-id>.md` only |
 | `designer` | screen design per the shared `screen-design` skill: draft rounds on a canvas, human approval, handoff export | Read, Glob, Grep, Write, Edit, Bash, Artifact, Skill | `design/` only |
-| `test-writer` | approved gate-1 test rows -> one failing test each, committed before any code (never for a greenfield repo); bug fixes first answer "why did no existing test catch this?" | Read, Glob, Grep, Write, Edit, Bash | test files only |
-| `implementer` | approved spec (+ handoff) -> code that makes the Test Writer's tests pass, small commits; may add tests, never edits the Test Writer's | Read, Edit, Write, Glob, Grep, Bash | production code (+ own tests) |
-| `tester` | runs the whole suite, build/lint/type-check, verdict per failing test (`implementation` / `test` / `spec`), checks the repo's house rules and fonts; browser measurement only when a criterion is explicitly about it; writes tests only when the Test Writer was skipped | Read, Edit, Write, Glob, Grep, Bash | test files only, never the Test Writer's |
+| `implementer` | approved spec (+ handoff) -> code that makes the change, small commits, own tests where the Tester's coverage needs them (no Test Writer to write them first) | Read, Edit, Write, Glob, Grep, Bash | production code (+ own tests) |
+| `tester` | runs the whole suite, build/lint/type-check, verdict per failing test (`implementation` / `test` / `spec`), writes a test itself for any acceptance criterion still uncovered, checks the repo's house rules and fonts; browser measurement only when a criterion is explicitly about it | Read, Edit, Write, Glob, Grep, Bash | test files (its own only) |
+| `judgment-tester` | scaffolded 2026-09-10, off by default: the judgment-requiring half of the Tester role once split off for real - verdict per failing test, house rules, definition-of-done's judgment sections, coverage gaps; reads the Technical Tester's report, never re-runs it | Read, Glob, Grep, Bash | nothing |
 | `reviewer` | diff vs spec -> ranked findings with scenarios, verdict | Read, Glob, Grep, Bash | nothing |
 
 Flow (Christian, 2026-09-04; test-first since 2026-09-06; test scope narrowed 2026-09-09
-evening, see "Tests are technical, humans click the rest" below; the gate-1 test table itself
-dropped 2026-09-10, see `architect.md`): architect -> **gate 1: Christian
-approves the spec**, including its "What to click" checklist (every
+evening, see "Tests are technical, humans click the rest" below; the gate-1 test table dropped and
+the Test Writer removed entirely 2026-09-10, see `architect.md` and the note above): architect ->
+**gate 1: Christian approves the spec**, including its "What to click" checklist (every
 task, first month; skipped for fixes from an error report) -> if the spec says `design: needed`:
 designer drafts -> **gate 2: Christian approves a round** (layout, and whether the screen shows
-the functions the task needs) -> designer exports the handoff -> **test writer** (the spec's
-approved gate-1 test rows become failing tests on the branch, technical only, only where a suite
-already exists) -> implementer (makes them pass) -> tester (runs the suite, build, lint,
-type-check and house rules; no browser round unless a criterion calls for one) -> reviewer
-(blocking findings go back once) -> local branch + Slack report -> **gate 3: Christian on the
-deploy preview against the spec's "What to click" checklist, then merges on GitHub**. Delivery is
-a local branch and a Slack DM, no push, no PR, so the agent process needs no GitHub credentials.
+the functions the task needs) -> designer exports the handoff -> implementer (writes the code and
+any tests its own coverage needs) -> tester (runs the suite, build, lint, type-check and house
+rules, writes any test an acceptance criterion is still missing; no browser round unless a
+criterion calls for one) -> reviewer (blocking findings go back once) -> local branch + Slack
+report -> **gate 3: Christian on the deploy preview against the spec's "What to click" checklist,
+then merges on GitHub**. Delivery is a local branch and a Slack DM, no push, no PR, so the agent
+process needs no GitHub credentials.
 
 **Plan-first process (Christian, 2026-09-08).** Every delegated unit - a Dev Manager task, a
 background manager instance, a Producer job - follows `PLAN-TEMPLATE.md` (this folder): a brief
@@ -40,14 +47,12 @@ process the Architect's spec carries the same three middle sections ("Verificati
 "Will not do", "Stop conditions"); gate 1 is unchanged. Reasoning and the decision: agent-cluster
 `docs/plan-first-agent-process-options.md`.
 
-**Skip rule (option C, temporary; narrowed 2026-09-09 evening).** The Test Writer runs only when
-every repo the task spans has a real test command, non-empty `testPaths`, and `testsRunnable` not
-set to `false` in the Dev Manager's `companies.json`. (Its second condition used to be "and the
-spec's gate-1 test table has approved rows" - moot since 2026-09-10, the table no longer exists;
-also moot in practice already, since the Test Writer stays deactivated cluster-wide regardless,
-per `DEV_MANAGER_TEST_WRITER_ENABLED`.) Otherwise the task keeps the old order (implementer ->
-tester, and the Tester writes only what the "no suite" path in the tester role calls for) and the
-Slack thread says why.
+**Skip rule (option C, 2026-09-06 - superseded 2026-09-10 by the Test Writer's removal, kept here
+as history).** The Test Writer used to run only when every repo the task spans had a real test
+command, non-empty `testPaths`, and `testsRunnable` not set to `false` in the Dev Manager's
+`companies.json`, and the spec's gate-1 test table had approved rows. There is no Test Writer to
+apply this rule to any more - the task always runs today's order (implementer -> tester, the
+Tester writing only what "no suite" or an uncovered criterion calls for, per `tester.md`).
 Never for a greenfield repo, regardless of `testPaths`. The suites are to be made runnable in
 worktrees over the following days (board `20260906-runnable-test-suites`).
 
@@ -77,9 +82,10 @@ tested anyway for now; too many random tests just slow down the implementation t
 3. **Human test is an explicit step**, not implied by "tests green": the Architect writes a "What
    to click" checklist of at most five lines into the spec as a new section; **gate 3** is
    Christian on the deploy preview against that checklist, and the spec says so.
-4. The **Test Writer runs only where a suite already exists** (`companies.json` `testPaths`)
-   **and** the gate-1 table has approved rows; never for a greenfield repo, even one with
-   `testPaths` set for another part of the task. See the updated skip rule above.
+4. The **Test Writer ran only where a suite already existed** (`companies.json` `testPaths`)
+   **and** the gate-1 table had approved rows; never for a greenfield repo, even one with
+   `testPaths` set for another part of the task. See the updated skip rule above - the Test Writer
+   itself is gone as of 2026-09-10.
 5. **Later Tester rounds re-run only the tests and files the last fix touched**, plus the
    mechanical checks (suite, build, lint, type-check, floor, fonts); the full run happens once, in
    round 1.
@@ -103,14 +109,16 @@ touched here):**
   failed" bullet still setting `anyFailure`) are separate, already-filed defects, not part of this
   rewrite.
 
-**Escalation rule.** The Tester never patches; it labels each failing test and the Dev Manager
-routes: `implementation` -> Implementer, then Tester again (max 2 rounds); `test` -> Test Writer
+**Escalation rule (as it ran with a Test Writer; see `tester.md` for today's version without one).**
+The Tester never patches; it labels each failing test and the Dev Manager routes:
+`implementation` -> Implementer, then Tester again (max 2 rounds); `test` -> Test Writer
 fixes that test, then Tester (max 1); `spec` -> Architect amends the spec in one pass (or marks
 `decision: needed`), the Test Writer redoes the affected criteria, Implementer, Tester (max 1).
 Anything still failing after its round, or a `decision: needed`, pauses the task as
 `awaiting-review`: a Slack post with the criterion, the test, the trimmed output and the three
 answers `spec` / `test` / `code` (or free text). Christian's reply is appended to the spec and
-the task continues from the Test Writer step.
+the task continues. (2026-09-10: with no Test Writer, a `test` verdict is the Tester's own fix
+instead of a hand-off - see `tester.md`'s "Writing tests yourself" section.)
 
 **Fonts (Christian, 2026-09-06).** The Tester checks every font family a diff introduces or
 references (CSS/HTML/Vue/TSX/config/font files) against the shared `font-licensing` skill:
@@ -176,11 +184,11 @@ skill, named explicitly by `tester.md` and `reviewer.md`.
 ## Limits these files cannot enforce
 
 Frontmatter restricts tools, not paths. "Architect writes only the spec file", "Designer writes
-only under design/", "Test Writer and Tester edit only test files", and "the Implementer never
-edits the Test Writer's files" are prompt rules here; the Dev Manager enforces them mechanically
-with a pre-tool-use hook on file paths (the Test Writer's committed files are recorded on the
-task and denied to the Implementer) and a denied-paths list per company (`companies.json`). An
-interactive session relies on the prompt rules plus the human watching.
+only under design/", and "Tester edits only test files" are prompt rules here; the Dev Manager
+enforces them mechanically with a pre-tool-use hook on file paths and a denied-paths list per
+company (`companies.json`). (The hook's "the Test Writer's files are denied to the Implementer"
+case is moot since 2026-09-10 - there is no Test Writer to have committed any.) An interactive
+session relies on the prompt rules plus the human watching.
 
 ## Trying them without an orchestrator
 
