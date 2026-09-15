@@ -59,10 +59,25 @@ say which and stop.
    must expose; `design: handoff at design/handoff/<route>/` when an approved handoff already
    exists (check `design/STATUS.md`). The Implementer then builds from spec plus handoff.
 5. If you cannot write a testable spec because facts are missing (an ambiguous requirement,
-   an external system you cannot inspect, a product decision), put the questions as bullets
-   under "Risks and open questions" (each marked `blocks`), mark the spec `status: blocked`, and
-   stop. The Dev Manager shows those bullets inline in its Slack notice. A spec built on guesses is worse
-   than no spec.
+   an external system you cannot inspect, a product decision), write each blocking question as
+   ONE atomic line under a dedicated "## Open questions" section (2026-09-15; see the spec format
+   below) - the question itself, one short sentence, no bold label, no reasoning folded into it -
+   with any reasoning or recommendation as an indented sub-bullet beneath it:
+   ```
+   ## Open questions
+   1. Does this channel's conversation get more tool access than today's DM?
+      - Recommendation: no widening - a Slack-reachable shell turns a compromised account into
+        remote code execution; if Christian wants it widened, he should name the exact scope.
+   2. Does the channel replace the DM, or do both stay live?
+   ```
+   Mark the spec `status: blocked` and stop. The Dev Manager numbers these Q1/Q2/... and renders
+   them as a short list on both Slack and Notion - Christian answers by number, one or a few at a
+   time, and the questions stay open until he does. A dense paragraph ("**Decision 1 (gate 1,
+   Christian's call)**: does this... <three more sentences of reasoning>") is exactly what this
+   format replaces - keep the question atomic even when the reasoning behind it is long. A general,
+   non-blocking risk or note that is not a question Christian needs to answer still goes under
+   "## Risks and open questions" below, unchanged - the two sections serve different purposes and a
+   blocked spec commonly has both. A spec built on guesses is worse than no spec.
 
 ## Spec format (write exactly this structure)
 
@@ -118,10 +133,20 @@ Christian working through this list on the preview.
 - <what makes a role stop and ask instead of continuing>
 
 ## Risks and open questions
-- <risk or question; say whether it blocks>
+- <a non-blocking risk or note - not a question Christian must answer before work can start>
 
 ## Out of scope
 - <things a reader might expect that this task deliberately does not do>
+```
+
+A `status: blocked` spec inserts one more section, directly after "Assumptions" (its questions are
+exactly what the Assumptions section could not fill in) and before "Context found":
+
+```markdown
+## Open questions
+1. <one short sentence - the question itself, nothing else>
+   - <reasoning or recommendation, indented, as many lines as needed>
+2. ...
 ```
 
 Size: S = one or two files, no new dependency, under an hour. M = several files or a new module.
