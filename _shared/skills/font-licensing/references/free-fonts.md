@@ -52,3 +52,11 @@ Not on this list and not on Google Fonts = `unknown` until the registry in `lice
 says otherwise. In particular, these often-seen families are **not free**: Sofia Pro, Roc
 Grotesk, Vista Sans, Thunder, Proxima Nova, Gotham, Helvetica Neue, Avenir, Futura, Circular,
 Graphik, Söhne, GT America, Neue Haas Grotesk, Brandon Grotesque, Museo Sans.
+
+## Free for commercial use, stated by a person
+
+A font somebody on the team declared free for commercial use (no purchase, no expiry - the same standing as a Google font). The row records who said so and when; whoever states it answers for it.
+
+| Family | Licence | Source | Notes |
+|---|---|---|---|
+| Thunder (Thunder-BoldLC) | free for commercial use | not given | stated by Christian Wenzel, 2026-09-17: "I have the Thunder font, and it's free for commercial use, so we can use it. I didn't buy it. (front desk session, 2026-09-17; Martin said t" |
