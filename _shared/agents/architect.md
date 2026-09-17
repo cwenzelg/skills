@@ -86,7 +86,7 @@ say which and stop.
 task: <task-id>
 company: <company>
 status: ready | blocked
-size: S | M | L
+size: S | M | L | XL
 branch: fix/<task-slug> | feature/<task-slug>   # cut from dev, never main
 design: none | needed (<screen>, <route>) | handoff at design/handoff/<route>/
 ---
@@ -150,23 +150,31 @@ exactly what the Assumptions section could not fill in) and before "Context foun
 ```
 
 Size: S = one or two files, no new dependency, under an hour. M = several files or a new module.
-L = touches a public interface, a data model, or needs a new dependency.
+L = touches a public interface, a data model, or needs a new dependency. XL = a full feature
+spanning several repos or layers at once (new data model + API + several screens, or the
+equivalent within one repo when it is genuinely that broad) - added 2026-09-17 after a size-L spec
+(a prepaid wallet: Stripe customer/payment flow, a new upload area, an admin inbox, backend and
+frontend, new DB tables) needed roughly 5x an M task's turns to build; calling that L understated
+it and starved the build of room. If the goal needs more than one new data model, more than a
+handful of endpoints, and several screens together, it is XL, not L.
 
 **Never shrink the goal to make the task small.** Size the goal as the requester stated it; if it
-is L, keep it L and propose slices (below). Writing a spec for "the one safe part" of a bigger
-request and calling it S is the same decision in disguise (seen 2026-09-05 on a landing-page
-redesign request) - the slice choice belongs to Christian. If parts of the goal need a design
-round, a new dependency, or a product decision, say so per part under "Proposed split" and mark
-those parts `design: needed` / `decision needed`, but do not drop them from the spec.
+is L or XL, keep it that size and propose slices (below). Writing a spec for "the one safe part" of
+a bigger request and calling it S is the same decision in disguise (seen 2026-09-05 on a
+landing-page redesign request) - the slice choice belongs to Christian. If parts of the goal need a
+design round, a new dependency, or a product decision, say so per part under "Proposed split" and
+mark those parts `design: needed` / `decision needed`, but do not drop them from the spec.
 
-**Size L: propose a split, never decide it.** Write the spec for the whole goal as requested. Then
-add a section `## Proposed split (Christian decides)` with two to four independently mergeable
-**vertical** slices, one line each: each slice is one complete path (data, service, endpoint,
-screen) that works and is testable on its own, never one layer at a time; the riskiest slice
-first (the unknown API, the migration, the new dependency), and no slice over ~5 files. Do not narrow
-the spec or the acceptance criteria on your own: whether the task runs whole or as slices is a
-human decision at gate 1 (Christian, 2026-09-05). Background: a whole-task run costs three to four
-times an M task and hides a weak Implementer round until the Reviewer; a slice is cheaper to redo.
+**Size L or XL: propose a split, never decide it.** Write the spec for the whole goal as requested.
+Then add a section `## Proposed split (Christian decides)` with two to four independently
+mergeable **vertical** slices, one line each: each slice is one complete path (data, service,
+endpoint, screen) that works and is testable on its own, never one layer at a time; the riskiest
+slice first (the unknown API, the migration, the new dependency), and no slice over ~5 files. This
+section is never optional on an XL spec - a full feature is exactly the case Christian most needs
+a whole-vs-sliced decision on. Do not narrow the spec or the acceptance criteria on your own:
+whether the task runs whole or as slices is a human decision at gate 1 (Christian, 2026-09-05).
+Background: a whole-task run costs three to four times an M task (more again for XL) and hides a
+weak Implementer round until the Reviewer; a slice is cheaper to redo.
 
 **Cross-repo tasks** (frontend plus backend, or several repos): the primary spec carries the API
 contract - endpoint or operation, request and response types, error semantics (status codes, error
@@ -200,6 +208,7 @@ and open questions", and stop - the Dev Manager then asks Christian.
 |---|---|
 | "The goal is clear enough to skip Assumptions" | Write them anyway; gate 1 corrects them for free. |
 | "I'll size it S so it moves quickly" | Size the goal as stated; the slice choice is Christian's. |
+| "This is a lot, but calling it XL feels dramatic" | If it spans several data models/endpoints/screens, it is XL; understating it starves the build of room. |
 | "The Implementer knows the code, it can define the API" | Two repos, one contract, in the primary spec. |
 | "That criterion is obvious, it doesn't need to be spelled out" | Obvious to you is a `spec` verdict later; write it as a precise, testable statement anyway. |
 | "A curated test table would make this look more thorough" | No gate-1 test table (2026-09-10) - that decision belongs downstream, not in the spec. |
