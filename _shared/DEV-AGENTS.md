@@ -18,7 +18,7 @@ here) is trusted enough to split off for real.
 | Agent | Job | Tools | Writes |
 |---|---|---|---|
 | `architect` | goal -> spec with testable acceptance criteria (no gate-1 test table since 2026-09-10 - that decision moved downstream) plus a "What to click" checklist, a file-level plan, and a "needs design?" call | Read, Glob, Grep, Write | `docs/specs/<task-id>.md` only |
-| `designer` | screen design per the shared `screen-design` skill: draft rounds on a canvas, human approval, handoff export | Read, Glob, Grep, Write, Edit, Bash, Artifact, Skill | `design/` only |
+| `designer` | screen design per the shared `screen-design` skill: image-first draft rounds posted to the project's design Slack channel, human approval, handoff export | Read, Glob, Grep, Write, Edit, Bash, Artifact, Skill | `design/` only |
 | `implementer` | approved spec (+ handoff) -> code that makes the change, small commits, own tests where the Tester's coverage needs them (no Test Writer to write them first) | Read, Edit, Write, Glob, Grep, Bash | production code (+ own tests) |
 | `tester` | runs the whole suite, build/lint/type-check, verdict per failing test (`implementation` / `test` / `spec`), writes a test itself for any acceptance criterion still uncovered, checks the repo's house rules and fonts; browser measurement only when a criterion is explicitly about it | Read, Edit, Write, Glob, Grep, Bash | test files (its own only) |
 | `judgment-tester` | scaffolded 2026-09-10, off by default: the judgment-requiring half of the Tester role once split off for real - verdict per failing test, house rules, definition-of-done's judgment sections, coverage gaps; reads the Technical Tester's report, never re-runs it | Read, Glob, Grep, Bash | nothing |
@@ -133,10 +133,13 @@ committed in the skills repo, then on to the Reviewer), `replace with <free font
 (instruction into the spec, Implementer + Tester again). A font gets into the registry only that
 way or through Christian directly, always with its validity period.
 
-The Designer is interactive-only for now: the canvas editor is a Claude Code built-in that
-SDK-run sessions do not get (see `skills/screen-design/references/canvas-tooling.md`). The Dev
-Manager treats "needs design" as a pause: Christian runs the Designer in the project workspace,
-and the task resumes when `design/handoff/<route>/` exists.
+**Updated 2026-09-17:** the Designer can now run as a background/SDK agent, not only
+interactively — the canvas editor it used to depend on is gone from Claude Code entirely (see
+`skills/screen-design/references/canvas-tooling.md`), replaced by an image-first process
+(self-contained HTML variants, headless-rendered PNGs, posted to the project's design Slack
+channel) that needs no Claude Code built-in. What stays a human step either way is the review
+itself: the Dev Manager still treats "needs design" as a pause at gate 2, and the task resumes
+only once a human has named a round in that Slack thread and `design/handoff/<route>/` exists.
 
 ## Branching (all projects, Christian 2026-09-04)
 

@@ -369,7 +369,7 @@
           "scope": "_shared",
           "description": "Company-neutral screen-design process for any project that keeps a design/ folder. Use whenever a task drafts, iterates, approves, exports, or implements a screen, page, dialog, or flow design, or asks what is drafted, approved, or built, even if the request only says \"mock this up\", \"design the X screen\", \"build round 2b\", or \"what's open in design\". Reads the project's design/PROJECT.md for stack, component map, tokens, and copy language.",
           "path": "_shared/skills/screen-design/SKILL.md",
-          "bodyLines": 130,
+          "bodyLines": 161,
           "references": [
             "_shared/skills/screen-design/references/canvas-tooling.md",
             "_shared/skills/screen-design/references/handoff-template.md",
@@ -551,7 +551,7 @@
         },
         {
           "name": "designer",
-          "description": "Designs the screens a task needs before anyone codes them. Use after the Architect's spec marks a task as needing design; give it the spec path and the screen or route. Runs the project's design/ process (draft rounds on a canvas, human approval, handoff export). Interactive Claude Code sessions only; never edits application code.",
+          "description": "Designs the screens a task needs before anyone codes them. Use after the Architect's spec marks a task as needing design; give it the spec path and the screen or route. Runs the project's design/ process (image-first draft rounds posted to the project's design Slack channel, human approval, handoff export). Runs as an interactive session or as a background/SDK agent; the review itself is always a human, in Slack.",
           "path": "_shared/agents/designer.md"
         },
         {
