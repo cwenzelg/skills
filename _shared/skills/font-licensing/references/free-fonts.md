@@ -48,9 +48,10 @@ downloaded `.woff2`) is still free under the same licence.
 | Ubuntu | UFL | Google Fonts | |
 | DejaVu Sans / Serif / Mono | Vera | OS packages | |
 
-Not on this list and not on Google Fonts = `unknown` until the registry in `licensed-fonts.md`
-says otherwise. In particular, these often-seen families are **not free**: Sofia Pro, Roc
-Grotesk, Vista Sans, Thunder, Proxima Nova, Gotham, Helvetica Neue, Avenir, Futura, Circular,
+Not on this list and not on Google Fonts = `unknown` until somebody on the team states it is free
+(last table below) or the registry in `licensed-fonts.md` says otherwise. In particular, these
+often-seen families are **not free**: Sofia Pro, Roc
+Grotesk, Vista Sans, Proxima Nova, Gotham, Helvetica Neue, Avenir, Futura, Circular,
 Graphik, Söhne, GT America, Neue Haas Grotesk, Brandon Grotesque, Museo Sans.
 
 ## Free for commercial use, stated by a person

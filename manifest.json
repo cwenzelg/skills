@@ -160,7 +160,7 @@
           "scope": "_shared",
           "description": "Font licence rule for every public site and app - which fonts are free for commercial use, which ones we bought or subscribe to (vendor, date, validity), and what to do with a font that is neither. Use whenever a task adds, changes, reviews or tests fonts, @font-face rules, Google Fonts / Adobe Fonts (Typekit) links, font files (woff/woff2/ttf/otf), CSS font variables, or asks whether a font may be used commercially, even if the user just says \"the font\", \"the typeface\" or \"the headline style\".",
           "path": "_shared/skills/font-licensing/SKILL.md",
-          "bodyLines": 94,
+          "bodyLines": 102,
           "references": [
             "_shared/skills/font-licensing/references/free-fonts.md",
             "_shared/skills/font-licensing/references/licensed-fonts.md"

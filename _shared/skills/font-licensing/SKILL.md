@@ -21,9 +21,10 @@ Whenever you check fonts, end with this table and one finding per unknown or exp
 |---|---|---|---|
 | Inter | app/assets/css/main.css:5 (fonts.googleapis.com) | free | OFL 1.1 (Google Fonts) |
 | Sofia Pro | index.html:14 (use.typekit.net/nyh3brn.css) | licensed | Adobe Fonts, valid until 2026-09-30 |
-| Thunder | web/stil.css:22 (@font-face, fonts/Thunder-BoldLC.woff2) | unknown | not in either list |
+| Thunder | web/stil.css:22 (@font-face, fonts/Thunder-BoldLC.woff2) | free | free for commercial use (stated by Christian, free list) |
+| Proxima Nova | web/stil.css:30 (@font-face, fonts/ProximaNova.woff2) | unknown | not in either list |
 
-- font licence needed: Thunder (web/stil.css:22)
+- font licence needed: Proxima Nova (web/stil.css:30)
 ```
 
 Status values, exactly these: `free` | `licensed` | `unknown` | `expired`. System fallbacks
@@ -61,7 +62,9 @@ belong to the base family.
 1. **free** - the family is in `references/free-fonts.md`, or it is loaded from
    `fonts.googleapis.com` (every family Google Fonts serves is OFL, Apache or UFL). Note the
    licence from the table. A Google Fonts family that is *self-hosted* is still free: the OFL
-   allows bundling; keep the licence text next to the files when the repo has one.
+   allows bundling; keep the licence text next to the files when the repo has one. The free list's
+   last table, "Free for commercial use, stated by a person", counts exactly like the others: a
+   font somebody on the team declared free needs no vendor, no purchase date and no expiry.
 2. **licensed** - the family is in `references/licensed-fonts.md`. Check the "valid until" cell
    against today's date and the "scope" cell against the use (a desktop licence does not cover a
    website; a web kit does not cover self-hosted `.ttf` copies of the same family). Valid and in
@@ -75,13 +78,18 @@ belong to the base family.
   plus the finding `font licence needed: <family> (<where>)`.
 - In the dev pipeline the Dev Manager pauses the task (`awaiting-review`) and asks Christian in
   Slack. His answer is one of:
+  - `free` (or "it is free for commercial use") - nothing was bought, so there is no vendor and no
+    date: the family goes on `references/free-fonts.md` under the name of whoever said so, and the
+    task continues. Never ask for a `licensed:` line for a font the person says is free;
   - `licensed: <vendor>, bought <date>, valid until <date|subscription>, scope <web/desktop/app>`
     - the family is appended to `references/licensed-fonts.md` with the timeline, and the task
     continues;
   - `replace with <free font>` - the Implementer swaps the family for the named free font;
   - `drop` - the Implementer removes the font and falls back to the stack's next family.
-- Interactive sessions ask Christian the same question and record his answer in
-  `references/licensed-fonts.md` themselves (see "How a font gets into this list" there).
+- Interactive sessions ask Christian the same question and record his answer themselves: a free
+  font in `references/free-fonts.md` (stated-free table), a bought one in
+  `references/licensed-fonts.md` (see "How a font gets into this list" there). A project's dev desk
+  records a free font with its `record_free_font` tool in the turn the person says so.
 - The Reviewer does not approve a change while any font in its diff is `unknown` or `expired`.
 
 ## Always / never
