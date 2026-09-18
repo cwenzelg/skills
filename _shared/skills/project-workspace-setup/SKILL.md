@@ -75,7 +75,11 @@ nested distribution folder, add it to that repo's `.git/info/exclude` (local, no
 - **Knowledge base** from read-only analysis agents (backend + infra, frontends, one per odd repo)
   plus the GCP inventory: system overview, api, frontends, deployment, 3–4 ADRs for decisions the
   code will not explain (incl. what is *parked* on purpose), one doc per business domain, glossary
-  (code ↔ UI ↔ German). Record every committed secret **by path only**, never by value.
+  (code ↔ UI ↔ German). Record every committed secret **by path only**, never by value. Add a
+  `market/` folder the first time a competitor gets profiled (not at initial scaffold): one file
+  per competitor under `market/competitors/`, sourced from public info only with URL + fetch date,
+  plus a maintained `market/competitors.md` comparison table — never customer/prospect data (Tap2Link
+  2026-09-18 is the worked example).
 - **`agents/dev-manager/companies.json`**: one entry per project; repo paths = the nested paths for
   Flow packages; `build`/`test` commands that run on this machine or an honest `echo "not run: …"`;
   `denyPaths` for env/cloudbuild/k8s/compose/`files/`/`Configuration/Settings.yaml`/keys.
