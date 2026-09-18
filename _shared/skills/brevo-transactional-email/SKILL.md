@@ -38,17 +38,31 @@ Before writing anything, find in the project's own code or knowledge base:
 3. **Sender identity** - most projects reuse one sender name/email across templates. Read it off
    an existing template via the API (`GET /v3/smtp/templates/{id}`) rather than guessing, or from
    the project's override skill if it already names one.
-4. **Whether dev and live share one Brevo account** - check the API key each environment uses. If
-   they share a key (compare the two keys' hash, never their plaintext, or ask), they share every
-   template id too: one template, one id, both environments.
-5. **The account's existing naming convention** - `GET /v3/smtp/templates` (paginated, `limit`/
-   `offset`) before creating anything. In the shared Venture Labs account, each venture prefixes
-   its own templates so they never collide with another venture's in the same account: Loop
-   Studio uses `LS - <purpose> - <lang>` (e.g. `LS - Password recovery - EN`), MachineMaster uses
-   `MM-<purpose>[-<lang>]` (e.g. `MM-financing-...`, `MM-purchase-...`). A new template follows
-   whichever prefix its own venture already uses - check the project's override skill for the
-   exact form, and when genuinely unsure, look at that venture's existing templates in the list
-   rather than guessing a new scheme.
+4. **Whether dev and live share one Brevo account** - check the API key each environment uses (or
+   ask). Sharing an account does NOT mean sharing a template: this account's own convention (see
+   below) keeps a separate dev and live copy of every template, by name, in the one account.
+5. **The account's naming convention (Christian, 2026-09-18)** - `GET /v3/smtp/templates`
+   (paginated, `limit`/`offset`) before creating anything, and follow the scheme below exactly.
+   Some older templates predate it (Loop Studio's `LS - Password recovery - EN`, MachineMaster's
+   `MM-financing-...`) - those are legacy, never renamed, and not a pattern to copy for a new
+   template.
+
+## Naming: `<Project>-dev-<Name>` and `<Project>-live-<Name>`
+
+Taken from an existing convention already in the account (e.g. `OH2-dev-LetterBox-New` /
+`OH2-live-LetterBox-New`, another project's templates). Every NEW template gets both a dev and a
+live name, project-prefixed:
+
+- `<Project>` is the venture's short code - `LS` for Loop Studio, `MM` for MachineMaster; a new
+  venture's override skill states its own.
+- `<Name>` is the purpose, in whatever casing/separators that venture's own templates already use;
+  keep a per-language suffix as part of `<Name>` (e.g. `...-de`, `...-en`) where the project sends
+  different templates per language.
+- The **dev** template (`<Project>-dev-<Name>`) is the one the Implementer creates and edits
+  during a task - upsert it as often as the task needs.
+- The **live** template (`<Project>-live-<Name>`) is **only ever a copy of the dev one**, made at
+  promotion time (see below) - never created by hand, never edited directly in Brevo's UI, and
+  never touched by an ordinary implementation task.
 
 ## Templates as code (the layout)
 
@@ -58,16 +72,18 @@ Absent a project convention that says otherwise, lay a template out as:
 <templates-root>/<name>/
   template.html     # the Brevo template body - use {{ params.foo }} placeholders
   subject.txt        # one line, may also use {{ params.foo }}
-  meta.json           # { "templateName": "...", "sender": { "name": "...", "email": "..." }, "isActive": true }
+  meta.json           # { "templateName": "<Project>-dev-<Name>", "sender": { "name": "...", "email": "..." }, "isActive": true }
 ```
 
 `<templates-root>` is wherever the project keeps generated/config-like assets next to the code
 that uses them - e.g. a Java/Spring backend under
 `src/main/resources/email-templates/<name>/`, adapt for another stack's own resource convention.
-`meta.json`'s `templateName` is Brevo's own template name (shown in its dashboard, used to find
-an existing template by name so re-running the script updates rather than duplicates it).
+`<name>` (the folder) is the bare purpose, e.g. `password-recovery`; `meta.json`'s `templateName`
+is the FULL **dev** Brevo name (`<Project>-dev-<Name>`, see the naming scheme above) - the repo
+only ever names the dev template. The live counterpart is derived from it by the `promote` script
+mode below, never written by hand.
 
-## The upsert script
+## The script: `upsert` (dev) and `promote` (dev -> live)
 
 Copy this into the project's own repo (e.g. `tools/brevo-template.mjs`) the first time a task
 needs it - do not duplicate it a second time inside a project's own skill or knowledge-base doc;
@@ -75,30 +91,31 @@ point back here instead. Node 18+, no dependencies beyond `fetch` (built in).
 
 ```js
 #!/usr/bin/env node
-// Upsert a Brevo transactional template from templates-as-code (see the brevo-transactional-email
-// skill). Usage: node tools/brevo-template.mjs <templates-root>/<name>
-// Reads BREVO_API_KEY from the environment - never accepts it as an argument, never prints it.
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+// Upsert a dev Brevo template, or promote an existing dev template to its live counterpart, from
+// templates-as-code (see the brevo-transactional-email skill). BREVO_API_KEY comes from the
+// environment only - never accept it as an argument, never print it.
+//
+// Naming (Christian, 2026-09-18, from an existing account convention, e.g. "OH2-dev-LetterBox-New"
+// / "OH2-live-LetterBox-New"): every template is "<Project>-dev-<Name>" or
+// "<Project>-live-<Name>". meta.json's templateName always names the DEV template - this script's
+// `upsert` mode only ever creates/updates dev. The live template is only ever a byte-for-byte copy
+// of the dev one, made by `promote`, never hand-edited in Brevo's UI.
+//
+// Usage:
+//   node brevo-template.mjs upsert <dir>                       # create/update the dev template
+//   node brevo-template.mjs promote <dir> [--ids-file <path>]  # copy dev -> live
+//   node brevo-template.mjs promote --all <templates-root> [--ids-file <path>]
+import { readFileSync, readdirSync, existsSync, writeFileSync } from 'node:fs';
+import { join, basename } from 'node:path';
 
-const dir = process.argv[2];
-if (!dir) {
-  console.error('usage: node brevo-template.mjs <path to template folder>');
-  process.exit(1);
-}
 const apiKey = process.env.BREVO_API_KEY;
 if (!apiKey) {
   console.error('BREVO_API_KEY is not set in the environment - refusing to run.');
   process.exit(1);
 }
-
-const meta = JSON.parse(readFileSync(join(dir, 'meta.json'), 'utf8'));
-const htmlContent = readFileSync(join(dir, 'template.html'), 'utf8');
-const subject = readFileSync(join(dir, 'subject.txt'), 'utf8').trim();
-
 const headers = { 'api-key': apiKey, 'content-type': 'application/json', accept: 'application/json' };
 
-async function findExisting(name) {
+async function findByName(name) {
   let offset = 0;
   const limit = 50;
   for (;;) {
@@ -106,27 +123,83 @@ async function findExisting(name) {
     if (!res.ok) throw new Error(`GET /v3/smtp/templates failed: ${res.status} ${await res.text()}`);
     const body = await res.json();
     const hit = (body.templates ?? []).find((t) => t.name === name);
-    if (hit) return hit.id;
+    if (hit) return hit;
     if ((body.templates ?? []).length < limit) return undefined;
     offset += limit;
   }
 }
 
-async function main() {
-  const payload = {
-    templateName: meta.templateName,
-    subject,
-    htmlContent,
-    sender: meta.sender,
-    isActive: meta.isActive ?? true,
-  };
-  const existingId = await findExisting(meta.templateName);
-  const url = existingId ? `https://api.brevo.com/v3/smtp/templates/${existingId}` : 'https://api.brevo.com/v3/smtp/templates';
-  const method = existingId ? 'PUT' : 'POST';
+async function getTemplate(id) {
+  const res = await fetch(`https://api.brevo.com/v3/smtp/templates/${id}`, { headers });
+  if (!res.ok) throw new Error(`GET /v3/smtp/templates/${id} failed: ${res.status} ${await res.text()}`);
+  return res.json();
+}
+
+async function upsertByName(payload) {
+  const existing = await findByName(payload.templateName);
+  const url = existing ? `https://api.brevo.com/v3/smtp/templates/${existing.id}` : 'https://api.brevo.com/v3/smtp/templates';
+  const method = existing ? 'PUT' : 'POST';
   const res = await fetch(url, { method, headers, body: JSON.stringify(payload) });
   if (!res.ok) throw new Error(`${method} ${url} failed: ${res.status} ${await res.text()}`);
-  const id = existingId ?? (await res.json()).id;
-  console.log(`Brevo template "${meta.templateName}" -> id ${id}`);
+  return existing ? existing.id : (await res.json()).id;
+}
+
+function readLocalTemplate(dir) {
+  const meta = JSON.parse(readFileSync(join(dir, 'meta.json'), 'utf8'));
+  const htmlContent = readFileSync(join(dir, 'template.html'), 'utf8');
+  const subject = readFileSync(join(dir, 'subject.txt'), 'utf8').trim();
+  return { templateName: meta.templateName, subject, htmlContent, sender: meta.sender, isActive: meta.isActive ?? true };
+}
+
+function writeIdsFile(idsFile, name, id) {
+  if (!idsFile) return;
+  const current = existsSync(idsFile) ? JSON.parse(readFileSync(idsFile, 'utf8')) : {};
+  current[name] = id;
+  writeFileSync(idsFile, JSON.stringify(current, null, 2) + '\n');
+}
+
+async function upsertOne(dir) {
+  const payload = readLocalTemplate(dir);
+  if (!payload.templateName.includes('-dev-')) {
+    throw new Error(`meta.json templateName "${payload.templateName}" is not a dev name (expected "<Project>-dev-<Name>")`);
+  }
+  const id = await upsertByName(payload);
+  console.log(`upsert: "${payload.templateName}" -> id ${id}`);
+  return id;
+}
+
+async function promoteOne(dir, idsFile) {
+  const devName = readLocalTemplate(dir).templateName;
+  if (!devName.includes('-dev-')) throw new Error(`"${devName}" is not a dev template name - refusing to promote`);
+  const liveName = devName.replace('-dev-', '-live-');
+  const dev = await findByName(devName);
+  if (!dev) throw new Error(`dev template "${devName}" does not exist in Brevo yet - run upsert first`);
+  const devFull = await getTemplate(dev.id); // the LIVE source of truth is what is actually live in Brevo's dev template right now, not the local files
+  const liveId = await upsertByName({ templateName: liveName, subject: devFull.subject, htmlContent: devFull.htmlContent, sender: devFull.sender, isActive: true });
+  console.log(`promote: "${devName}" (id ${dev.id}) -> "${liveName}" (id ${liveId})`);
+  writeIdsFile(idsFile, basename(dir), liveId);
+}
+
+async function main() {
+  const args = process.argv.slice(2);
+  const mode = args[0];
+  const idsFlagIdx = args.indexOf('--ids-file');
+  const idsFile = idsFlagIdx >= 0 ? args[idsFlagIdx + 1] : undefined;
+  const positional = args.slice(1).filter((_, i) => i + 1 !== idsFlagIdx && i + 1 !== idsFlagIdx + 1);
+
+  if (mode === 'upsert') {
+    await upsertOne(positional[0]);
+  } else if (mode === 'promote' && positional[0] === '--all') {
+    const root = positional[1];
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      if (entry.isDirectory()) await promoteOne(join(root, entry.name), idsFile);
+    }
+  } else if (mode === 'promote') {
+    await promoteOne(positional[0], idsFile);
+  } else {
+    console.error('usage: node brevo-template.mjs upsert <dir> | promote <dir> [--ids-file <path>] | promote --all <templates-root> [--ids-file <path>]');
+    process.exit(1);
+  }
 }
 
 main().catch((err) => {
@@ -135,9 +208,27 @@ main().catch((err) => {
 });
 ```
 
-Run it, take the printed id, and write it into the project's own template-id config **the way
-that project already selects templates** (see "Investigate first" above) - never a new file or
-mechanism.
+Run `upsert`, take the printed dev id, and write it into the project's own template-id config
+**the way that project already selects templates** (see "Investigate first" above) - never a new
+file or mechanism, unless the project's override skill says the project is changing that
+convention to a per-environment one (see "Environments: dev and live" below).
+
+## Environments: dev and live
+
+A normal implementation task only ever touches the **dev** template - write the files, run
+`upsert`, wire the printed dev id into whatever config the project's dev profile reads. It never
+runs `promote` and never creates or edits a live template.
+
+**Promotion** (`promote`) happens once, on the release branch, right before the merge to main -
+after the dev template has been through a task's normal review, not as part of implementing a
+feature. It reads the CURRENT content of the dev template from Brevo (not the local files - the
+dev template in Brevo is the thing that was actually tested), writes an identical live template
+under `<Project>-live-<Name>`, and updates the live id into whatever config the project's live
+profile reads (`--ids-file` if the project's build reads a small JSON id map; otherwise by hand
+following the project's own convention). A project's own override skill or knowledge-base doc says
+whether the dev desk files this as its own release task or Christian runs it himself - either way,
+**a live template is never edited directly in Brevo's UI**, and never created by anything other
+than `promote` acting on an already-reviewed dev template.
 
 ## Getting the key into a Dev Manager task
 
@@ -161,15 +252,24 @@ crash) - the Implementer's report should say the key was missing rather than gue
 
 ## The Tester's check
 
-A task that adds or changes a template is done only once `GET /v3/smtp/templates/{id}` (same
-`BREVO_API_KEY`) returns a template whose `name` matches `meta.json`'s `templateName`. This proves
-the template exists and was actually pushed - it does not prove the rendered HTML looks right;
-say so explicitly rather than claiming a visual check that did not happen.
+A task that adds or changes a template is done only once:
+1. `GET /v3/smtp/templates/{id}` (same `BREVO_API_KEY`) returns a **dev** template whose `name`
+   matches `meta.json`'s `templateName` exactly (`<Project>-dev-<Name>`), and
+2. the project's dev config carries that same id.
+
+This proves the dev template exists and was actually pushed - it does not prove the rendered HTML
+looks right; say so explicitly rather than claiming a visual check that did not happen. An
+ordinary task's Tester run must **not** find a `<Project>-live-<Name>` template that did not exist
+before the task - if one exists, the Implementer ran `promote` when it shouldn't have; flag it as
+a floor-style finding, not a pass.
 
 ## Never
 
 - Never print, log, or write `BREVO_API_KEY` (or any Brevo key) into a file, commit, spec, or
   Slack message.
 - Never invent a second way to select a template id when the project already has one.
-- Never assume dev and live use different accounts without checking - most projects here share
-  one Brevo account across environments, which means one template id serves both.
+- Never create or edit a `<Project>-live-<Name>` template from an ordinary implementation task -
+  only `promote`, run at release time, ever touches a live template, and it only ever copies an
+  already-reviewed dev template rather than writing new content.
+- Never hand-edit a live template directly in Brevo's UI - if a live template ever needs to
+  change, change the dev one and promote again.
