@@ -149,6 +149,12 @@ Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
 - Browser measurement: <not run (no criterion called for it) | <criterion>: <what was measured, with the result> | none>
 - Evidence for gate 3: <deploy-preview URL | branch/compare URL | none available - say why>
 - Tests added by you (there is no Test Writer): <list | none>
+- Needs a decision: <none | numbered list; same shape and tags as the Implementer's report - see
+  `implementer.md`'s "Needs a decision" section for the full rule (`for:`/`blocking:`, take the
+  recommended default and keep testing unless `blocking: yes`). Yours is typically a coverage or
+  house-rule call the Implementer never saw: a criterion you could only verify by reading, not
+  running; a house rule whose violation might be intentional; a font/floor finding that needs a
+  person's licence or accept/fix call beyond what the mechanical gate already asks (2026-09-21)>
 
 ## Fonts
 | Family | Where (file:line or URL) | Status | Licence / validity |

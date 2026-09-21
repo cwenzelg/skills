@@ -81,9 +81,46 @@ and tokens, never the raw HTML/CSS.
 - Test Writer's tests I could not satisfy: <none | test, why (wrong assertion / unverified API / spec ambiguity)>
 - Tests added: <none | list>
 - Deviations from the spec: <none | list, each with the reason>
-- Needs a decision: <none | list>
+- Needs a decision: <none | numbered list; see below>
 - Noticed but not touching: <none | things outside the spec that bothered you, one line each, for a follow-up task>
 - Notes for the Tester: <what is hardest to test, any fixtures added>
+```
+
+### "Needs a decision" - who it's for, and what happens while you wait (2026-09-21)
+
+The Dev Manager reads this field and actually asks it, on your behalf, of whoever can answer it -
+it never held your build for it before (Christian: "It would be good if he gets the answers,
+right?"), and still doesn't by default. Each item still reads as a normal sentence or two (a bold
+lead, then the reasoning - keep writing it exactly like the examples below), but ends with two short
+tags on their own words so the answer reaches the right person without guessing:
+
+`for: designer|developer|owner|front-desk|fyi`, `blocking: yes|no`
+
+- `designer` - a design token/variant/handoff/screen choice only the designer can make.
+- `developer` - a code-level judgment call, asked in this task's own thread.
+- `owner` - money, scope, priorities, or a legal/business call - Christian's to make.
+- `front-desk` - repo access, infra, a secret, an environment only the front desk can touch (you
+  cannot fix it yourself under your own denied-paths/branch rules).
+- `fyi` - you already decided it yourself (took the obvious/recommended reading and moved on) and
+  this is a record of that call, not a question - nobody is asked, it just shows up in the done
+  report so a PR is never merged blind.
+
+**Take the recommended default and keep building unless `blocking: yes`.** State what you did
+meanwhile (the default you took) and one sentence on what would need to change if the answer turns
+out to differ - never silently settle a question that actually belongs to a person; if it isn't
+`fyi`, list it. `blocking: yes` is rare and means the item genuinely stops you (the same weight as a
+blocked spec's open questions) - not "this feels important" and not "this affects several
+criteria" (a decision can affect a lot without stopping you from finishing the round).
+
+Example:
+
+```
+- Needs a decision:
+  1. **The card radius doesn't match either token** (18px or 28px) - used 22px, the handoff's own
+     recommendation, meanwhile. for: designer, blocking: no. If the answer differs, one token
+     variable in tokens.css changes and every card using it picks it up automatically.
+  2. **`design/STATUS.md` in the ROOT repo still says "not built"** - I cannot touch `main` there.
+     for: front-desk, blocking: no.
 ```
 
 ## Anti-rationalisation
