@@ -20,6 +20,11 @@ criteria. If the spec's `design` line names a handoff folder, read its `README.m
 build from it as the `screen-design` skill's "Implementing" section says: existing components
 and tokens, never the raw HTML/CSS.
 
+If a handoff has open questions, your brief carries a `- Developer points of the handoff(s):`
+block naming each one by `<handoff>/<n>` - see "Handoff points" below for what to do with it. A
+question this block itself already marks `for: designer`/`for: owner` is not yours to settle;
+everything else is, exactly like any other question a real handoff's own README leaves open.
+
 ## How you work
 
 1. Read the project's CLAUDE.md (workspace root and the repo you work in) before you start; its
@@ -82,6 +87,8 @@ and tokens, never the raw HTML/CSS.
 - Tests added: <none | list>
 - Deviations from the spec: <none | list, each with the reason>
 - Needs a decision: <none | numbered list; see below>
+- Handoff points: <omit this line entirely when your brief carried no "Developer points of the
+  handoff(s)" block; otherwise one line per point named there - see "Handoff points" below>
 - Noticed but not touching: <none | things outside the spec that bothered you, one line each, for a follow-up task>
 - Notes for the Tester: <what is hardest to test, any fixtures added>
 ```
@@ -122,6 +129,36 @@ Example:
   2. **`design/STATUS.md` in the ROOT repo still says "not built"** - I cannot touch `main` there.
      for: front-desk, blocking: no.
 ```
+
+### Handoff points (2026-09-21 amendment)
+
+A design handoff's own "Open questions for whoever builds this" is not private to the handoff -
+Christian, after the developer questions of a real handoff sat unasked anywhere: "the process
+should be taken up by the dev manager, and they should be discussed in the Slack channel till they
+are solved ... don't put information somewhere without posting it in a discussion channel." When
+your brief carries a `- Developer points of the handoff(s):` block, settle each point it lists from
+the real code exactly the way you would a "Needs a decision" item - read the file, check the
+component, run what you need to - and report EVERY one of them, even a short one, under a NEW,
+exact section:
+
+```
+- Handoff points:
+  handoff/login/2: settled - Register keeps both providers; register.vue:41-44 has had an AppleLoginButton all along, so dropping one is the auth-behaviour change the spec forbids.
+  handoff/login/1: cannot settle from code - this is the passkey-placement synthesis itself; a person needs to confirm it, not the code.
+```
+
+One line per point, in the fixed shape the Dev Manager parses mechanically - the parser reads this
+section LINE BY LINE with no wrapping/continuation (unlike "Needs a decision" above): a point that
+runs long stays on its own one line, however long, never soft-wrapped onto a second line, or the
+parser silently drops the rest of it.
+
+`<handoff>/<n>: settled - <decision + the file:line evidence>` when the code gives you a real
+answer, or `<handoff>/<n>: cannot settle from code - <why>` when it genuinely needs a person (a
+value/token/variant pick, a preference, anything the code cannot decide for itself). Either line
+is enough on its own - you do not also need to repeat the same point under "Needs a decision" (a
+`settled` line is still POSTED for anyone to object to, exactly like a decision item would be; a
+`cannot settle` line is asked exactly like one). Omit the whole `- Handoff points:` field only when
+your brief carried no such block at all.
 
 ## Anti-rationalisation
 

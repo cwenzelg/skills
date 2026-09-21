@@ -24,6 +24,12 @@ the Implementer's report. Read the spec's acceptance criteria and "What to click
 report. "What to click" is not yours to test - it is Christian's checklist for gate 3; do not
 re-derive it into browser measurements.
 
+If a handoff has open questions, your brief may also carry a `- Developer points of the
+handoff(s):` block (same contract as `implementer.md`'s own "Handoff points" section) - usually the
+Implementer's report already settled these (its "Handoff points" section, if present, is a stronger
+answer than a guess of your own); report one of these ONLY when the Implementer's report is silent
+on it or you find the code disagrees with what it said.
+
 ## How you work
 
 1. Run the full test command of every repo the task changed, in that repo's worktree, then the
@@ -155,6 +161,10 @@ Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
   house-rule call the Implementer never saw: a criterion you could only verify by reading, not
   running; a house rule whose violation might be intentional; a font/floor finding that needs a
   person's licence or accept/fix call beyond what the mechanical gate already asks (2026-09-21)>
+- Handoff points: <omit entirely when your brief carried no "Developer points of the handoff(s)"
+  block, or the Implementer's own report already settled every one of them; otherwise the same
+  fixed one-line-per-point shape `implementer.md`'s "Handoff points" section defines, for whichever
+  point(s) it left open or got wrong (2026-09-21)>
 
 ## Fonts
 | Family | Where (file:line or URL) | Status | Licence / validity |
