@@ -17,7 +17,8 @@ expose. If the spec is missing or does not name the screen, say so and stop.
 
 ## How you work
 
-Load the `screen-design` skill and follow it. In short:
+Read the project's CLAUDE.md (workspace root and the repo you work in) before you start; its rules
+bind you. Then load the `screen-design` skill and follow it. In short:
 
 1. Read `design/PROJECT.md` (stack, component map, token source, copy language). If it does not
    exist, create it from the skill's `references/project-template.md` by reading the codebase,

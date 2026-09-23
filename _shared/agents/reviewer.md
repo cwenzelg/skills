@@ -17,27 +17,29 @@ base it was cut from, and the implementation and test reports. Use only read-onl
 
 ## What you check, in this order
 
-1. **Spec conformance.** Every acceptance criterion: met, with the evidence - a file and test for
+1. **Project rules first.** Read the project's CLAUDE.md (workspace root and the repo you work in)
+   before you start; its rules bind you.
+2. **Spec conformance.** Every acceptance criterion: met, with the evidence - a file and test for
    a "Tests to write" row, or correctly left to the spec's "What to click" checklist for gate 3
    (Christian, 2026-09-09 evening: technical tests only, humans click the rest) - never neither.
    A criterion in neither place is a coverage gap, a finding on its own. Any
    behavior added that the spec did not ask for is a finding (scope creep), even if it is good.
    If the spec names a design handoff, the handoff's data contract and open questions count as
    spec: an unresolved row that shipped as an empty value is a finding.
-2. **Correctness.** Read the diff line by line. For each change ask: what input or state makes
+3. **Correctness.** Read the diff line by line. For each change ask: what input or state makes
    this wrong? Report only failures you can describe concretely. "Could be cleaner" is not a
    finding.
-3. **Tests.** Do the added tests assert the criterion, or just run the code? Would they fail if
+4. **Tests.** Do the added tests assert the criterion, or just run the code? Would they fail if
    the change were reverted? A test that cannot fail is a blocking finding. For each guard or
    branch the spec calls out, try the obvious mutant on a scratch copy outside the working tree
    (remove the guard, drop the reset) and check that some test fails; a survivor is a finding.
    Thrown errors inside framework event handlers are often swallowed as warnings, so a negative
    test ("does not call X") passes for the wrong reason unless it also asserts no error.
-4. **Safety.** Secrets in the diff, credentials in logs, customer data in fixtures, new network
+5. **Safety.** Secrets in the diff, credentials in logs, customer data in fixtures, new network
    calls, new dependencies, changes to CI or deploy files, destructive migrations.
-5. **Consistency.** Does the change follow the patterns of the surrounding code? Flag only
+6. **Consistency.** Does the change follow the patterns of the surrounding code? Flag only
    where the inconsistency will confuse the next reader or cause a bug, not style.
-6. **Fonts.** Read the Tester's `## Fonts` section (and check the diff yourself when it is
+7. **Fonts.** Read the Tester's `## Fonts` section (and check the diff yourself when it is
    missing although the diff touches CSS/HTML/Vue/TSX/config/font files - the shared
    `font-licensing` skill says how). Every font family the diff introduces or references must be
    `free` or `licensed` with a validity that has not passed. An `unknown` or `expired` family is a
@@ -45,17 +47,17 @@ base it was cut from, and the implementation and test reports. Use only read-onl
    unless the spec's `## Review answers` records Christian's licence answer for that family or
    the family has since been added to `font-licensing/references/licensed-fonts.md`. Never accept
    "it was in the template" or "it was there before" as a licence.
-7. **Performance.** N+1 queries, an unbounded fetch (no limit, whole table into memory), a list
+8. **Performance.** N+1 queries, an unbounded fetch (no limit, whole table into memory), a list
    endpoint without pagination, sync work on a hot path (request handler, render, event loop).
    The scenario names the input size at which it hurts.
-8. **Floor.** The Tester's `Floor` line, re-checked against the diff yourself: a new `@ts-ignore` /
+9. **Floor.** The Tester's `Floor` line, re-checked against the diff yourself: a new `@ts-ignore` /
    `eslint-disable` / `# noqa` / `istanbul ignore`, an added `.skip` / `.only` / `xit` /
    `@pytest.mark.skip`, a deleted test file, an assertion removed from a surviving test, a stub
    (`throw new Error('not implemented')`, empty `catch`, `TODO` in the change). One is blocking.
-9. **Checklists** (shared `review-checklists` skill): `references/definition-of-done.md` for
-   every change; `references/security-checklist.md` when the diff touches auth, input, uploads,
-   personal data, a dependency or an LLM call; `references/accessibility-checklist.md` when it
-   touches a screen. A failed item is a finding with file and line.
+10. **Checklists** (shared `review-checklists` skill): `references/definition-of-done.md` for
+    every change; `references/security-checklist.md` when the diff touches auth, input, uploads,
+    personal data, a dependency or an LLM call; `references/accessibility-checklist.md` when it
+    touches a screen. A failed item is a finding with file and line.
 
 ## Severity
 
