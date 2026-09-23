@@ -61,3 +61,4 @@ A font somebody on the team declared free for commercial use (no purchase, no ex
 | Family | Licence | Source | Notes |
 |---|---|---|---|
 | Thunder (Thunder-BoldLC) | free for commercial use | not given | stated by Christian Wenzel, 2026-09-17: "I have the Thunder font, and it's free for commercial use, so we can use it. I didn't buy it. (front desk session, 2026-09-17; Martin said t" |
+| inherit | free for commercial use | not given | stated by Christian Wenzel, 2026-09-23: "free - inherit is a CSS keyword (font-family: inherit), not a font family; no licence required. Front desk unblocking task 20260923-font-gat" |
