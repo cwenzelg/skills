@@ -55,5 +55,20 @@ are history.>
 
 ## Open questions for whoever builds this
 1. <Anything the design assumed that was not confirmed against the real API or backend. Answer
-   before or while building; never guess silently.>
+   before or while building; never guess silently. Tag each item **For: developer** / **For: owner**
+   / **For: designer** — who actually needs to decide it. See the note below on the designer tag:
+   most things that look like a "For: designer" question are really one of the other two.>
 ```
+
+**Tagging `**For:**` items (2026-09-23):** don't reach for `**For:** designer` by default. Cross-
+screen visual/technical details — an exact px value, a radius, a colour, spacing, a hairline, a
+pill/badge/icon family, a font size, or "should this become a shared component" — are never real
+per-screen questions: nobody, including the designer, can judge one of these sensibly against a
+single screen with no view of the rest of the site. Leave that value **as drawn** and say so plainly
+in the Layout/Design tokens sections instead of raising it as a question; it gets collected with
+every other project's screens into one later consolidation round, not asked here.
+`**For:** designer` is for something that genuinely needs the designer's own judgement in the
+moment — an ambiguous layout call the brief didn't settle, a variant he'd want to redraw. A product,
+content, flow or wording call ("does this line stay", "which page does this link to") is
+`**For:** owner`, never designer. A build-mechanics question (a component name, a data-shape
+decision, a fallback) is `**For:** developer`.

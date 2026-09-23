@@ -101,7 +101,14 @@ replaced, and the optional Artifact "Design" type.
    `references/canvas-tooling.md`): the overview image first, which becomes the thread root; each
    variant's render(s) as follow-up calls, which thread automatically under the same
    screen+round. The caption names the variants and asks in plain words for the preferred letter
-   and any changes. Record the round and the resulting thread in `STATUS.md`.
+   and any changes. **Never tag or @-mention the designer in the caption** (2026-09-23, Christian:
+   "the best would be to not tag him initially on any of the designs" —
+   `docs/decisions/2026-09-23-design-details-not-per-screen.md` in the agent-cluster repo). If the
+   caption itself needs to ask something, ask the project owner, in plain words, with no mention —
+   and only a genuine product/flow/wording call, never a px/radius/token/colour/spacing/hairline/
+   pill-or-badge-family/font-size/shared-component question (those get noted as decided "as drawn"
+   in the handoff instead of asked — see `references/handoff-template.md`'s "Open questions"
+   section). Record the round and the resulting thread in `STATUS.md`.
 
 ## 2. Approving
 
