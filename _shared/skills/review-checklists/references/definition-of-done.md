@@ -51,6 +51,15 @@ against the diff; an item that fails is a finding with file and line, never a si
       cross-repo task, the data contract of the design handoff
 - [ ] Migrations, config keys, env variables and feature flags are named in the spec and the
       report; `.env.example` updated, `.env` never touched
+- [ ] A new `${VAR}` placeholder added to a Spring properties/yaml file (or any similar
+      environment-substituted config file) either gets a default in the same change
+      (`prop=${VAR:default}`) or has its `Dockerfile` + `cloudbuild`/CI wiring added in the same
+      change — a placeholder with neither leaves the app unable to boot the moment it deploys,
+      and a Java-side `@Value("${prop:default}")` default does NOT rescue an unresolved nested
+      placeholder (Spring resolves `${VAR}` before the `:default` ever applies). Cite: Loop
+      Studio tasks `20260916-apple-sign-in` (dev backend down 5 days, 402 pod restarts, "the dev
+      frontend still serves, so nobody noticed") and `20260925-hotfix-instagram-login` (same
+      failure shape repeated because this lesson was not yet a checklist item).
 - [ ] A changed public interface or API keeps existing clients working, or the spec says why it
       may not (contract rules in the shared `api-and-interface-design` skill)
 
