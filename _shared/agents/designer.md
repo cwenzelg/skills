@@ -36,7 +36,10 @@ bind you. Then load the `screen-design` skill and follow it. In short:
    rounds a new `round-<n+1>/` folder, never overwriting or renaming a previous one. Post the
    overview image first (it becomes the Slack thread root), then each variant, to the project's
    design Slack channel via the Dev Manager's `POST /design/post` — see the skill's
-   `references/canvas-tooling.md` for the render/post mechanics. Never tag or @-mention the designer
+   `references/canvas-tooling.md` for the render/post mechanics. **Every post carries the `taskId`
+   of the Dev Manager task this round is for, and a screen's FIRST round is refused without it**
+   (Christian, 2026-09-26: "Designrunde nur aus einem task raus" — a round with no task has nowhere
+   for the decisions in its thread to flow). Never tag or @-mention the designer
    in the caption (2026-09-23 — see the skill's `references/handoff-template.md`); a question in the
    caption goes to the project owner in plain words, and only if it is a real product/flow/wording
    call, never a px/radius/token/colour/spacing/font-size/shared-component detail.

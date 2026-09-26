@@ -56,10 +56,24 @@ a shell one-liner):
   "company": "loopstudio",
   "screen": "Subscription",
   "round": "1",
+  "taskId": "20260926-subscription-screen",
   "imagePath": "C:/code/loopstudio/design/draft/Subscription/round-1/render-overview.png",
   "caption": "Two directions for /subscription — A: pricing card, direct; B: Basis hervorgehoben. Reply with the letter you prefer and anything to change."
 }
 ```
+
+**`taskId` is required for a screen's first round** and must be a Dev Manager task of that same
+company (Christian, 2026-09-26: "Designrunde nur aus einem task raus"). The route answers `409`
+with no id and a screen that has no thread yet, `404` for an id no task has, and `409` for a task
+of another company. A round with no task has nowhere for the decisions in its thread to flow: the
+design desk cannot record a go against it, and somebody has to file and link a task by hand
+afterwards (that is exactly what happened to the MachineMaster slice-4 rounds on 2026-09-25/26).
+So: **the task exists before the round does** — it reached `awaiting-design`, or it is an existing
+task of that project you name in the post. If a round genuinely precedes any task (a deliberate
+pre-task exploration pass), pass `"taskless": true` with a `"reason"` instead; it is logged and the
+thread is marked as such. Every later post for the same screen inherits the thread's link, so the
+id is only strictly needed on the first one — pass it every time anyway, it is free and it survives
+a screen whose first round was posted before this rule existed.
 
 The **first** post for a given `{company, screen, round}` becomes the Slack thread root — post
 the overview image first, exactly the "multiple designs next to each other" view Christian asked
