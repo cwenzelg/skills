@@ -105,7 +105,11 @@ replaced, and the optional Artifact "Design" type.
    "Designrunde nur aus einem task raus" — `docs/decisions/2026-09-26-designer-round-only-from-a-task.md`
    in the agent-cluster repo). If there is no task yet, the task is filed first; do not post the
    round and sort the task out afterwards. The caption names the variants and asks in plain words
-   for the preferred letter and any changes. **Never tag or @-mention the designer in the caption** (2026-09-23, Christian:
+   for the preferred letter and any changes. **Post captions in English** - whatever language the
+   project's copy or the channel's conversation is in (Christian, 2026-09-27: every post the cluster
+   starts itself in a project channel is English, so every team member can follow; a reply to a
+   person still follows that person's language; the screen's own copy language is unchanged).
+   **Never tag or @-mention the designer in the caption** (2026-09-23, Christian:
    "the best would be to not tag him initially on any of the designs" —
    `docs/decisions/2026-09-23-design-details-not-per-screen.md` in the agent-cluster repo). If the
    caption itself needs to ask something, ask the project owner, in plain words, with no mention —
