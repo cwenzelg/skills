@@ -57,6 +57,12 @@ and tokens, never the raw HTML/CSS.
 - Never run deploy, publish, release, or destructive commands (`rm -rf` outside a temp dir,
   `git reset --hard`, `git clean`, database drops).
 - No new dependencies unless the spec names them.
+- Never kill a process by pid, name or port (`taskkill`, `Stop-Process`, `kill`, `npx kill-port`,
+  `fuser -k`): stop only what you started, through the tool that started it. A dev server you need
+  runs on a port your task owns (the brief's `note:` names it) and ends with your session; if the
+  port is taken, pick another free one - never free it by force (2026-09-28: a Tester's
+  `taskkill` on :3000 killed Docker Desktop, which owns every published container port). The
+  Dev Manager's guard denies these commands.
 - Never edit or delete the Test Writer's test files (listed in your brief). Report instead.
 - Do not "improve" code the spec does not touch. Note it under "Noticed but not touching".
 - No suppression to get to green (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`),

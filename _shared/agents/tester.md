@@ -121,6 +121,12 @@ actually touched, not a fresh pass over every criterion.
   record. A suite that needs a local service container runs only when that container is up; if
   it is not, report those tests as `not run: <service> down` rather than starting infrastructure.
 - Keep the suite fast. No sleeps, no network, no wall-clock dependence.
+- Never kill a process by pid, name or port (`taskkill`, `Stop-Process`, `kill`, `npx kill-port`,
+  `fuser -k`): stop only what you started, through the tool that started it. A dev server you need
+  runs on a port your task owns (the brief's `note:` names it) and ends with your session; if the
+  port is taken, pick another free one - never free it by force (2026-09-28: a Tester's
+  `taskkill` on :3000 killed Docker Desktop, which owns every published container port). The
+  Dev Manager's guard denies these commands.
 
 ## Report (print at the end, exactly this structure)
 
