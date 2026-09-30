@@ -52,9 +52,10 @@ against the diff; an item that fails is a finding with file and line, never a si
 - [ ] Migrations, config keys, env variables and feature flags are named in the spec and the
       report; `.env.example` updated, `.env` never touched
 - [ ] A new `${VAR}` placeholder added to a Spring properties/yaml file (or any similar
-      environment-substituted config file) either gets a default in the same change
-      (`prop=${VAR:default}`) or has its `Dockerfile` + `cloudbuild`/CI wiring added in the same
-      change — a placeholder with neither leaves the app unable to boot the moment it deploys,
+      environment-substituted config file) ships with its default value
+      (`prop=${VAR:default}`) or with the build wiring that supplies it (`Dockerfile` +
+      `cloudbuild`/CI), in the same change - never on the assumption that the environment already
+      has it; a placeholder with neither leaves the app unable to boot the moment it deploys,
       and a Java-side `@Value("${prop:default}")` default does NOT rescue an unresolved nested
       placeholder (Spring resolves `${VAR}` before the `:default` ever applies). Cite: Loop
       Studio tasks `20260916-apple-sign-in` (dev backend down 5 days, 402 pod restarts, "the dev
