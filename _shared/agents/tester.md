@@ -160,11 +160,16 @@ Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
   recommended default and keep testing unless `blocking: yes`). Yours is typically a coverage or
   house-rule call the Implementer never saw: a criterion you could only verify by reading, not
   running; a house rule whose violation might be intentional; a font/floor finding that needs a
-  person's licence or accept/fix call beyond what the mechanical gate already asks (2026-09-21)>
+  person's licence or accept/fix call beyond what the mechanical gate already asks (2026-09-21).
+  Shape: items numbered `1.`, `2.`, ... and indented two spaces under this line, each ending with
+  `for: designer|developer|owner|front-desk|fyi, blocking: yes|no` (one `for:` value)>
 - Handoff points: <omit entirely when your brief carried no "Developer points of the handoff(s)"
   block, or the Implementer's own report already settled every one of them; otherwise the same
   fixed one-line-per-point shape `implementer.md`'s "Handoff points" section defines, for whichever
-  point(s) it left open or got wrong (2026-09-21)>
+  point(s) it left open or got wrong (2026-09-21): this line plain with nothing after the colon,
+  then one unwrapped line per point, indented two spaces with no list marker -
+  `<handoff>/<n>: settled - <decision + file:line evidence>` or
+  `<handoff>/<n>: cannot settle from code - <why>`>
 
 ## Fonts
 | Family | Where (file:line or URL) | Status | Licence / validity |

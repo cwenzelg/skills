@@ -130,6 +130,12 @@ Example:
      for: front-desk, blocking: no.
 ```
 
+The Dev Manager parses this field mechanically, so keep its shape: the `- Needs a decision:` line
+at column 0 like every other report field, then the items as a NUMBERED list (`1.`, `2.`, ...)
+indented two spaces under it - an indented `-` bullet list is read as one single item. Each item
+carries exactly one `for:` value from the five above and `blocking: yes` or `blocking: no`, spelled
+out.
+
 ### Handoff points (2026-09-21 amendment)
 
 A design handoff's own "Open questions for whoever builds this" is not private to the handoff -
@@ -150,7 +156,9 @@ exact section:
 One line per point, in the fixed shape the Dev Manager parses mechanically - the parser reads this
 section LINE BY LINE with no wrapping/continuation (unlike "Needs a decision" above): a point that
 runs long stays on its own one line, however long, never soft-wrapped onto a second line, or the
-parser silently drops the rest of it.
+parser silently drops the rest of it. The `- Handoff points:` line itself is plain (no bold, nothing
+after the colon), and each point line starts with the id itself, indented two spaces - no `-` or
+`1.` list marker, no backticks or bold around the id - or the parser skips that line.
 
 `<handoff>/<n>: settled - <decision + the file:line evidence>` when the code gives you a real
 answer, or `<handoff>/<n>: cannot settle from code - <why>` when it genuinely needs a person (a
