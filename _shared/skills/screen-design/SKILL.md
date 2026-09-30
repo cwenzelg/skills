@@ -160,6 +160,10 @@ the screen show the functions the task needs. Both answers come from the humans 
   keys instead of hardcoded strings). The handoff says which.
 - Every option must be buildable from components that already exist in the app. A new component
   is a named open question in the handoff, not a silent assumption.
+- Every open question names who can actually answer it (`**For:** designer | developer | owner`,
+  see `references/handoff-template.md`) - so a downstream reader never has to guess whether a gap
+  needs the person who drew it, the person who builds it, or Christian. Most gaps are developer
+  or owner, see the template's tagging note.
 - Loading, error, and empty states are part of every handoff. Most of a screen's life is spent
   in one of them.
 - Placeholders are marked as placeholders (imagery, metrics not confirmed by the API).
