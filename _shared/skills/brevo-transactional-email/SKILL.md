@@ -60,9 +60,10 @@ live name, project-prefixed:
   different templates per language.
 - The **dev** template (`<Project>-dev-<Name>`) is the one the Implementer creates and edits
   during a task - upsert it as often as the task needs.
-- The **live** template (`<Project>-live-<Name>`) is **only ever a copy of the dev one**, made at
-  promotion time (see below) - never created by hand, never edited directly in Brevo's UI, and
-  never touched by an ordinary implementation task.
+- The **live** template (`<Project>-live-<Name>`) is **only ever a copy of the dev one**, made by
+  `promote` **in the same task that creates the dev template** (Christian, 2026-10-02 - see
+  "Environments: dev and live" below) - never created by hand and never edited directly in
+  Brevo's UI.
 
 ## Templates as code (the layout)
 
@@ -211,24 +212,37 @@ main().catch((err) => {
 Run `upsert`, take the printed dev id, and write it into the project's own template-id config
 **the way that project already selects templates** (see "Investigate first" above) - never a new
 file or mechanism, unless the project's override skill says the project is changing that
-convention to a per-environment one (see "Environments: dev and live" below).
+convention to a per-environment one (see "Environments: dev and live" below). For a new template,
+run `promote` right after and write the printed live id into the live config the same way.
 
 ## Environments: dev and live
 
-A normal implementation task only ever touches the **dev** template - write the files, run
-`upsert`, wire the printed dev id into whatever config the project's dev profile reads. It never
-runs `promote` and never creates or edits a live template.
+**A task that creates a new template creates its live copy in the same task, right away**
+(Christian, 2026-10-02: asked "a waiting list until the release, or a live copy at once?", he
+answered «jetzt gleich»). The Implementer writes the files, runs `upsert`, then runs `promote`
+for that template, and wires **both** ids in the same change: the dev id into the config the dev
+profile reads, the live id into the config the live profile reads (`--ids-file` if the project's
+build reads a small JSON id map; otherwise following the project's own convention). Creating the
+live copy early is harmless - live code does not reference the template until the change reaches
+the main branch - and it is the only way the id is there when it does.
 
-**Promotion** (`promote`) happens once, on the release branch, right before the merge to main -
-after the dev template has been through a task's normal review, not as part of implementing a
-feature. It reads the CURRENT content of the dev template from Brevo (not the local files - the
-dev template in Brevo is the thing that was actually tested), writes an identical live template
-under `<Project>-live-<Name>`, and updates the live id into whatever config the project's live
-profile reads (`--ids-file` if the project's build reads a small JSON id map; otherwise by hand
-following the project's own convention). A project's own override skill or knowledge-base doc says
-whether the dev desk files this as its own release task or Christian runs it himself - either way,
-**a live template is never edited directly in Brevo's UI**, and never created by anything other
-than `promote` acting on an already-reviewed dev template.
+Why: on 2026-10-02 eight Loop Studio `LS-dev-*` templates had never been copied to `LS-live-*`,
+because the copy was a separate release-time step nobody ran. Their live ids stayed `0` ("send
+nothing"), so live silently sent none of those mails - an approved agency never got its invite.
+
+`promote` reads the CURRENT content of the dev template from Brevo (not the local files - the dev
+template in Brevo is the thing that was actually tested) and writes an identical live template
+under `<Project>-live-<Name>`. It is the only thing that ever writes a live template.
+
+**Changing an existing template.** Edit and `upsert` the dev template. Re-run `promote` in the
+same task when the new content works with the code live runs today (wording, layout, the same
+`params`). When it needs `params` only the new code passes, re-promoting now would break the live
+mail, so the re-promote waits until that code reaches the main branch - the task's report names it
+as an open step with a dated follow-up, never as a silent "later".
+
+**A live id of `0` is never acceptable for a template dev sends.** A project may enforce this with
+a test over its dev and live config (Loop Studio: `BrevoTemplateIdsLiveParityTest`) - never add a
+waiting list or an exception to such a test to get a task green; create the live copy instead.
 
 ## Getting the key into a Dev Manager task
 
@@ -254,22 +268,27 @@ crash) - the Implementer's report should say the key was missing rather than gue
 
 A task that adds or changes a template is done only once:
 1. `GET /v3/smtp/templates/{id}` (same `BREVO_API_KEY`) returns a **dev** template whose `name`
-   matches `meta.json`'s `templateName` exactly (`<Project>-dev-<Name>`), and
-2. the project's dev config carries that same id.
+   matches `meta.json`'s `templateName` exactly (`<Project>-dev-<Name>`), and the project's dev
+   config carries that same id;
+2. for a new template, `GET /v3/smtp/templates/{liveId}` returns the **live** template
+   (`<Project>-live-<Name>`, the same name with `-dev-` replaced by `-live-`) with the same subject
+   and HTML as the dev one, and the project's live config carries that live id - never `0`, never
+   the dev id.
 
-This proves the dev template exists and was actually pushed - it does not prove the rendered HTML
-looks right; say so explicitly rather than claiming a visual check that did not happen. An
-ordinary task's Tester run must **not** find a `<Project>-live-<Name>` template that did not exist
-before the task - if one exists, the Implementer ran `promote` when it shouldn't have; flag it as
-a floor-style finding, not a pass.
+This proves both templates exist and were actually pushed - it does not prove the rendered HTML
+looks right; say so explicitly rather than claiming a visual check that did not happen. A new
+template whose live copy or live id is missing is a failing finding, not a pass - "promoted at
+release" is no longer an answer (2026-10-02). For a changed template whose re-promote waits for
+the code (see "Changing an existing template" above), the report must name that open step.
 
 ## Never
 
 - Never print, log, or write `BREVO_API_KEY` (or any Brevo key) into a file, commit, spec, or
   Slack message.
 - Never invent a second way to select a template id when the project already has one.
-- Never create or edit a `<Project>-live-<Name>` template from an ordinary implementation task -
-  only `promote`, run at release time, ever touches a live template, and it only ever copies an
-  already-reviewed dev template rather than writing new content.
+- Never write a `<Project>-live-<Name>` template any other way than `promote` - it only ever
+  copies the dev template rather than writing new content.
+- Never finish a task that creates a template without its live copy and its live id in the live
+  config - a dev template with live at `0` means live silently sends nothing.
 - Never hand-edit a live template directly in Brevo's UI - if a live template ever needs to
   change, change the dev one and promote again.

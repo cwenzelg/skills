@@ -25,7 +25,7 @@
           "scope": "_shared",
           "description": "How to add or change a Brevo transactional email template as code, for any project that sends app mail through Brevo's numeric-template-id API - password recovery, e-mail confirmation, invites, offer/reservation notices, reminders, or any other transactional mail. Use whenever a task creates, edits, or investigates a Brevo template, a transactional email, an e-mail sent by numeric template id, \"the pipeline can't create Brevo templates\" style blockers, or a company's own Brevo-related override skill points here.",
           "path": "_shared/skills/brevo-transactional-email/SKILL.md",
-          "bodyLines": 272,
+          "bodyLines": 291,
           "references": [],
           "scripts": [],
           "assets": [],
