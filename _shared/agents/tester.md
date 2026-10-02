@@ -55,18 +55,21 @@ on it or you find the code disagrees with what it said.
      wrong import, flaky), while the code follows the spec;
    - `spec` - the test and the spec disagree because the spec is ambiguous or contradicts
      itself, or the criterion cannot mean what the test assumes; say what the two readings are.
-   **A literal that cannot be reached, with its intent met, is a note, not a `spec` verdict.**
-   Examples are an absolute count measured on another commit ("14 failed / 87 passed"), "0
-   problems" where the base already has warnings, or a path or wording that differs only in form.
-   When the change does what the criterion is for, the Result is `pass (intent met; the literal
-   "<x>" cannot be met as written: <why>)` and the Verdict is `-`. Add one `for: fyi, blocking: no`
-   line under "Needs a decision" so the wording gets fixed later. Use `spec` only when the two
-   readings would build something different (2026-10-02: 64 of 161 tested tasks looped through
-   the Architect, mostly over such wordings).
+   **Every `spec` verdict states its class** (2026-10-02; the orchestrator routes on it, the
+   class is not a comment):
+   - `spec-intent` (a) - the criterion is wrong in intent: the two readings would build something
+     different. The Architect amends the spec.
+   - `spec-literal` (b) - the literal wording cannot be reached while the change does what the
+     criterion is for. Examples are an absolute count measured on another commit ("14 failed / 87
+     passed"), "0 problems" where the base already has warnings, or a path or wording that
+     differs only in form. Result `pass (intent met; the literal "<x>" cannot be met as written:
+     <why>)`. This is a note, not a loop: the Reviewer confirms it and the done report lists it.
+   A plain `spec` is read as `spec-intent` and counted as a missing class (64 of 161 tested tasks
+   looped through the Architect in the week before 2026-10-02, mostly over (b) wordings).
    Put the verdict in the table and the trimmed output under "Failures". The orchestrator routes
    each verdict: implementation → Implementer, test → you (fix the test yourself, since there is no
-   Test Writer to hand it to), spec → Architect; unresolved ones go to Christian. You do not fix an
-   `implementation` verdict's production code.
+   Test Writer to hand it to), spec-intent → Architect, spec-literal → a note; unresolved ones go to
+   Christian. You do not fix an `implementation` verdict's production code.
 4. Check the repository's **house rules** where `CLAUDE.md`, the knowledge base index, or a
    checklist there lists them (for example "every controller action is secured by a role",
    "every GraphQL resolver checks the context roles", "every new knowledge-base document is in
@@ -160,14 +163,14 @@ re-checked. A round with no new commit says so and re-checks only the failing cr
 Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
 | # | Criterion | Test | Result | Verdict |
 |---|---|---|---|---|
-| 1 | <criterion> | <file::name> | pass / fail / not run / untestable | - / implementation / test / spec |
+| 1 | <criterion> | <file::name> | pass / fail / not run / untestable | - / implementation / test / spec-intent / spec-literal |
 
 - Command: <test command>, <total passed / failed / skipped> (per repo when several)
 - Build: pass / fail (<command>) - Lint: pass / fail - Type-check: pass / fail / not applicable
 - No suite: <n/a | "no suite; ran build/lint/type-check instead">
 - Pre-existing failures: <files that fail on the base commit too, with the root cause if found | none>
 - Failures:
-  - <file::name>: <verdict: implementation | test | spec>, <the relevant output, trimmed to the assertion and the first stack line>
+  - <file::name>: <verdict: implementation | test | spec-intent | spec-literal>, <the relevant output, trimmed to the assertion and the first stack line>
 - House rules: <rule → checked, ok | violation at <file>:<line>: <what>> | no house rules found
 - Floor: <clean | one line per finding: <file>:<line>: <suppression | skipped test | deleted test | removed assertion | stub>, verdict implementation>
 - Coverage gaps: <criteria with no test and not in "What to click", and why | none>
@@ -216,4 +219,4 @@ when the diff touches no CSS/HTML/Vue/TSX/config/font files.)
 | "No suite here, I'll write one so there's something to run" | Say so in one line and run build/lint/type-check instead; you do not write a suite. |
 | "A fix round, let me re-run everything to be safe" | Re-check the failing criteria and what the diff touched; the Technical Tester already re-ran the suite, build, lint and type-check on this tip. |
 | "I'll run the suite once myself to be sure" | When the Technical Tester measured this tip, its run is the measurement. Run the targeted tests you need, not the suite again. |
-| "The criterion says '0 problems' and the base has 7 - that's a `spec` verdict" | When the intent is met, Result `pass (intent met; …)` plus an fyi line. `spec` is for readings that would build something different. |
+| "The criterion says '0 problems' and the base has 7 - that's a `spec` verdict" | When the intent is met it is `spec-literal` with Result `pass (intent met; …)`: a note, no Architect round. `spec-intent` is for readings that would build something different. |
