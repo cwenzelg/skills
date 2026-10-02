@@ -30,6 +30,14 @@ say which and stop.
    assumption you cannot even state is an open question (step 5).
    Acceptance criteria must be testable statements, one per line - testable by a machine or by a
    human on the deploy preview, not necessarily both.
+   **Criteria about the suite, lint, type-check or a build are phrased relative to the base**, for
+   example "no new failing tests against `dev`", "no new lint warnings in the changed files" or
+   "the build passes as on `dev`". Never use an absolute count measured somewhere else, such as
+   "14 failed / 87 passed", or "0 problems" when the base already has warnings. The base is often
+   red already, and the Technical Tester compares every check against the merge-base. A count
+   taken on an older `dev` cannot be met on the branch's own base. Such criteria sent 64 of 161
+   tested tasks back through a `spec` loop (2026-10-02). An exact literal (a string, a file path,
+   an export name) belongs in a criterion only when that literal is the point of the change.
    **No gate-1 test table** (Christian, 2026-09-10: "what he can skip is the test table, because I
    don't have good experiences" - dropped, not narrowed, after the 2026-09-09 version of this rule
    was tried and found not worth its cost). You do not pre-specify which tests prove which
@@ -211,6 +219,7 @@ and open questions", and stop - the Dev Manager then asks Christian.
 | "This is a lot, but calling it XL feels dramatic" | If it spans several data models/endpoints/screens, it is XL; understating it starves the build of room. |
 | "The Implementer knows the code, it can define the API" | Two repos, one contract, in the primary spec. |
 | "That criterion is obvious, it doesn't need to be spelled out" | Obvious to you is a `spec` verdict later; write it as a precise, testable statement anyway. |
+| "I'll write the current numbers in: 14 failed / 87 passed" | Relative to the base: "no new failing tests against `dev`". A count from another commit is unreachable by construction. |
 | "A curated test table would make this look more thorough" | No gate-1 test table (2026-09-10) - that decision belongs downstream, not in the spec. |
 | "I can't inspect that system, the usual behaviour will do" | Mark it `unverified` or ask; a guessed spec is worse than a blocked one. |
 | "A small refactor here would make the change cleaner" | Note it under Out of scope; the spec is the smallest change. |

@@ -34,6 +34,13 @@ on it or you find the code disagrees with what it said.
 
 1. Run the full test command of every repo the task changed, in that repo's worktree, then the
    build, lint and type-check commands. Do not stop at the first failure; collect them all.
+   **The Technical Tester measured this tip** (your brief says "measured EXACTLY this tip"): do
+   NOT run the full suite, lint or type-check again. Its report is this round's measurement of
+   them, made minutes ago on the same commit. Take those results from it, give every failing test
+   in it a verdict, and run only targeted tests: a criterion's own test files, a failing test on
+   its own to read its output, and the tests you add (`npx vitest run <files>`,
+   `./gradlew test --tests <Class>`). A full re-run only repeats the same numbers (2026-10-02:
+   Tester sessions started their first suite run 0.3-0.5 min in, 5.2 suite runs per session).
    **No suite to run** (greenfield repo, or `testsRunnable: false`): say so in one line and run the
    build, lint and type-check instead - you do not write a suite to fill the gap.
 2. Map every acceptance criterion to the test that proves it (there is no gate-1 test table to
@@ -48,6 +55,14 @@ on it or you find the code disagrees with what it said.
      wrong import, flaky), while the code follows the spec;
    - `spec` - the test and the spec disagree because the spec is ambiguous or contradicts
      itself, or the criterion cannot mean what the test assumes; say what the two readings are.
+   **A literal that cannot be reached, with its intent met, is a note, not a `spec` verdict.**
+   Examples are an absolute count measured on another commit ("14 failed / 87 passed"), "0
+   problems" where the base already has warnings, or a path or wording that differs only in form.
+   When the change does what the criterion is for, the Result is `pass (intent met; the literal
+   "<x>" cannot be met as written: <why>)` and the Verdict is `-`. Add one `for: fyi, blocking: no`
+   line under "Needs a decision" so the wording gets fixed later. Use `spec` only when the two
+   readings would build something different (2026-10-02: 64 of 161 tested tasks looped through
+   the Architect, mostly over such wordings).
    Put the verdict in the table and the trimmed output under "Failures". The orchestrator routes
    each verdict: implementation → Implementer, test → you (fix the test yourself, since there is no
    Test Writer to hand it to), spec → Architect; unresolved ones go to Christian. You do not fix an
@@ -109,13 +124,17 @@ area) so a later round can reuse them instead of rewriting from scratch.
 
 ## Round 1 vs later rounds
 
-**Round 1** runs the full suite, build, lint, type-check, house rules, floor and fonts once, in
-full - this is the one full measurement the task gets. **Every later round** (after an Implementer
-fix) re-runs only: the tests in files the fix touched, the mechanical checks (suite, build, lint,
-type-check), and the floor/fonts scan on the new diff. Do not re-state the full evidence table
-from round 1; report only what changed and what you re-ran, plus a line pointing back to round 1's
-table for everything else. This is what keeps a re-test round to the tests and files the fix
-actually touched, not a fresh pass over every criterion.
+**Round 1** maps every criterion, and checks the house rules, the floor and the fonts once, in
+full. The suite, build, lint and type-check come from the Technical Tester when it measured this
+tip (step 1); otherwise you run them yourself.
+
+**Every later round** (after an Implementer fix) builds on the last one. Your brief carries the
+round number, the previous round's table, its failing set and the commits and files changed since
+the tip the previous round tested. Re-check only the criteria that failed, plus the criteria whose
+code those changes touched, with targeted test runs. The suite, build, lint and type-check results
+come from the Technical Tester's report of this tip; do not re-run them. Copy every other row from
+the previous table unchanged, so the table stays complete, and say in one line which rows you
+re-checked. A round with no new commit says so and re-checks only the failing criteria.
 
 ## Hard limits
 
@@ -195,4 +214,6 @@ when the diff touches no CSS/HTML/Vue/TSX/config/font files.)
 | "The suite is green, no need to run the new files alone" | A test that is never collected proves nothing. |
 | "I'll measure this in a browser to be thorough" | Only when a criterion is explicitly about geometry/contrast/focus; the rest is Christian's "What to click" at gate 3. |
 | "No suite here, I'll write one so there's something to run" | Say so in one line and run build/lint/type-check instead; you do not write a suite. |
-| "A fix round, let me re-run everything to be safe" | Scope to the touched tests/files plus the mechanical checks; full re-measurement is round 1 only. |
+| "A fix round, let me re-run everything to be safe" | Re-check the failing criteria and what the diff touched; the Technical Tester already re-ran the suite, build, lint and type-check on this tip. |
+| "I'll run the suite once myself to be sure" | When the Technical Tester measured this tip, its run is the measurement. Run the targeted tests you need, not the suite again. |
+| "The criterion says '0 problems' and the base has 7 - that's a `spec` verdict" | When the intent is met, Result `pass (intent met; …)` plus an fyi line. `spec` is for readings that would build something different. |

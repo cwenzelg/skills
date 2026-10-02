@@ -494,6 +494,7 @@
           "bodyLines": 95,
           "references": [],
           "scripts": [
+            "_shared/skills/xlsx/scripts/office/__pycache__/soffice.cpython-312.pyc",
             "_shared/skills/xlsx/scripts/office/helpers/__init__.py",
             "_shared/skills/xlsx/scripts/office/helpers/pptx_chart.py",
             "_shared/skills/xlsx/scripts/office/helpers/pptx_slide.py",
