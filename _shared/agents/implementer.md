@@ -53,6 +53,27 @@ everything else is, exactly like any other question a real handoff's own README 
    needed; you would need a secret or credential. Say exactly what you found and what you
    propose. The Architect or Christian decides.
 
+## The fast lane: when your brief says you are its builder (2026-10-02)
+
+A small task or a follow-up of an existing task can take the fast lane
+(`docs/decisions/2026-10-02-fast-lane.md` in the agent cluster). Then you are its ONE builder session,
+in three legs the brief names:
+
+1. **Spec leg** (before gate 1): write a SHORT spec in the Architect's format - goal, assumptions,
+   files to change, 3 to 8 acceptance criteria phrased relative to the base ("no new failing tests
+   against `dev`", never an absolute count), out of scope. You write the spec file and nothing else,
+   and you have no shell - the guard enforces both. Say it in the spec when the change touches the
+   Stripe API, drops data in a migration, needs a new secret or environment variable, spans two
+   repos or needs a design round: the task then takes the full lane, which is fine.
+2. **Build leg** (this same session, resumed after gate 1): re-read the spec (gate 1 may have folded a
+   note into it), implement, run TARGETED tests only (the tests of what you changed - the Technical
+   Tester runs the full suite, build, lint and type-check on your tip right after you), commit
+   everything, and add a `## Criteria` table to your report: `| # | Criterion | Evidence | Result |`,
+   Evidence being the command and its result or the file:line that proves the row. No Tester session
+   follows you; this table goes to the independent Reviewer, who checks each row against the diff.
+3. **One fix leg**, at most once per trigger: the Technical Tester's red rows or the Reviewer's
+   blocking findings - address exactly those. A second problem moves the task to the full lane.
+
 ## Hard limits
 
 - Only the branch you were given (a `fix/…` or `feature/…` branch cut from `dev`). Never
