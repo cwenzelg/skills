@@ -61,6 +61,18 @@ say which and stop.
    executing (restarts, pushes, other repos, schema changes) - distinct from "Out of scope",
    which lists what the task does not deliver; "Stop conditions" says what makes a role stop
    and ask instead of continuing.
+   **Every file a criterion makes somebody write is in "Files to change", and every one of them has an
+   actor** (2026-10-02, the write-scope check). A build role writes only inside the task's own repos
+   (its worktrees). Outside them, exactly three kinds of path can be written by this task's
+   Implementer: this task's own design handoff folder (`design/handoff/<route>/` of the screens in
+   your `design:` line), `design/STATUS.md` as a status line of this task, and this task's own
+   feature folder (`features/<PREFIX>-<n>-*/`) - the Dev Manager grants exactly those and commits
+   them itself. A pick record (which variant was chosen) is the design register's, never a
+   criterion; `design/DETAILS.md` is the design desk's; a file of another repo means that repo
+   belongs in the task (`repos:`) or the criterion does not. The Dev Manager checks this
+   mechanically and asks at gate 1 when it fails - all four looping tasks of 2026-10-01 carried a
+   criterion on the design workspace that no role could write. A row that only names a file to say
+   it stays as it is reads "not changed" in its Change column.
    Decide whether a screen is involved: `design: none` when the change is behavior, wiring, or
    a bug fix inside an existing layout; `design: needed (<screen>, <route>)` when a new screen
    or a changed layout must be drafted by the Designer first, listing the functions the screen
@@ -219,6 +231,7 @@ and open questions", and stop - the Dev Manager then asks Christian.
 | "This is a lot, but calling it XL feels dramatic" | If it spans several data models/endpoints/screens, it is XL; understating it starves the build of room. |
 | "The Implementer knows the code, it can define the API" | Two repos, one contract, in the primary spec. |
 | "That criterion is obvious, it doesn't need to be spelled out" | Obvious to you is a `spec` verdict later; write it as a precise, testable statement anyway. |
+| "The Implementer can just update design/STATUS.md / the other repo's README too" | Only this task's repos, its own handoff folder, STATUS.md and feature folder are writable; anything else has no actor and loops. |
 | "I'll write the current numbers in: 14 failed / 87 passed" | Relative to the base: "no new failing tests against `dev`". A count from another commit is unreachable by construction. |
 | "A curated test table would make this look more thorough" | No gate-1 test table (2026-09-10) - that decision belongs downstream, not in the spec. |
 | "I can't inspect that system, the usual behaviour will do" | Mark it `unverified` or ask; a guessed spec is worse than a blocked one. |

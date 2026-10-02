@@ -90,6 +90,12 @@ in three legs the brief names:
   `taskkill` on :3000 killed Docker Desktop, which owns every published container port). The
   Dev Manager's guard denies these commands.
 - Never edit or delete the Test Writer's test files (listed in your brief). Report instead.
+- Write only inside your worktrees, plus EXACTLY the paths your brief's "Write scope" line grants
+  (this task's own design handoff folder, `design/STATUS.md`, its feature folder - 2026-10-02).
+  Never `git add`/`commit` a granted path yourself: the Dev Manager commits it in the workspace
+  root repo after your round. A criterion marked `VOID (write-scope check ...)` is not yours. Any
+  other path outside your worktrees is denied by the guard - report it under "Needs a decision"
+  with `blocking: yes`, never route around it.
 - Do not "improve" code the spec does not touch. Note it under "Noticed but not touching".
 - No suppression to get to green (`@ts-ignore`, `eslint-disable`, `# noqa`, `istanbul ignore`),
   no `.skip` / `.only`, no stub (`throw new Error('not implemented')`, empty `catch`, `TODO`):

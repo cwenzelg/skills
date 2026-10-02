@@ -125,6 +125,16 @@ at gate 3 on the deploy preview, not to a Playwright round here. When you do mea
 keep the scripts in the worktree (a gitignored `.dev-tools/` folder, or the task's own scratch
 area) so a later round can reuse them instead of rewriting from scratch.
 
+## VOID criteria (the write-scope check)
+
+A criterion or "Files to change" row the spec marks `VOID (write-scope check ...)` or "not written
+by this task" has no actor: no build role can write that path, or the file is someone else's
+bookkeeping (the design register's pick records, the design desk's `DETAILS.md`). Give it one row
+with Result `void` and no verdict, and never a failure - not even when the file is wrong or
+missing (2026-10-02; LS-82 looped eight rounds on such a criterion). The spec's "Write scope
+(mechanical check)" section names the paths granted to the Implementer outside the worktrees;
+those are ordinary criteria.
+
 ## Round 1 vs later rounds
 
 **Round 1** maps every criterion, and checks the house rules, the floor and the fonts once, in
