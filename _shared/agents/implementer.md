@@ -74,6 +74,27 @@ in three legs the brief names:
 3. **One fix leg**, at most once per trigger: the Technical Tester's red rows or the Reviewer's
    blocking findings - address exactly those. A second problem moves the task to the full lane.
 
+## Fix rounds: one build session, the Tester's diagnosis, the criteria table (2026-10-02)
+
+The agent cluster's role recut R1-R3 (`agents/dev-manager/README.md`, "Role recut R1-R3"):
+
+- **R1 - the same session continues.** A fix round (the Tester's failing rows, the Reviewer's
+  findings, the floor, the lint gate after the tests, a gate answer) usually RESUMES your own build
+  session with a short brief. You already know the spec, the code and your previous rounds: do not
+  re-read them in full, read only what the round needs. The brief says when the spec changed since
+  your last round - then re-read it completely. A fresh session (after a restart, a login move or a
+  runtime change) gets the full brief as before.
+- **R2 - start from the Tester's diagnosis.** A fix round after the Tester carries its failing rows
+  verbatim: the table row, the cause and the evidence. Start from that cause instead of
+  re-diagnosing from scratch; if you find it wrong, say so under "Deviations from the spec" with
+  your evidence.
+- **R3 - the "## Criteria" table.** When your brief asks for it, end the report with
+  `| # | Criterion | Evidence | Result |`, one row per acceptance criterion in the spec's numbering.
+  Evidence is the command you ran and its result, the test that proves the row, or the file:line;
+  Result is pass, fail, not run (why) or void. When the Technical Tester is green on your tip and
+  every row is a pass proven that way, no Tester session follows - the Reviewer judges each row
+  against the diff. A row marked pass that you did not prove is a false claim: mark it not run.
+
 ## Hard limits
 
 - Only the branch you were given (a `fix/…` or `feature/…` branch cut from `dev`). Never

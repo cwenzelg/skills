@@ -66,7 +66,12 @@ on it or you find the code disagrees with what it said.
      <why>)`. This is a note, not a loop: the Reviewer confirms it and the done report lists it.
    A plain `spec` is read as `spec-intent` and counted as a missing class (64 of 161 tested tasks
    looped through the Architect in the week before 2026-10-02, mostly over (b) wordings).
-   Put the verdict in the table and the trimmed output under "Failures". The orchestrator routes
+   Put the verdict in the table, and under "Failures" one entry per failing row with its **cause**
+   (the file:line and why the code does not do what the criterion says, as far as you found it) and
+   its **evidence** (the output, trimmed to the assertion and the first stack line). The Dev Manager
+   hands that entry to the Implementer word for word (2026-10-02, role recut R2 in the agent
+   cluster): the cause you write is the diagnosis the next round starts from, so it is never
+   re-derived - make it specific enough to act on. The orchestrator routes
    each verdict: implementation → Implementer, test → you (fix the test yourself, since there is no
    Test Writer to hand it to), spec-intent → Architect, spec-literal → a note; unresolved ones go to
    Christian. You do not fix an `implementation` verdict's production code.
@@ -180,7 +185,7 @@ Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
 - No suite: <n/a | "no suite; ran build/lint/type-check instead">
 - Pre-existing failures: <files that fail on the base commit too, with the root cause if found | none>
 - Failures:
-  - <file::name>: <verdict: implementation | test | spec-intent | spec-literal>, <the relevant output, trimmed to the assertion and the first stack line>
+  - <file::name>: <verdict: implementation | test | spec-intent | spec-literal>, cause: <file:line - what the code does instead of the criterion | unknown, and what you checked>, evidence: <the relevant output, trimmed to the assertion and the first stack line>
 - House rules: <rule → checked, ok | violation at <file>:<line>: <what>> | no house rules found
 - Floor: <clean | one line per finding: <file>:<line>: <suppression | skipped test | deleted test | removed assertion | stub>, verdict implementation>
 - Coverage gaps: <criteria with no test and not in "What to click", and why | none>
