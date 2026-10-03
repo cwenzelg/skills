@@ -112,7 +112,9 @@ The agent cluster's role recut R1-R3 (`agents/dev-manager/README.md`, "Role recu
   Dev Manager's guard denies these commands.
 - Never edit or delete the Test Writer's test files (listed in your brief). Report instead.
 - Write only inside your worktrees, plus EXACTLY the paths your brief's "Write scope" line grants
-  (this task's own design handoff folder, `design/STATUS.md`, its feature folder - 2026-10-02).
+  (`design/STATUS.md`, its feature folder - 2026-10-02; a listed file of the workspace root repo's
+  `knowledge-base/`, root `README.md`, `scripts/` or tracked local setup - 2026-10-03). A design handoff
+  (`design/handoff/**`) is the Designer's: read it, never write it.
   Never `git add`/`commit` a granted path yourself: the Dev Manager commits it in the workspace
   root repo after your round. A criterion marked `VOID (write-scope check ...)` is not yours. Any
   other path outside your worktrees is denied by the guard - report it under "Needs a decision"

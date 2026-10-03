@@ -63,11 +63,15 @@ say which and stop.
    and ask instead of continuing.
    **Every file a criterion makes somebody write is in "Files to change", and every one of them has an
    actor** (2026-10-02, the write-scope check). A build role writes only inside the task's own repos
-   (its worktrees). Outside them, exactly three kinds of path can be written by this task's
-   Implementer: this task's own design handoff folder (`design/handoff/<route>/` of the screens in
-   your `design:` line), `design/STATUS.md` as a status line of this task, and this task's own
-   feature folder (`features/<PREFIX>-<n>-*/`) - the Dev Manager grants exactly those and commits
-   them itself. A pick record (which variant was chosen) is the design register's, never a
+   (its worktrees). Outside them, only these paths can be written by this task's Implementer:
+   `design/STATUS.md` as a status line of this task, this task's own feature folder
+   (`features/<PREFIX>-<n>-*/`), and (2026-10-03) files of the company's workspace root repo listed
+   in "Files to change": `knowledge-base/**`, the root `README.md`, `scripts/**`, and the local-setup
+   folder only when the workspace root repo tracks it (MachineMaster's `docker-moerschen-local` is its
+   own repo - it is not). The Dev Manager grants exactly the listed files (or a folder below one of
+   those roots, never the root itself) and commits them itself. A design handoff
+   (`design/handoff/<route>/`) is produced by the design round - the Designer's, never a build role's;
+   list it only as something the build reads. A pick record (which variant was chosen) is the design register's, never a
    criterion; `design/DETAILS.md` is the design desk's; a file of another repo means that repo
    belongs in the task (`repos:`) or the criterion does not. The Dev Manager checks this
    mechanically and asks at gate 1 when it fails - all four looping tasks of 2026-10-01 carried a
