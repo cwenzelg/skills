@@ -35,6 +35,7 @@ design/
         assets/                # this round's own fonts/images, if it needs any beyond the shared ones
         render-overview.png    # headless render of overview.html — posted first, becomes the Slack thread root
         render-variant-<letter>-{desktop,mobile}.png
+        render-*-clean.png     # the same renders with every working note hidden — the only ones a customer sees
     assets/                 # brand assets extracted from the live app, shared across every screen's rounds
   handoff/
     <route-slug>/         # named after the app ROUTE, not the screen title: competitors/, not "Wettbewerber Screen/"
@@ -84,15 +85,26 @@ replaced, and the optional Artifact "Design" type.
    in the posting caption) — grounded in whichever examples were picked in step 2, when there
    were any. Later rounds: a new `round-<n+1>/` folder holding one variant per feedback thread;
    never overwrite or rename a previous round.
+   **Every working note sits inside an element marked `data-note`** — the variant label, the
+   concept check, a state list's titles and descriptions, file and component names, task and
+   question ids, criterion numbers, routes, "placeholder" remarks: whatever the built app would
+   not show at that spot — in `variant-*.html` and in `overview.html` alike. Nothing outside the
+   drawn screen is left unmarked, and the screen itself (or a wrapper around it) never carries
+   the mark.
 5. Build `overview.html`: a plain page that shows every variant in this round side by side (e.g.
    scaled iframes onto each `variant-*.html`), each labelled with its letter and a one-line name
    — this is the "multiple designs next to each other" view that gets posted first.
-6. Render headlessly to PNG: a throwaway Node script driving `playwright-core` against the
-   machine's installed Chrome/Edge, served from a local static server on `127.0.0.1` (a `file://`
-   open is not reliable for fonts, relative assets, or iframes) — `render-overview.png` plus a
-   desktop and mobile render per variant. Delete the render script when done; it is not part of
-   the deliverable. **Look at every PNG before posting** — this is the actual quality gate now
-   that there is no interactive editor step to catch a broken layout first.
+6. Render with the skill's own script — never a script of your own:
+   `node <this skill's folder>/scripts/render-round.mjs "<round folder>"`. Per variant it writes a
+   desktop (1440px) and a mobile (390px) render, plus `render-overview.png`, each twice: as drawn
+   (`render-variant-a-desktop.png`, the team's review image) and with every `[data-note]` hidden
+   (`render-variant-a-desktop-clean.png`). It exits non-zero and names the file when a clean
+   render would be empty or a variant has no drawn screen outside its notes, and warns when an
+   id, a file name or a route is still readable in a clean render — fix the HTML and run it
+   again. **Only a `*-clean.png` may be shown to a customer.** **Look at every PNG before
+   posting**, the clean ones included — this is the actual quality gate now that there is no
+   interactive editor step to catch a broken layout first. Options and setup:
+   `references/canvas-tooling.md`.
 7. Reuse `draft/assets/` across screens; extract a new asset from the app only when none exists.
    A round-specific asset (e.g. a font file needed only for this round) goes in the round's own
    `assets/`.

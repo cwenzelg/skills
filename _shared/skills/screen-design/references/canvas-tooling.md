@@ -34,14 +34,36 @@ the "Subscription round 1 — image-first format" entry in that project's `STATU
 
 ### Rendering
 
-- One throwaway Node script per rendering session — delete it afterward, it is not a deliverable.
-  It starts a static file server bound to `127.0.0.1` serving the round folder, drives
-  `playwright-core` against the machine's already-installed Edge/Chrome (`channel: 'msedge'` or
-  `'chrome'` — no bundled Chromium download needed), screenshots `overview.html` and each
-  `variant-*.html` at a desktop width (1440px) and, when the screen is responsive, a mobile width
-  (390px), writes the PNGs into the round folder, then exits.
+- One fixed script, shipped with this skill (2026-10-08; it replaces the throwaway script every
+  session used to write): `node <this skill's folder>/scripts/render-round.mjs "<round folder>"`.
+  The same line works in every shell on Windows and macOS. It serves `design/draft/` (two levels
+  above the round, so `../../assets/` resolves) on `127.0.0.1`, drives the Playwright library
+  against the machine's installed Chrome or Edge (else Playwright's own Chromium), and writes
+  into the round folder, full page:
+  - `render-variant-<letter>-desktop.png` (1440px) and `-mobile.png` (390px) — as drawn, notes
+    included; `render-overview.png` from `overview.html`.
+  - the same names ending in `-clean.png` — every `[data-note]` element hidden, in an overview
+    inside its frames too. Only these may be shown to a customer.
+- Exit codes: `0` everything written; `1` a clean render would be empty, a variant has no drawn
+  screen outside its notes, or a note is still visible in a clean render (the file is named,
+  nothing is written for it); `2` usage or setup. A warning (never a failure) names an id, a
+  source file name or a route still readable in a clean render, and every asset that failed to
+  load.
+- Options: `--out <dir>` writes somewhere else and only reads the round folder; `--hide
+  "<css selectors>"` hides more than `[data-note]` in the clean renders — for a round drawn before
+  the rule, e.g. `--hide ".screen-label,.concept,.states"`; `--only variant-a,overview`;
+  `--viewports desktop`; `--overview-width <px>` for an overview that has no fixed body width
+  (default 1440); `--json` prints what the script measured in the page (notes found, notes
+  visible, screen elements) per render.
+- Setup, once per machine: the script needs the Playwright library and installs nothing itself.
+  It looks in `--playwright-dir` / `RENDER_ROUND_PLAYWRIGHT_DIR`, the working directory, the round
+  folder, its own folder, `NODE_PATH`, then one fixed folder in the machine's temp directory —
+  and when none has it, it prints the one `npm install --prefix ... playwright-core` line to run.
+  Run that line; do not probe for Playwright yourself, and never install into a project checkout
+  or a worktree.
+- Its test: `node --test <this skill's folder>/scripts/render-round.test.mjs`.
 - `file://` is not reliable for this step: relative asset paths, `@font-face`, and iframe `src`
-  loads behave inconsistently without a real HTTP origin. Always serve, even for a quick look.
+  loads behave inconsistently without a real HTTP origin — which is why the script always serves.
 - **Look at every PNG before posting.** With no editor step in between, this is the only quality
   gate left before a human sees the round — catch a broken layout here, not in the Slack thread.
 

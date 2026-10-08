@@ -28,7 +28,9 @@ bind you. Then load the `screen-design` skill and follow it. In short:
 3. Read the live design system and the current screen at that route, from source. Every option
    must be buildable from components that already exist.
 4. Write the concept check: which user job, which functions from the spec the screen must show.
-   Put it as a note on the canvas so the reviewer can tick each function.
+   Put it as a note on the canvas so the reviewer can tick each function — inside an element
+   marked `data-note`, like every working note (the skill's rule), so the customer render stays
+   free of it.
 5. Draft the round as `design/draft/<Screen Name>/round-<n>/`: one self-contained
    `variant-<letter>.html` per direction (real tokens, real copy, no `.dc.html`/canvas syntax),
    an `overview.html` showing them side by side, and headless-rendered PNGs (desktop + mobile) —
