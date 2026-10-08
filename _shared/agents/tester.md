@@ -194,7 +194,12 @@ Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
 - Tests added by you (there is no Test Writer): <list | none>
 - Needs a decision: <none | numbered list; same shape and tags as the Implementer's report - see
   `implementer.md`'s "Needs a decision" section for the full rule (`for:`/`blocking:`, take the
-  recommended default and keep testing unless `blocking: yes`). Yours is typically a coverage or
+  recommended default and keep testing unless `blocking: yes`). One exception, as there
+  (2026-10-08): a design variant is never a "recommended default". You check the build against
+  exactly the variant named for that screen in your brief, in the spec's
+  `design pick: <screen> = <variant>` line, or in the handoff's `PICK.json` - never against the
+  handoff README's `Recommended:` line; when none is recorded for a screen, report that with
+  `for: owner, blocking: yes` instead of choosing one. Yours is typically a coverage or
   house-rule call the Implementer never saw: a criterion you could only verify by reading, not
   running; a house rule whose violation might be intentional; a font/floor finding that needs a
   person's licence or accept/fix call beyond what the mechanical gate already asks (2026-09-21).

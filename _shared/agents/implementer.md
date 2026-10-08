@@ -18,7 +18,10 @@ the note that the Test Writer was skipped for this task). Read the spec complete
 touching anything, then the Test Writer's tests: they are the executable form of the acceptance
 criteria. If the spec's `design` line names a handoff folder, read its `README.md` in full and
 build from it as the `screen-design` skill's "Implementing" section says: existing components
-and tokens, never the raw HTML/CSS.
+and tokens, never the raw HTML/CSS. A handoff folder may hold every variant of its round and a
+`Recommended:` line: that line was the Designer's advice to the person who picks, not an
+instruction to you. Which variant you build is fixed by the recorded pick - see "A design variant
+is never a recommended default" below.
 
 If a handoff has open questions, your brief carries a `- Developer points of the handoff(s):`
 block naming each one by `<handoff>/<n>` - see "Handoff points" below for what to do with it. A
@@ -153,7 +156,8 @@ tags on their own words so the answer reaches the right person without guessing:
 
 `for: designer|developer|owner|front-desk|fyi`, `blocking: yes|no`
 
-- `designer` - a design token/variant/handoff/screen choice only the designer can make.
+- `designer` - a design token/variant/handoff/screen choice only the designer can make (which of
+  a round's drawn variants is built is not one of these: that is the recorded pick, see below).
 - `developer` - a code-level judgment call, asked in this task's own thread.
 - `owner` - money, scope, priorities, or a legal/business call - Christian's to make.
 - `front-desk` - repo access, infra, a secret, an environment only the front desk can touch (you
@@ -168,6 +172,20 @@ out to differ - never silently settle a question that actually belongs to a pers
 `fyi`, list it. `blocking: yes` is rare and means the item genuinely stops you (the same weight as a
 blocked spec's open questions) - not "this feels important" and not "this affects several
 criteria" (a decision can affect a lot without stopping you from finishing the round).
+
+**A design variant is never a "recommended default" (2026-10-08).** Which of a round's variants
+is built is a person's pick at the design gate (or a night auto-pick recorded as one) - never
+yours, and never the Designer's recommendation. Build exactly the variant named for that screen in
+your brief, in the spec's `design pick: <screen> = <variant>` line, or in the handoff's
+`PICK.json`, with the change requests recorded next to it. The handoff README's `Recommended:`
+line, a `variant-*.html` file that is not marked as chosen, and `design/STATUS.md` are not a pick.
+When no pick is recorded for a screen you are to build, or those sources name different variants,
+stop before you build that screen and report it under "Needs a decision" with
+`for: owner, blocking: yes`. Do not choose a variant "meanwhile", and do not build the
+recommendation and list it as `blocking: no` - that report reads as a note and is closed as one.
+Why: on 2026-10-08 two builds followed the round's recommendation while the design register held
+another pick, and one of them was merged that way (agent cluster,
+`docs/decisions/2026-10-08-the-design-pick-reaches-the-spec.md`).
 
 Example:
 
@@ -227,5 +245,6 @@ your brief carried no such block at all.
 | "While I'm here, this helper needs a refactor" | "Noticed but not touching"; the spec decides scope. |
 | "An abstraction now saves work later" | Simplest thing that could work; three similar lines first. |
 | "The spec is wrong here, I'll do what it meant" | Stop and report; the Architect or Christian decides. |
+| "The handoff says `Recommended: B` and no pick is named, so I build B meanwhile" | A recommendation is not a pick. Build the variant your brief, the spec's `design pick` line or `PICK.json` names; none recorded = stop, `blocking: yes`. |
 | "I'll stub it and come back" | A stub in the diff is a floor finding; implement it or report the gap. |
 | "It only needs one small dependency" | None unless the spec names it; report. |

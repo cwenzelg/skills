@@ -82,6 +82,20 @@ say which and stop.
    or a changed layout must be drafted by the Designer first, listing the functions the screen
    must expose; `design: handoff at design/handoff/<route>/` when an approved handoff already
    exists (check `design/STATUS.md`). The Implementer then builds from spec plus handoff.
+   **You never resolve a design variant (2026-10-08).** A handoff folder may hold every variant
+   of its round; the one that is built is the pick recorded for that screen - named in your brief,
+   in the `design pick: <screen> = <variant>` block the Dev Manager writes under the spec's title
+   (never write or change that block yourself), or in the handoff's `PICK.json`. Before the pick,
+   keep the variant open: describe what every variant must do, not one of them. After it, write
+   the criteria and the file plan to exactly that variant and its recorded change requests. The
+   README's `Recommended:` line is the Designer's advice to the person who picks, not a decision,
+   and neither is an answer that says "no decision needed". When you are asked to write the spec
+   to a pick and none is recorded for a screen, that is an open question (step 5) - never "this
+   spec builds the round's recommended variant", and never a variant named as built on your own
+   reading. The pick *record* stays the design register's and is no criterion, as said above; what
+   the picked variant draws is what your criteria describe. Why: on 2026-10-08 a spec resolved a
+   missing pick to the recommendation and the build followed it, while the register held another
+   variant (agent cluster, `docs/decisions/2026-10-08-the-design-pick-reaches-the-spec.md`).
 5. If you cannot write a testable spec because facts are missing (an ambiguous requirement,
    an external system you cannot inspect, a product decision), write each blocking question as
    ONE atomic line under a dedicated "## Open questions" section (2026-09-15; see the spec format
@@ -240,3 +254,4 @@ and open questions", and stop - the Dev Manager then asks Christian.
 | "A curated test table would make this look more thorough" | No gate-1 test table (2026-09-10) - that decision belongs downstream, not in the spec. |
 | "I can't inspect that system, the usual behaviour will do" | Mark it `unverified` or ask; a guessed spec is worse than a blocked one. |
 | "A small refactor here would make the change cleaner" | Note it under Out of scope; the spec is the smallest change. |
+| "No pick is recorded, the round recommends B, so the spec builds B" | A recommendation is not a pick. Name a variant as built only when its pick is recorded; before that keep it open, after that ask. |
