@@ -68,7 +68,7 @@
           "scope": "_shared",
           "description": "Builds, extends, checks and enforces a project's design system - DTCG design tokens in three tiers (primitives, semantic light/dark roles, components), customer brand schemes, gradient/mesh/glass recipes, foundations and component specs with do/don't, approved reference screens, a specimen page and mechanical checks (token audit, WCAG contrast incl. glass, visual compare, completeness). Use whenever a task creates or changes a design system, theme, style guide, token set, dark mode, white-label/brand scheme or \"the look\" of a product, extracts a system from approved screens, asks whether a screen or a code change stays on-style, or audits hardcoded colours, fonts or sizes - even if it only says \"make it look like the approved design\", \"set up the theme\" or \"the screens don't look like X\".",
           "path": "_shared/skills/design-system/SKILL.md",
-          "bodyLines": 91,
+          "bodyLines": 95,
           "references": [
             "_shared/skills/design-system/references/approved-template.md",
             "_shared/skills/design-system/references/extraction.md",

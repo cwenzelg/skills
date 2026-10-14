@@ -28,7 +28,11 @@ and sizes redraws the old look in new colours.
   open question). `check-system.mjs` fails on a missing or `TODO` source.
 - **Every role in every mode.** `semantic.light` and `semantic.dark` have the same paths.
 - **Components use roles only**, never a primitive or a literal - so a mode or a brand reaches them.
-- **A brand overrides primitives or `brand.*` slots only** - never a role, never a component.
+- **A brand overrides primitives or `brand.*` slots only** - never a role, never a component - and
+  **colours only**: a customer scheme is a colour exchange, never another corner, typeface, shadow or
+  size (Christian, 2026-10-14: «am Ende ist [der Kunde] nur Farbaustausch, nicht von den Rundungen
+  oder irgendwas anderem»). `check-system.mjs` enforces it; `system.json` `brandTypes` widens it only
+  by the owner's explicit decision.
 - **Human approval before use.** No screen is drawn from a system without `specimen/APPROVED.md`
   (`references/approved-template.md`): who, when, their words.
 - **Checks are exit codes.** Never post, approve or merge on a read of the output; chain on the

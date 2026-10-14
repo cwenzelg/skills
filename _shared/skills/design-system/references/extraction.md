@@ -22,7 +22,7 @@ the reference.
 5. **Roles** per mode. Same paths in every mode. Dark is not an inversion: desaturate accents,
    use dark grey not black, lighter surfaces for higher elevation, tint glass darker and blur more.
 6. **Components** the reference actually shows: one spec + one snippet each, every state it needs.
-7. **Brands** last, only as overrides of primitives or brand.* slots.
+7. **Brands** last, only as colour overrides of primitives or brand.* slots - a scheme never changes a corner, typeface or shadow.
 8. **Run the checks** (CHECKLIST.md), build the specimen, look at it next to the reference with
    visual-compare.mjs, fix, repeat - then ask for approval.
 

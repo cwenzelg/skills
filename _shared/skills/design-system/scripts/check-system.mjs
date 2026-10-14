@@ -8,7 +8,8 @@
 //   - a semantic role missing in one mode (every role needs a value in EVERY mode)
 //   - a token with a literal value and no source ($extensions["skill.design-system"].source)
 //   - a component token that is a literal or points at a primitive instead of a semantic role
-//   - a brand file that overrides anything but a primitive path or a brand.* slot
+//   - a brand file that overrides anything but a primitive path or a brand.* slot, or anything but
+//     a colour (system.json "brandTypes" widens that by the owner's decision)
 //   - the same path in two tiers
 //   - a component with tokens but no components/<name>.md, a spec missing a fixed-grid section,
 //     or a state used in the tokens (hover, pressed, focus, disabled, ...) the spec does not list
@@ -70,10 +71,15 @@ export function checkSystem(dir, { requireApproved = false } = {}) {
     }
   }
 
-  // 4. brands override primitives or brand.* only
+  // 4. brands override primitives or brand.* only - and only colour values: a customer scheme is a
+  //    colour exchange, never another corner, typeface, shadow or spacing (Christian, 2026-10-14).
+  //    system.json "brandTypes" widens that list - a decision of the system's owner, never a default.
+  const brandTypes = new Set(system.config.brandTypes ?? ['color']);
   for (const [b, info] of Object.entries(brands)) {
-    for (const p of info.tokens.keys()) {
+    for (const [p, t] of info.tokens) {
       if (!primitives.has(p) && !p.startsWith('brand.')) errors.push(`brand "${b}" overrides "${p}" - a brand may only override a primitive path or a brand.* slot, never a semantic role or a component`);
+      const type = t.$type ?? primitives.get(p)?.$type;
+      if (!brandTypes.has(type)) errors.push(`brand "${b}" overrides "${p}" of type ${type ?? 'unknown'} - a brand exchanges ${[...brandTypes].join(', ')} values only, never a corner, typeface, shadow or size`);
     }
     for (const m of info.modes) if (!modes.includes(m)) errors.push(`brand "${b}" declares mode "${m}", which the system does not have`);
   }

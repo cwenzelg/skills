@@ -17,7 +17,7 @@ cards, not in the chrome".>
 ## Rules (always / never)
 
 - Always build from the tokens in `build/tokens.css` (`var(--...)`); never type a colour, font, size or radius.
-- Always draw light AND dark; a brand only swaps its brand values.
+- Always draw light AND dark; a brand only swaps colours - never corners, typefaces or anything else.
 - Never use a typeface other than <display> and <body>.
 - Never <the most common way a screen loses this look - e.g. "white cards on a flat ground">.
 - <...>

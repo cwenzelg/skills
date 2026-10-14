@@ -22,7 +22,7 @@
 
 ## Brands
 
-<Which primitives or brand.* slots a customer scheme may override; what stays fixed.>
+<Which colour primitives or brand.* slots a customer scheme may override (colours only); what stays fixed.>
 
 ## Do
 

@@ -93,6 +93,9 @@ export function checkContrast(dir, pairsFile = join(dir, 'checks', 'contrast-pai
   const results = [];
   for (const [setName, set] of Object.entries(sets)) {
     const mode = setName.startsWith('brand:') ? setName.split(':')[2] : setName;
+    // a brand without this mode stays in its own first mode - it never sits on this mode's
+    // backdrop, and its values are already measured under that mode
+    if (setName.startsWith('brand:') && !system.brands[setName.split(':')[1]].modes.includes(mode)) continue;
     for (const [i, p] of pairs.entries()) {
       if (p.modes && !p.modes.includes(mode)) continue;
       const where = `${pairsFile} pair ${i + 1} (${setName})`;

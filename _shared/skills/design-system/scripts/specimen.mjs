@@ -31,7 +31,7 @@
 // Exit codes: 0 written · 1 the token files do not resolve, or the PDF could not be printed · 2 usage.
 
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -390,7 +390,9 @@ pre{background:${v(role.paper, 'transparent')};border-radius:${r('inner')};paddi
 footer{color:${muted}}
 @media (max-width:860px){.shell{grid-template-columns:minmax(0,1fr)}.rail{position:static;height:auto;border-right:0;border-bottom:1px solid ${line};padding:20px 16px}.toc{flex-direction:row;flex-wrap:wrap}.type-row{grid-template-columns:minmax(0,1fr);gap:8px}.dodont{grid-template-columns:minmax(0,1fr)}.recipe-stages{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
-@media print{.rail{display:none}.shell{display:block}main{max-width:none;padding:24px}.comp,.ref,.tile,.recipe-fig,.type-row{break-inside:avoid}}`;
+@media print{.rail{display:none}.shell{display:block}main{max-width:none;padding:24px}.comp,.ref,.tile,.recipe-fig,.type-row{break-inside:avoid}
+/* a backdrop blur makes the printer rasterise every page (a glass system printed to ~50 MB); the PDF keeps the fill, the page shows the blur */
+*{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}}`;
 
   const body = `<div class="shell">
 <aside class="rail">
@@ -475,7 +477,31 @@ ${body}
 `;
 }
 
-/** Prints the page once per mode and merges the runs (pdfunite); one file per mode without it. */
+const RASTER_ABOVE = 12 * 1024 * 1024;
+
+/** One mode of the page as A4 pages cut from a single JPEG screenshot (text not selectable). */
+async function rasterPdf(browser, htmlFile, mode, out) {
+  const width = 1200;
+  const page = await browser.newPage({ viewport: { width, height: 900 } });
+  await page.emulateMedia({ media: 'screen', colorScheme: mode === 'dark' ? 'dark' : 'light' });
+  await page.goto(`${pathToFileURL(htmlFile).href}?theme=${encodeURIComponent(mode)}&print=1`, { waitUntil: 'networkidle' });
+  await page.addStyleTag({ content: '.rail{display:none!important}.shell{display:block!important}main{max-width:none!important}' });
+  await page.evaluate(() => document.fonts.ready);
+  const shot = await page.screenshot({ fullPage: true, type: 'jpeg', quality: 82 });
+  const height = await page.evaluate(() => document.documentElement.scrollHeight);
+  await page.close();
+  const pageH = Math.round((width * 297) / 210);
+  const n = Math.ceil(height / pageH);
+  const src = `data:image/jpeg;base64,${shot.toString('base64')}`;
+  const sheets = Array.from({ length: n }, (_, i) => `<div class="p"><img src="${src}" style="top:-${(i * 297).toFixed(2)}mm"></div>`).join('');
+  const holder = await browser.newPage();
+  await holder.setContent(`<!doctype html><style>@page{size:A4;margin:0}*{margin:0}.p{position:relative;width:210mm;height:297mm;overflow:hidden;break-after:page}.p img{position:absolute;left:0;width:210mm}</style>${sheets}`, { waitUntil: 'load' });
+  await holder.pdf({ path: out, format: 'A4', printBackground: true, margin: { top: '0', bottom: '0', left: '0', right: '0' } });
+  await holder.close();
+}
+
+/** Prints the page once per mode and merges the runs (pdfunite); one file per mode without it.
+ *  A mode whose vector print is very large (rasterised gradients) is printed from a screenshot instead. */
 export async function printPdf(system, htmlFile, pdfFile, { playwrightDir } = {}) {
   const here = dirname(fileURLToPath(import.meta.url));
   const { loadPlaywright } = await import(pathToFileURL(join(here, '..', '..', 'screen-design', 'scripts', 'render-round.mjs')).href);
@@ -498,6 +524,9 @@ export async function printPdf(system, htmlFile, pdfFile, { playwrightDir } = {}
       await page.evaluate(() => document.fonts.ready);
       const part = join(tmp, `${m}.pdf`);
       await page.pdf({ path: part, format: 'A4', printBackground: true, margin: { top: '0', bottom: '0', left: '0', right: '0' } });
+      // translucent gradient grounds make the printer rasterise every stage (a mesh/glass system
+      // printed to ~25 MB per mode); then print the page from one screenshot instead
+      if (statSync(part).size > RASTER_ABOVE) await rasterPdf(browser, htmlFile, m, part);
       parts.push([m, part]);
     }
   } finally {

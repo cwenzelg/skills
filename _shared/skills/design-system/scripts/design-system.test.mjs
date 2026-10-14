@@ -114,6 +114,22 @@ test('check-system: missing dark role, component on a primitive, brand on a role
   assert.equal(run('check-system.mjs', [dir]).status, 1);
 });
 
+test('check-system: a brand exchanges colours only - a radius or a typeface override is an error', () => {
+  const dir = system({ complete: true });
+  const src = { 'skill.design-system': { source: 'fixture' } };
+  writeFileSync(join(dir, 'tokens', 'brands', 'acme.tokens.json'), JSON.stringify({
+    color: { accent: { 600: { $type: 'color', $value: '#eb1a24', $extensions: src } } },
+    radius: { lg: { $type: 'dimension', $value: '0px', $extensions: src } },
+    font: { family: { body: { $type: 'fontFamily', $value: ['Work Sans'], $extensions: src } } },
+  }));
+  const { errors } = checkSystem(dir);
+  assert.ok(errors.some((e) => /"radius\.lg" of type dimension/.test(e)), errors.join('\n'));
+  assert.ok(errors.some((e) => /"font\.family\.body" of type fontFamily/.test(e)));
+  assert.ok(!errors.some((e) => /color\.accent\.600/.test(e)), 'a colour override is fine');
+  editJson(join(dir, 'system.json'), (j) => { j.brandTypes = ['color', 'dimension', 'fontFamily']; });
+  assert.ok(!checkSystem(dir).errors.some((e) => /acme/.test(e)), 'the owner may widen it explicitly');
+});
+
 test('token-audit: off-system colour, font, size and radius are findings with the nearest token; system values pass', () => {
   const dir = system({ complete: true });
   const allowed = allowedValues(loadSystem(dir));
@@ -177,6 +193,17 @@ test('contrast: worst point over an image backdrop', () => {
   assert.ok(checkContrast(dir).results[0].pass);
   const w = worstContrast(parseColor('#1d1b2e'), parseColor('rgba(255,255,255,0.1)'), [parseColor('#141414'), parseColor('#ffffff')]);
   assert.ok(w.ratio < 2, 'nearly clear glass over a dark patch is unreadable');
+});
+
+test('contrast: a light-only brand is not measured against a dark-only backdrop', () => {
+  const img = blankImage(8, 8, [10, 10, 18, 255]);
+  const dir = system({ complete: true });
+  writeFileSync(join(dir, 'reference', 'dark', 'ground.png'), encodePng(img));
+  cpSync(join(dir, 'tokens', 'brands', '_template.tokens.json'), join(dir, 'tokens', 'brands', 'acme.tokens.json'));
+  editJson(join(dir, 'tokens', 'brands', 'acme.tokens.json'), (j) => { j.color.accent['600'].$extensions['skill.design-system'].source = 'fixture'; });
+  writeFileSync(join(dir, 'checks', 'contrast-pairs.json'), JSON.stringify({ pairs: [{ text: 'text.body', background: 'bg.ground', overImage: 'reference/dark/ground.png', min: 4.5, modes: ['dark'] }] }));
+  const sets = checkContrast(dir).results.map((r) => r.set);
+  assert.deepEqual(sets, ['dark'], 'brand:acme:dark is skipped - acme declares light only');
 });
 
 test('colour maths: WCAG ratio for black on white is 21', () => {
