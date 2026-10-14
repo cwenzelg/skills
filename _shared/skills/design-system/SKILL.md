@@ -53,6 +53,9 @@ Read `references/extraction.md` first - the order and when to stop and ask. In s
    plain ground - loses the mesh and the glass").
 6. Run the checks below until green, build the specimen, look at it next to the reference in every
    mode and brand. Then ask for approval - with the specimen render and the compare sheet attached.
+   The specimen (and its `--pdf`) is also what a designer reviews: give it the open points of
+   DESIGN.md as a table (`| O1 | question | today |`), they lead the page. Never hand-build a second
+   review page - extend `specimen.mjs` instead, so the page always shows what the checks check.
 
 ## Scripts
 
@@ -65,7 +68,7 @@ Playwright lookup). Run them with the system folder as first argument.
 | `check-system.mjs <sys> [--require-approved]` | completeness: roles x modes, sources, tier rules, brand rules, component specs and states, required files, reference images, approval | any of those is missing |
 | `contrast.mjs <sys>` | WCAG 2.2 for every pair in `checks/contrast-pairs.json`, in every mode and brand; translucent surfaces over the WORST point of their backdrop (`over` token stops or an `overImage` PNG); APCA Lc reported, never gating | a pair is under its `min` (4.5 text, 3 large text / UI) |
 | `token-audit.mjs <sys> <files/dirs> [--strict]` | colour, font family, font size, radius literals not in the system, with file:line and the nearest token; `--strict` (for code) also flags a matching literal outside a `--x:` declaration | any finding |
-| `specimen.mjs <sys>` | `specimen/index.html`: roles per mode, typefaces, type scale, grounds/gradients/glass, radii, shadows, component snippets, reference images, light/dark and brand switch | the tokens do not resolve |
+| `specimen.mjs <sys> [--fragment <f>] [--pdf [<f>]]` | `specimen/index.html`, ONE self-contained page for approval and design review: character and rules, open points (DESIGN.md "Open points ..."), every colour role per mode and brand with its source and a derived flag, grounds/gradients/glass per mode, typefaces and scale, shape/shadow, foundations, every component in every mode and brand next to its spec, reference screens and don'ts, mode and brand switch; images and `site.inlineFonts` inlined. Styled only with the system's own roles (`system.json` `site`, see the script header), so it passes `token-audit.mjs` against its own system. `--fragment` = without the document skeleton (a host that adds its own); `--pdf` = printed once per mode, merged | the tokens do not resolve, or the PDF could not be printed |
 | `visual-compare.mjs --screen <png/html> --reference <png> [--system <sys>]` | one sheet reference / screen / difference; diff ratio (same screen only), palette match (a weak hint - a flat light screen still scores high against a pastel reference, so never a gate on its own); fonts the page really renders that the system lacks (the strong mechanical signal) | over `--max-diff`, under `--min-palette`, or a foreign font |
 
 `checks/CHECKLIST.md` (from the starter) is the release order.

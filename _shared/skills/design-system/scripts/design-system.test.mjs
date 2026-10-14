@@ -213,6 +213,52 @@ test('specimen: every role, both modes, the switch and the reference images', ()
   assert.ok(existsSync(join(dir, 'out.html')));
 });
 
+test('specimen: passes its own audit, shows open points, component specs and the brand switch', () => {
+  const dir = system({ complete: true });
+  const designFile = join(dir, 'DESIGN.md');
+  writeFileSync(designFile, readFileSync(designFile, 'utf8') + '\n## Open points for review\n\n| # | Question | Today |\n|---|---|---|\n| O1 | Which green for text, #18765B or #0E7656? | web uses #18765B |\n');
+  cpSync(join(dir, 'tokens', 'brands', '_template.tokens.json'), join(dir, 'tokens', 'brands', 'acme.tokens.json'));
+  editJson(join(dir, 'tokens', 'brands', 'acme.tokens.json'), (j) => {
+    j.color.accent['600'].$value = '#eb1a24';
+    j.color.accent['600'].$extensions['skill.design-system'].source = 'test fixture: brand guide';
+  });
+  const out = join(dir, 'specimen', 'index.html');
+  writeFileSync(out, specimenHtml(loadSystem(dir), out));
+  const html = readFileSync(out, 'utf8');
+  assert.match(html, /<span class="oid">O1<\/span>/, 'open points from DESIGN.md');
+  assert.match(html, /<h4>States<\/h4>/, 'component spec');
+  assert.match(html, /<h4>Don't<\/h4>/);
+  assert.match(html, /data-brand-pick="acme"/, 'brand switch');
+  assert.match(html, /data-theme="light" data-brand="acme"/, 'component stage per brand');
+  assert.match(html, /src="data:image\/png;base64,/, 'images inlined');
+  const { findings } = audit(dir, [out]);
+  assert.deepEqual(findings, [], 'the page is styled only with the system: ' + findings.map((f) => f.message).join('; '));
+  const frag = join(dir, 'frag.html');
+  assert.equal(run('specimen.mjs', [dir, '--out', join(dir, 'o.html'), '--fragment', frag]).status, 0);
+  assert.doesNotMatch(readFileSync(frag, 'utf8'), /<!doctype/i, 'a fragment has no document skeleton');
+});
+
+test('specimen --pdf: one print per mode, merged (skipped without Playwright/browser)', async (t) => {
+  const { loadPlaywright } = await import('../../screen-design/scripts/render-round.mjs');
+  try {
+    loadPlaywright();
+  } catch {
+    t.skip('no Playwright on this machine');
+    return;
+  }
+  const dir = system({ complete: true });
+  const pdf = join(dir, 'out.pdf');
+  const r = run('specimen.mjs', [dir, '--pdf', pdf]);
+  if (r.status === 1 && /browser/.test(r.stderr)) {
+    t.skip('no browser could be started');
+    return;
+  }
+  assert.equal(r.status, 0, r.stderr);
+  const written = r.stdout.split('\n').filter((l) => /\.pdf$/.test(l)).map((l) => l.replace(/^wrote /, ''));
+  assert.ok(written.length >= 1);
+  for (const f of written) assert.equal(readFileSync(f).subarray(0, 4).toString(), '%PDF');
+});
+
 test('visual-compare CLI: PNG input writes the sheet and gates on --max-diff', () => {
   const dir = join(work, 'vc');
   cpSync(STARTER, dir, { recursive: true });

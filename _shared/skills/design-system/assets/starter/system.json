@@ -2,5 +2,12 @@
   "name": "Starter",
   "modes": ["light", "dark"],
   "fontImports": [],
-  "roles": { "ground": "bg.ground", "text": "text.body" }
+  "roles": { "ground": "bg.ground", "text": "text.body" },
+  "site": {
+    "title": "Starter Design System",
+    "roles": { "ground": "bg.ground", "surface": "bg.surface", "paper": "bg.surface", "text": "text.body", "muted": "text.muted", "accent": "accent.default" },
+    "radius": { "card": "shape.card", "inner": "shape.chip", "pill": "shape.button-radius" },
+    "type": { "display": "type.title", "headline": "type.title", "title": "type.title", "body": "type.body", "label": "type.body", "eyebrow": "type.body" },
+    "inlineFonts": []
+  }
 }
