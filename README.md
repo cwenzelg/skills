@@ -20,6 +20,7 @@ skills/
                                webapp-testing, frontend-design, mcp-builder, skill-creator,
                                video-post (talking-head post-production, pipeline in C:\ai\video-pipeline),
                                error-tracking, project-workspace-setup, screen-design,
+                               design-system (DTCG tokens light/dark/brands, specimen, audit/contrast/visual checks),
                                font-licensing (free-fonts list + licensed-fonts registry; the Tester's
                                font check and the Dev Manager's licence gate read it)
     agents/<name>.md           dev subagents: architect, implementer, tester, reviewer (see _shared/DEV-AGENTS.md)

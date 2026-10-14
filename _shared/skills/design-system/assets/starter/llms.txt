@@ -1,0 +1,17 @@
+# <System name> design system
+> Tokens, rules, components and reference screens for <product>. Read DESIGN.md first.
+
+## Start
+- [DESIGN.md](DESIGN.md): character, always/never rules, where everything is
+- [build/tokens.css](build/tokens.css): the generated custom properties (never edit)
+
+## Foundations
+- [foundations/color.md](foundations/color.md): colour roles, light/dark, brand slots
+- [foundations/typography.md](foundations/typography.md): typefaces and the type scale
+
+## Components
+- [components/button.md](components/button.md): primary action
+
+## Reference
+- reference/light/, reference/dark/: the approved screens
+- reference/dont/: typical mistakes

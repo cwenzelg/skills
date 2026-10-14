@@ -1,0 +1,32 @@
+{
+  "$description": "Tier 1 - every raw value of the system, each with the spot it was read from. Replace every TODO source before the system is used.",
+  "color": {
+    "$type": "color",
+    "neutral": {
+      "0":   { "$value": "#ffffff", "$extensions": { "skill.design-system": { "source": "TODO: reference/light/<file>.png, card background" } } },
+      "50":  { "$value": "#f5f4f8", "$extensions": { "skill.design-system": { "source": "TODO: reference/light/<file>.png, page ground" } } },
+      "700": { "$value": "#55516e", "$extensions": { "skill.design-system": { "source": "TODO: reference/light/<file>.png, secondary text" } } },
+      "900": { "$value": "#1d1b2e", "$extensions": { "skill.design-system": { "source": "TODO: reference/light/<file>.png, body text" } } },
+      "950": { "$value": "#0f0e18", "$extensions": { "skill.design-system": { "source": "TODO: reference/dark/<file>.png, page ground" } } },
+      "925": { "$value": "#1a1926", "$extensions": { "skill.design-system": { "source": "TODO: reference/dark/<file>.png, card background" } } },
+      "200": { "$value": "#c7c4da", "$extensions": { "skill.design-system": { "source": "TODO: reference/dark/<file>.png, secondary text" } } },
+      "100": { "$value": "#f4f3fa", "$extensions": { "skill.design-system": { "source": "TODO: reference/dark/<file>.png, body text" } } }
+    },
+    "accent": {
+      "600": { "$value": "#2a55d9", "$extensions": { "skill.design-system": { "source": "TODO: reference/light/<file>.png, primary button" } } },
+      "300": { "$value": "#8fb0ff", "$extensions": { "skill.design-system": { "source": "TODO: reference/dark/<file>.png, primary button" } } }
+    }
+  },
+  "font": {
+    "family": {
+      "display": { "$type": "fontFamily", "$value": ["Inter", "sans-serif"], "$extensions": { "skill.design-system": { "source": "TODO: the reference's heading typeface (inspect the reference HTML or ask)" } } },
+      "body":    { "$type": "fontFamily", "$value": ["Inter", "sans-serif"], "$extensions": { "skill.design-system": { "source": "TODO: the reference's body typeface" } } }
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "sm":   { "$value": "8px",  "$extensions": { "skill.design-system": { "source": "TODO: reference chip corner" } } },
+    "lg":   { "$value": "20px", "$extensions": { "skill.design-system": { "source": "TODO: reference card corner" } } },
+    "pill": { "$value": "999px", "$extensions": { "skill.design-system": { "source": "TODO: reference button corner" } } }
+  }
+}

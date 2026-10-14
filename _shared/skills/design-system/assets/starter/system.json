@@ -1,0 +1,6 @@
+{
+  "name": "Starter",
+  "modes": ["light", "dark"],
+  "fontImports": [],
+  "roles": { "ground": "bg.ground", "text": "text.body" }
+}

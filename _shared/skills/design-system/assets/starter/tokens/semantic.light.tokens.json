@@ -1,0 +1,24 @@
+{
+  "$description": "Tier 2, light mode - the roles every component uses. The dark file has exactly the same paths.",
+  "bg": {
+    "ground":  { "$type": "color", "$value": "{color.neutral.50}" },
+    "surface": { "$type": "color", "$value": "{color.neutral.0}" }
+  },
+  "text": {
+    "body":  { "$type": "color", "$value": "{color.neutral.900}" },
+    "muted": { "$type": "color", "$value": "{color.neutral.700}" },
+    "on-accent": { "$type": "color", "$value": "{color.neutral.0}" }
+  },
+  "accent": {
+    "default": { "$type": "color", "$value": "{color.accent.600}" }
+  },
+  "type": {
+    "title": { "$type": "typography", "$value": { "fontFamily": "{font.family.display}", "fontSize": "28px", "fontWeight": 700, "lineHeight": "34px" }, "$extensions": { "skill.design-system": { "source": "TODO: reference screen title" } } },
+    "body":  { "$type": "typography", "$value": { "fontFamily": "{font.family.body}", "fontSize": "16px", "fontWeight": 400, "lineHeight": "24px" }, "$extensions": { "skill.design-system": { "source": "TODO: reference body copy" } } }
+  },
+  "shape": {
+    "chip": { "$type": "dimension", "$value": "{radius.sm}" },
+    "card": { "$type": "dimension", "$value": "{radius.lg}" },
+    "button-radius": { "$type": "dimension", "$value": "{radius.pill}" }
+  }
+}

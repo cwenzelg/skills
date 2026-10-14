@@ -1,0 +1,11 @@
+{
+  "$description": "Tier 3 - components use semantic roles only, never a primitive or a literal.",
+  "button": {
+    "bg":     { "$type": "color", "$value": "{accent.default}" },
+    "text":   { "$type": "color", "$value": "{text.on-accent}" },
+    "radius": { "$type": "dimension", "$value": "{shape.button-radius}" },
+    "disabled": {
+      "bg":   { "$type": "color", "$value": "{text.muted}" }
+    }
+  }
+}

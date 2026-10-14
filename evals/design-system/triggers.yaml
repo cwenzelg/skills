@@ -1,0 +1,11 @@
+# Trigger evals for _shared/skills/design-system.
+positive:
+  - "Set up a design system with light and dark tokens from the approved screens"
+  - "Add a dark mode and a customer brand scheme to our design tokens"
+  - "The new screens don't look like the approved Harbor design, build the theme properly"
+  - "Audit the code for hardcoded colours and fonts that are not in our tokens"
+  - "Build a style guide specimen page with all tokens and components"
+negative:
+  - "Design the onboarding screen and post round 1 to Slack"
+  - "Is this font licensed for commercial use"
+  - "Write a pitch deck for the investor meeting"

@@ -1,0 +1,8 @@
+{
+  "pairs": [
+    { "text": "text.body",  "background": "bg.ground",  "min": 4.5, "label": "body text on the page ground" },
+    { "text": "text.body",  "background": "bg.surface", "min": 4.5, "label": "body text on a card" },
+    { "text": "text.muted", "background": "bg.surface", "min": 4.5, "label": "secondary text on a card" },
+    { "text": "button.text", "background": "button.bg", "min": 4.5, "label": "button label" }
+  ]
+}

@@ -52,11 +52,16 @@ replaced, and the optional Artifact "Design" type.
 
 ## 1. Drafting
 
-1. **Read the live design system first.** `design/PROJECT.md` names the theme file, the base
-   components, and the stylesheet scale. Lift exact values (colors, type, spacing, radii,
-   control heights) from source; never round to a grid or invent tokens. If a live screen exists
-   at the target route, read it and treat the work as a redesign relative to it: what is wrong,
-   what is kept.
+1. **Read the design system first.** If the project has a `design-system/<name>/` folder (the
+   `design-system` skill), it is the source and it beats the live theme: read its `DESIGN.md`,
+   link its `build/tokens.css`, and look at `reference/<mode>/` and `reference/dont/` before
+   drawing - and draw only from a system whose `specimen/APPROVED.md` exists
+   (`check-system.mjs <system> --require-approved` exits 0); otherwise stop and say the system
+   needs approval first. Without such a folder, `design/PROJECT.md` names the theme file, the base
+   components, and the stylesheet scale. Either way lift exact values (colors, type, spacing,
+   radii, control heights) from source; never round to a grid or invent tokens. If a live screen
+   exists at the target route, read it and treat the work as a redesign relative to it: what is
+   wrong, what is kept.
 2. **Ground a screen that has no live route to anchor on.** A genuinely new screen — nothing
    live at the target route — is never drafted from nothing; that produces the generic, "AI
    slop" result this step exists to prevent.
@@ -105,6 +110,14 @@ replaced, and the optional Artifact "Design" type.
    posting**, the clean ones included — this is the actual quality gate now that there is no
    interactive editor step to catch a broken layout first. Options and setup:
    `references/canvas-tooling.md`.
+   **On-style gate (projects with a `design-system/<name>/` folder), before anything is posted:**
+   run the design-system skill's `token-audit.mjs <system> "<round folder>"` and, per variant,
+   `visual-compare.mjs --screen <variant>.html --reference <closest reference/<mode>/ screen>
+   --system <system> --out "<round folder>/compare-<letter>.png"` - in light and dark. A non-zero
+   exit (a colour, size or radius outside the system, or a font family the system does not have)
+   blocks the round: fix the variant and rerun, never post it anyway. Look at each compare sheet
+   next to the render; a variant that does not read as the reference at a glance is redrawn, not
+   posted.
 7. Reuse `draft/assets/` across screens; extract a new asset from the app only when none exists.
    A round-specific asset (e.g. a font file needed only for this round) goes in the round's own
    `assets/`.

@@ -1,0 +1,9 @@
+{
+  "$description": "Copy to <brand>.tokens.json. A brand overrides primitive paths (or brand.* slots) only - never a semantic role or a component. List the modes it defines; a brand without dark stays light.",
+  "$extensions": { "skill.design-system": { "modes": ["light"] } },
+  "color": {
+    "accent": {
+      "600": { "$type": "color", "$value": "#000000", "$extensions": { "skill.design-system": { "source": "TODO: the customer's brand guide, page and colour name" } } }
+    }
+  }
+}
