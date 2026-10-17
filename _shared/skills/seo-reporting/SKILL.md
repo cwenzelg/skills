@@ -20,15 +20,15 @@ Five blocks, in this order, nothing else. Empty blocks are one line ("no change"
 *1. Numbers* (this week / last week / 4 weeks ago)
 - Pages crawled: 50 / 50 / -
 - Lighthouse mobile performance (home): 61 / 64 / -
-- Booking rate: not measured - tracking access missing (blocker T1)
+- Booking rate: not measured - tracking access missing (blocker F-9e01aa)
 
 *2. Findings* - 3 new, 1 fixed, 9 open
-- NEW blocker F-3a91 Page text missing from the HTML before JavaScript runs on 48 of 50 pages
-- NEW should-fix F-77c2 /de/blog/x: no meta description
-- FIXED F-12be sitemap listed /en/old (closed after 2 clean weeks)
+- NEW should-fix F-3a91c2 Page text missing from the HTML before JavaScript runs on 48 of 50 pages
+- NEW should-fix F-77c2d0 /de/blog/x: no meta description
+- FIXED F-12be4f sitemap listed /en/old
 
 *3. Proposals* (at most 3)
-- P1 (from F-3a91) Prerender the page body, not only the head. Metric: pages with text in the raw HTML, baseline 2 of 50, review +14 days.
+- P1 (from F-3a91c2) Prerender the page body, not only the head. Metric: pages with text in the raw HTML, baseline 2 of 50, review +14 days.
 
 *4. Briefs requested* - none
 
@@ -68,8 +68,8 @@ Bookings and leads sit **above** clicks in every report: clicks that do not beco
 - Its id is a **fingerprint** of what it is about (check + page or element), never of its wording,
   so the same problem keeps its id from week to week.
 - It repeats every week until it is fixed or a person explicitly accepts it. It is never dropped
-  silently. A finding not seen in two consecutive runs closes itself as `fixed`; seen again later
-  it reopens under the same id.
+  silently. A finding not seen in a run in which its check actually ran closes itself as `fixed`
+  (a check that did not run closes nothing); seen again later it reopens under the same id.
 - A regression that costs traffic now (site down, `noindex` on a live page, sitemap gone, the
   booking link broken, a form gone) is posted at once, once per incident - not held for Monday.
 
