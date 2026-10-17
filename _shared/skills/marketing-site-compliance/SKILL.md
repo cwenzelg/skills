@@ -76,7 +76,12 @@ same pass criteria and severities as the tables below, applied literally:
 ```
 node --env-file=<repo>/.env scripts/site-audit.mjs --sites <sites.json> --out <run dir> \
      --playwright-dir <a node_modules with playwright> [--diff <previous run dir>] [--only site.de]
+     [--block-analytics-events]
 ```
+
+`--block-analytics-events` is for a scheduled, unattended run: it aborts the analytics event beacon
+(Plausible's `/api/event`) so the audit never counts as a visitor, while the script itself still
+loads and L4 / L6 still see its host.
 
 The site list lives with the owner, not in this skill (agent-cluster: `config/marketing-sites.json`
 - per site: `origin`, `apex`, `languages`, `germanLaw`, `sellsOnline`, `legalHints`,

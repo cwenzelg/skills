@@ -23,6 +23,9 @@ skills/
                                design-system (DTCG tokens light/dark/brands, specimen, audit/contrast/visual checks),
                                font-licensing (free-fonts list + licensed-fonts registry; the Tester's
                                font check and the Dev Manager's licence gate read it)
+                               seo-reporting + content-brief (house rules of the SEO watcher, 2026-10-17)
+                               over the vendored seo-audit, ai-seo, schema, cro, ab-testing,
+                               content-strategy (coreyhaines31/marketingskills, MIT)
     agents/<name>.md           dev subagents: architect, implementer, tester, reviewer (see _shared/DEV-AGENTS.md)
   personal/                    plugin "personal": Christian only — genuinely private things (empty
                                since 2026-09-04; a private Instagram account may land here later)
@@ -158,7 +161,8 @@ contract is in the plan page. Until it exists, a worker flow can inline a SKILL.
 
 ## Upstream skills
 
-Skills downloaded from other repositories (today: anthropics/skills) are **vendored**: the copy is
+Skills downloaded from other repositories (anthropics/skills, addyosmani/agent-skills,
+coreyhaines31/marketingskills) are **vendored**: the copy is
 committed, and the lockfile `_shared/upstream.json` records where each came from and the exact
 commit. Committed rather than fetched on clone because a skill is a prompt: an upstream change
 changes agent behavior, and that should arrive as a reviewable `git diff`, not silently. A fresh
@@ -175,7 +179,9 @@ npm run upstream:update docx                            # same, one skill
 Rules: a vendored skill is never edited in place (the next update would overwrite it). To adapt
 one, copy it under a new name in the right scope and make it yours; `TODO.md` lists the ones
 waiting for that. Each vendored folder carries a generated `UPSTREAM.md` with repo, path, and
-commit, and its upstream `LICENSE.txt` stays with it.
+commit, and its upstream `LICENSE.txt` stays with it - when the skill folder has none, the tool
+copies the repository-root licence in as `LICENSE.txt` (MIT and Apache-2.0 require the notice to
+travel with the copy; added 2026-10-17). Only vendor a skill whose repository licence permits it.
 
 ## First-time setup
 

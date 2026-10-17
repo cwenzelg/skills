@@ -1,6 +1,20 @@
 {
   "$comment": "Vendored upstream skills. Managed by tools/upstream.mjs - see README \"Upstream skills\".",
   "skills": {
+    "ab-testing": {
+      "scope": "_shared",
+      "repo": "coreyhaines31/marketingskills",
+      "path": "skills/ab-testing",
+      "commit": "365b412152b9542499ca1439426f7fc3cc92bb65",
+      "added": "2026-10-17"
+    },
+    "ai-seo": {
+      "scope": "_shared",
+      "repo": "coreyhaines31/marketingskills",
+      "path": "skills/ai-seo",
+      "commit": "365b412152b9542499ca1439426f7fc3cc92bb65",
+      "added": "2026-10-17"
+    },
     "api-and-interface-design": {
       "scope": "_shared",
       "repo": "addyosmani/agent-skills",
@@ -14,6 +28,20 @@
       "path": "skills/constraint-driven-development",
       "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
       "added": "2026-09-06"
+    },
+    "content-strategy": {
+      "scope": "_shared",
+      "repo": "coreyhaines31/marketingskills",
+      "path": "skills/content-strategy",
+      "commit": "365b412152b9542499ca1439426f7fc3cc92bb65",
+      "added": "2026-10-17"
+    },
+    "cro": {
+      "scope": "_shared",
+      "repo": "coreyhaines31/marketingskills",
+      "path": "skills/cro",
+      "commit": "365b412152b9542499ca1439426f7fc3cc92bb65",
+      "added": "2026-10-17"
     },
     "debugging-and-error-recovery": {
       "scope": "_shared",
@@ -71,12 +99,26 @@
       "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
       "added": "2026-09-04"
     },
+    "schema": {
+      "scope": "_shared",
+      "repo": "coreyhaines31/marketingskills",
+      "path": "skills/schema",
+      "commit": "365b412152b9542499ca1439426f7fc3cc92bb65",
+      "added": "2026-10-17"
+    },
     "security-and-hardening": {
       "scope": "_shared",
       "repo": "addyosmani/agent-skills",
       "path": "skills/security-and-hardening",
       "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
       "added": "2026-09-06"
+    },
+    "seo-audit": {
+      "scope": "_shared",
+      "repo": "coreyhaines31/marketingskills",
+      "path": "skills/seo-audit",
+      "commit": "365b412152b9542499ca1439426f7fc3cc92bb65",
+      "added": "2026-10-17"
     },
     "skill-creator": {
       "scope": "_shared",

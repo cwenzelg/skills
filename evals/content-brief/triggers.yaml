@@ -1,0 +1,11 @@
+# Trigger evals for _shared/skills/content-brief.
+positive:
+  - "Brief the content agent for a blog post on the queries we rank 11th for"
+  - "We need more traffic on the automation page - should that be a new post?"
+  - "Turn these Search Console queries into an article idea"
+  - "Write a blog post for SEO about AI for offers"
+  - "Check this content brief before Content Studio drafts it"
+negative:
+  - "Write the cover email for the offer to the bakery"
+  - "Audit the website's Open Graph tags and sitemap"
+  - "Plan next week's Instagram reels"

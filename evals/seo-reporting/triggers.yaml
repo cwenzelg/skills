@@ -1,0 +1,11 @@
+# Trigger evals for _shared/skills/seo-reporting.
+positive:
+  - "Write this week's SEO digest for the website from the crawl snapshot"
+  - "What changed on the website this week - findings, numbers, proposals"
+  - "Why are bookings from the site down? Put it into the weekly report"
+  - "Rank these site findings and write at most three proposals with their metric and baseline"
+  - "Did the CTA change on the services page work? Write the experiment verdict"
+negative:
+  - "Is the Impressum on the landing page complete?"
+  - "Write an Instagram caption for the new series episode"
+  - "Add Sentry to the Nuxt frontend"

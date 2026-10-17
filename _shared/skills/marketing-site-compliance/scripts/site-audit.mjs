@@ -49,6 +49,8 @@ if (flag('--help') || flag('-h')) {
   --only <a,b>            audit only these site keys
   --playwright-dir <dir>  a node_modules dir containing playwright (or env SITE_AUDIT_PLAYWRIGHT_DIR)
   --no-browser            skip the [browser] checks (they become not-run)
+  --block-analytics-events  abort analytics event beacons (Plausible's /api/event) so a scheduled audit never
+                          counts as a visitor; the script itself still loads, so L4/L6 see the host
   --max-routes <n>        route cap for the per-route pass (default 30)
   --timeout <ms>          per request (default 20000)
   --help                  this text
@@ -67,6 +69,7 @@ if (DIFF_ONLY && !DIFF) { console.error('usage error: --diff-only needs --diff <
 const ONLY = opt('--only', '') ? opt('--only').split(',').map((s) => s.trim()).filter(Boolean) : null;
 const PW_DIR = opt('--playwright-dir', process.env.SITE_AUDIT_PLAYWRIGHT_DIR || null);
 const NO_BROWSER = flag('--no-browser');
+const BLOCK_EVENTS = flag('--block-analytics-events');
 const MAX_ROUTES = Number(opt('--max-routes', 30));
 const TIMEOUT = Number(opt('--timeout', 20000));
 const PSI_KEY = process.env.PAGESPEED_API_KEY || '';
@@ -307,6 +310,7 @@ async function auditSite(site) {
   if (!bReason) {
     try {
       ctx = await browser.newContext({ viewport: { width: 1366, height: 900 }, locale: 'de-DE' });
+      if (BLOCK_EVENTS) await ctx.route(/\/api\/event(\?|$)/, (route) => route.abort());
       ctx.on('request', (r) => requests.push({ url: r.url(), method: r.method(), type: r.resourceType() }));
       ctx.on('response', (r) => { respStatus[r.url()] = r.status(); });
       page = await ctx.newPage();

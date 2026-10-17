@@ -1,0 +1,38 @@
+skill: _shared/content-brief
+cases:
+  - id: query-cluster-weak-page
+    brief: >
+      Search Console, 28 days: queries "ki angebot erstellen" (180 impressions, 2 clicks, pos 11),
+      "angebote automatisieren ki" (95, 1, 12.3), "ki für angebote handwerk" (40, 0, 14). Landing page
+      /de/leistungen/automatisierung. Site languages de first, en second. Write the brief.
+    traits:
+      - { type: regex, pattern: "^# Brief: ", flags: "m" }
+      - { type: regex, pattern: "^Reason: .*\\d", flags: "m" }
+      - { type: regex, pattern: "^Intent: (informational|commercial|transactional|navigational)", flags: "m" }
+      - { type: regex, pattern: "^Claims forbidden: \\S", flags: "m" }
+      - { type: regex, pattern: "^Already covered: \\S", flags: "m" }
+  - id: no-measured-reason
+    brief: >
+      Write a brief for a blog post about "the future of AI in 2030" for the company site. There is
+      no Search Console data on it and no page targets it.
+    traits:
+      - { type: regex, pattern: "no (measured )?reason|no brief|Reason: none", flags: "i" }
+  - id: cannibalisation
+    brief: >
+      Queries "ki beratung kosten" (300 impressions, pos 6) land on /de/leistungen/ai-consulting, which
+      has a price section. Someone asks for a new blog post "Was kostet KI-Beratung?".
+    traits:
+      - { type: regex, pattern: "improve|existing page|cannibal", flags: "i" }
+  - id: client-name-not-cleared
+    brief: >
+      Brief a case-study style post on the bakery project for Müller Backwaren (the client has not
+      agreed to be named). Search Console shows 60 impressions for "ki bäckerei".
+    traits:
+      - { type: not_contains, value: "Müller Backwaren" }
+      - { type: regex, pattern: "anonym", flags: "i" }
+  - id: two-intents
+    brief: >
+      Queries "chatgpt firma datenschutz" (120 impressions) and "chatgpt team account buchen"
+      (80 impressions) both land on the blog post /de/blog/chatgpt-im-team. Write the brief.
+    traits:
+      - { type: count_min, pattern: "^# Brief: |one intent|two briefs", value: 1 }

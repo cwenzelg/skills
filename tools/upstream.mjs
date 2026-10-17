@@ -13,7 +13,7 @@
 // each carries a generated UPSTREAM.md. Defaults: --repo anthropics/skills, --scope _shared,
 // --path skills/<skill>. Dependency-free on purpose.
 
-import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
@@ -58,23 +58,37 @@ function fetch(repo, path, commit) {
   if (commit) {
     git(['init', '-q', src], tmp);
     git(['remote', 'add', 'origin', url], src);
-    git(['sparse-checkout', 'set', '--no-cone', path], src);
+    // The repo-root licence comes along: a skill folder that carries none gets it copied in (install below).
+    git(['sparse-checkout', 'set', '--no-cone', path, '/LICENSE*', '/LICENCE*'], src);
     git(['fetch', '--quiet', '--depth', '1', '--filter=blob:none', 'origin', commit], src);
     git(['checkout', '--quiet', 'FETCH_HEAD'], src);
   } else {
     git(['clone', '--depth', '1', '--filter=blob:none', '--sparse', '--quiet', url, 'src'], tmp);
     git(['sparse-checkout', 'set', path], src);
   }
-  return { tmp, dir: join(src, ...path.split('/')), commit: git(['rev-parse', 'HEAD'], src) };
+  return { tmp, root: src, dir: join(src, ...path.split('/')), commit: git(['rev-parse', 'HEAD'], src) };
+}
+
+// A vendored copy must carry its licence (MIT and Apache-2.0 both require the notice to travel with
+// the copy). Many repos keep one LICENSE at the root and none per skill folder: then the root file is
+// copied in as LICENSE.txt. Returns how the licence got there, for UPSTREAM.md.
+function ensureLicense(root, dest) {
+  const own = readdirSync(dest).find((f) => /^licen[cs]e/i.test(f));
+  if (own) return `${own} (in the upstream skill folder)`;
+  const rootFile = existsSync(root) ? readdirSync(root).find((f) => /^licen[cs]e/i.test(f)) : null;
+  if (!rootFile) return 'none found - check the repository licence by hand before committing';
+  cpSync(join(root, rootFile), join(dest, 'LICENSE.txt'));
+  return `LICENSE.txt (copied from the repository root ${rootFile})`;
 }
 
 function install(skill, entry, commit) {
   const dest = join(ROOT, entry.scope, 'skills', skill);
-  const { tmp, dir, commit: got } = fetch(entry.repo, entry.path, commit);
+  const { tmp, root, dir, commit: got } = fetch(entry.repo, entry.path, commit);
   try {
     if (!existsSync(join(dir, 'SKILL.md'))) throw new Error(`no SKILL.md at ${entry.path} in ${entry.repo}`);
     if (existsSync(dest)) rmSync(dest, { recursive: true, force: true });
     cpSync(dir, dest, { recursive: true });
+    const license = ensureLicense(root, dest);
     const name = (readFileSync(join(dest, 'SKILL.md'), 'utf8').match(/^name:\s*(.+)$/m) || [])[1]?.trim();
     if (name && name !== skill) console.warn(`warn  ${skill}: upstream frontmatter name is "${name}" - manifest validation will fail until folder and name match.`);
     writeFileSync(
@@ -82,7 +96,7 @@ function install(skill, entry, commit) {
       `# Upstream\n\nVendored copy managed by tools/upstream.mjs (lockfile: _shared/upstream.json). Do not edit this\n` +
         `skill in place - to adapt it, copy it under a new name in the right scope. Refresh with\n` +
         `\`npm run upstream:update ${skill}\`; review the diff before committing.\n\n` +
-        `repo: ${repoUrl(entry.repo)}\npath: ${entry.path}\ncommit: ${got}\n`,
+        `repo: ${repoUrl(entry.repo)}\npath: ${entry.path}\ncommit: ${got}\nlicense: ${license}\n`,
     );
     return got;
   } finally {

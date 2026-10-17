@@ -6,6 +6,55 @@
       "version": "0.1.0",
       "skills": [
         {
+          "name": "ab-testing",
+          "scope": "_shared",
+          "description": "When the user wants to plan, design, or implement an A/B test or experiment, or build a growth experimentation program. Also use when the user mentions \"A/B test,\" \"split test,\" \"experiment,\" \"test this change,\" \"variant copy,\" \"multivariate test,\" \"hypothesis,\" \"should I test this,\" \"which version is better,\" \"test two versions,\" \"statistical significance,\" \"how long should I run this test,\" \"growth experiments,\" \"experiment velocity,\" \"experiment backlog,\" \"ICE score,\" \"experimentation program,\" or \"experiment playbook.\" Use this whenever someone is comparing two approaches and wants to measure which performs better, or when they want to build a systematic experimentation practice. For tracking implementation, see analytics. For page-level conversion optimization, see cro.",
+          "path": "_shared/skills/ab-testing/SKILL.md",
+          "bodyLines": 351,
+          "references": [
+            "_shared/skills/ab-testing/references/sample-size-guide.md",
+            "_shared/skills/ab-testing/references/test-templates.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/coreyhaines31/marketingskills.git",
+            "path": "skills/ab-testing",
+            "commit": "365b412152b9542499ca1439426f7fc3cc92bb65"
+          }
+        },
+        {
+          "name": "ai-seo",
+          "scope": "_shared",
+          "description": "When the user wants to optimize content for AI search engines, get cited by LLMs, or appear in AI-generated answers. Also use when the user mentions 'AI SEO,' 'AEO,' 'GEO,' 'LLMO,' 'answer engine optimization,' 'generative engine optimization,' 'LLM optimization,' 'AI Overviews,' 'optimize for ChatGPT,' 'optimize for Perplexity,' 'AI citations,' 'AI visibility,' 'zero-click search,' 'how do I show up in AI answers,' 'LLM mentions,' 'optimize for Claude/Gemini,' 'llms.txt,' 'llms-full.txt,' 'OKF,' 'Open Knowledge Format,' 'knowledge bundle,' 'agent-readable site,' 'agent readiness,' 'is my site agent-ready,' 'WebMCP,' 'do listicles still work for AI,' 'ChatGPT stopped citing comparison pages,' 'how do LLMs see our brand,' 'LinkedIn for AEO,' or 'AI citation format shift.' Use this whenever someone wants their content to be cited or surfaced by AI assistants and AI search engines. For traditional technical and on-page SEO audits, see seo-audit. For structured data implementation, see schema.",
+          "path": "_shared/skills/ai-seo/SKILL.md",
+          "bodyLines": 494,
+          "references": [
+            "_shared/skills/ai-seo/references/agent-defaults.md",
+            "_shared/skills/ai-seo/references/agent-readiness.md",
+            "_shared/skills/ai-seo/references/ai-attribution.md",
+            "_shared/skills/ai-seo/references/answer-accuracy.md",
+            "_shared/skills/ai-seo/references/citations-vs-recommendations.md",
+            "_shared/skills/ai-seo/references/content-patterns.md",
+            "_shared/skills/ai-seo/references/content-types.md",
+            "_shared/skills/ai-seo/references/format-volatility.md",
+            "_shared/skills/ai-seo/references/linkedin-ai-citations.md",
+            "_shared/skills/ai-seo/references/multilingual-and-commerce.md",
+            "_shared/skills/ai-seo/references/okf.md",
+            "_shared/skills/ai-seo/references/platform-ranking-factors.md",
+            "_shared/skills/ai-seo/references/positioning-and-consensus.md",
+            "_shared/skills/ai-seo/references/prompt-portfolio.md",
+            "_shared/skills/ai-seo/references/youtube-ai-citations.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/coreyhaines31/marketingskills.git",
+            "path": "skills/ai-seo",
+            "commit": "365b412152b9542499ca1439426f7fc3cc92bb65"
+          }
+        },
+        {
           "name": "api-and-interface-design",
           "scope": "_shared",
           "description": "Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend.",
@@ -46,6 +95,53 @@
             "repo": "https://github.com/addyosmani/agent-skills.git",
             "path": "skills/constraint-driven-development",
             "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
+          }
+        },
+        {
+          "name": "content-brief",
+          "scope": "_shared",
+          "description": "The brief a search-and-conversion watcher hands a content agent so it can draft one blog post or topic page - search intent and query cluster (from Search Console, no paid tools), the page it supports and the call to action it ends on, internal links, outline, the claims allowed and forbidden, topics already covered, languages and their order - plus the rules against scaled, thin or invented content. Use whenever a task writes, checks or consumes a content brief, requests a blog post for traffic, turns search queries into an article idea, decides whether a query deserves a new post or a change to an existing page, or drafts from such a brief - even if it only says \"write a blog post for SEO\", \"we need more traffic on X\" or \"brief the content agent\".",
+          "path": "_shared/skills/content-brief/SKILL.md",
+          "bodyLines": 88,
+          "references": [],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
+        },
+        {
+          "name": "content-strategy",
+          "scope": "_shared",
+          "description": "When the user wants to plan a content strategy, decide what content to create, or figure out what topics to cover. Also use when the user mentions \"content strategy,\" \"what should I write about,\" \"content ideas,\" \"blog strategy,\" \"topic clusters,\" \"content planning,\" \"editorial calendar,\" \"content marketing,\" \"content roadmap,\" \"what content should I create,\" \"blog topics,\" \"content pillars,\" or \"I don't know what to write.\" Use this whenever someone needs help deciding what content to produce, not just writing it. For writing individual pieces, see copywriting. For SEO-specific audits, see seo-audit. For social media content specifically, see social.",
+          "path": "_shared/skills/content-strategy/SKILL.md",
+          "bodyLines": 436,
+          "references": [
+            "_shared/skills/content-strategy/references/content-distribution.md",
+            "_shared/skills/content-strategy/references/headless-cms.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/coreyhaines31/marketingskills.git",
+            "path": "skills/content-strategy",
+            "commit": "365b412152b9542499ca1439426f7fc3cc92bb65"
+          }
+        },
+        {
+          "name": "cro",
+          "scope": "_shared",
+          "description": "When the user wants to optimize, improve, or increase conversions on any marketing page or form — including homepage, landing pages, pricing pages, feature pages, lead capture forms, or contact forms. Also use when the user says 'CRO,' 'conversion rate optimization,' 'this page isn't converting,' 'improve conversions,' 'why isn't this page working,' 'my landing page sucks,' 'form abandonment,' 'nobody's converting,' 'low conversion rate,' or 'this page needs work.' Use this even if the user just shares a URL and asks for feedback. For signup/registration flows, see signup. For post-signup activation, see onboarding. For popups/modals, see popups.",
+          "path": "_shared/skills/cro/SKILL.md",
+          "bodyLines": 193,
+          "references": [
+            "_shared/skills/cro/references/experiments.md",
+            "_shared/skills/cro/references/form.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/coreyhaines31/marketingskills.git",
+            "path": "skills/cro",
+            "commit": "365b412152b9542499ca1439426f7fc3cc92bb65"
           }
         },
         {
@@ -261,7 +357,7 @@
           "scope": "_shared",
           "description": "Standing checklist for every public marketing website (landing pages, company sites, product pages) - SEO and technical basics (robots, sitemap, canonical/hreflang, titles, Open Graph, Core Web Vitals, broken links, redirects, TLS, 404, favicon), German legal-page presence (Impressum with the §5 DDG fields, Datenschutzerklaerung naming every third party the page really loads, cookie banner only where non-essential storage exists and only if it blocks until consent, AGB/Widerruf where something is sold, contact-form privacy notice), accessibility spot checks and cross-page consistency. Use whenever a task audits, checks, reviews or \"goes over\" a website or landing page, asks whether a site needs a cookie banner, whether the Impressum or Datenschutz is complete, whether the SEO basics are in place, before a DNS cutover or launch, or for a recurring site check - even if the user does not say compliance, SEO, or name a law. Legal checks are presence and consistency checks, never legal advice.",
           "path": "_shared/skills/marketing-site-compliance/SKILL.md",
-          "bodyLines": 170,
+          "bodyLines": 175,
           "references": [
             "_shared/skills/marketing-site-compliance/references/browser-snippets.md",
             "_shared/skills/marketing-site-compliance/references/legal-pages-de.md",
@@ -422,6 +518,23 @@
           "upstream": null
         },
         {
+          "name": "schema",
+          "scope": "_shared",
+          "description": "When the user wants to add, fix, or optimize schema markup and structured data on their site. Also use when the user mentions \"schema markup,\" \"structured data,\" \"JSON-LD,\" \"rich snippets,\" \"schema.org,\" \"FAQ schema,\" \"product schema,\" \"review schema,\" \"breadcrumb schema,\" \"Google rich results,\" \"knowledge panel,\" \"star ratings in search,\" or \"add structured data.\" Use this whenever someone wants their pages to show enhanced results in Google. For broader SEO issues, see seo-audit. For AI search optimization, see ai-seo.",
+          "path": "_shared/skills/schema/SKILL.md",
+          "bodyLines": 186,
+          "references": [
+            "_shared/skills/schema/references/schema-examples.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/coreyhaines31/marketingskills.git",
+            "path": "skills/schema",
+            "commit": "365b412152b9542499ca1439426f7fc3cc92bb65"
+          }
+        },
+        {
           "name": "screen-design",
           "scope": "_shared",
           "description": "Company-neutral screen-design process for any project that keeps a design/ folder. Use whenever a task drafts, iterates, approves, exports, or implements a screen, page, dialog, or flow design, or asks what is drafted, approved, or built, even if the request only says \"mock this up\", \"design the X screen\", \"build round 2b\", or \"what's open in design\". Reads the project's design/PROJECT.md for stack, component map, tokens, and copy language.",
@@ -455,6 +568,40 @@
             "path": "skills/security-and-hardening",
             "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
           }
+        },
+        {
+          "name": "seo-audit",
+          "scope": "_shared",
+          "description": "When the user wants to audit, review, or diagnose SEO issues on their site. Also use when the user mentions \"SEO audit,\" \"technical SEO,\" \"why am I not ranking,\" \"SEO issues,\" \"on-page SEO,\" \"meta tags review,\" \"SEO health check,\" \"my traffic dropped,\" \"lost rankings,\" \"not showing up in Google,\" \"site isn't ranking,\" \"Google update hit me,\" \"page speed,\" \"core web vitals,\" \"crawl errors,\" \"indexing issues,\" \"stuck on page 2,\" \"striking distance keywords,\" \"title tag rewrite,\" \"low CTR,\" \"local SEO,\" \"Google Business Profile,\" or \"map pack.\" Use this even if the user just says something vague like \"my SEO is bad\" or \"help with SEO\" — start with an audit. For building pages at scale to target keywords, see programmatic-seo. For adding structured data, see schema. For AI search optimization, see ai-seo.",
+          "path": "_shared/skills/seo-audit/SKILL.md",
+          "bodyLines": 491,
+          "references": [
+            "_shared/skills/seo-audit/references/ai-writing-detection.md",
+            "_shared/skills/seo-audit/references/international-seo.md",
+            "_shared/skills/seo-audit/references/local-seo-pages-and-measurement.md",
+            "_shared/skills/seo-audit/references/local-seo-profile-and-citations.md",
+            "_shared/skills/seo-audit/references/local-seo.md",
+            "_shared/skills/seo-audit/references/rankings-push.md",
+            "_shared/skills/seo-audit/references/title-tags.md"
+          ],
+          "scripts": [],
+          "assets": [],
+          "upstream": {
+            "repo": "https://github.com/coreyhaines31/marketingskills.git",
+            "path": "skills/seo-audit",
+            "commit": "365b412152b9542499ca1439426f7fc3cc92bb65"
+          }
+        },
+        {
+          "name": "seo-reporting",
+          "scope": "_shared",
+          "description": "How a recurring SEO and conversion watch reports on a website - the weekly digest shape, the metric definitions (booking rate, CTA click rate, organic visits), how findings are fingerprinted, repeated and closed, how a proposal states one change with its metric, baseline and review window, the small-traffic rule for experiments (before/after, never a fake A/B), and which other SEO skill to open for what. Use whenever a task writes, reviews or ranks an SEO digest, a website report, a weekly site check, findings or proposals for a site's search traffic or calls to action, a client website panel, or an experiment verdict - even if it only says \"the site report\", \"what changed on the website this week\" or \"why are bookings down\".",
+          "path": "_shared/skills/seo-reporting/SKILL.md",
+          "bodyLines": 120,
+          "references": [],
+          "scripts": [],
+          "assets": [],
+          "upstream": null
         },
         {
           "name": "skill-authoring",
