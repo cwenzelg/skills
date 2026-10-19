@@ -5,7 +5,8 @@
 //   node build-tokens.mjs <system folder> [--out <dir>]      (default <system>/build)
 //
 // Writes  <out>/tokens.css            :root = default mode; [data-theme="<mode>"] per mode;
-//                                      prefers-color-scheme: dark when no data-theme is set;
+//                                      prefers-color-scheme: dark when no data-theme is set, unless system.json
+//                                      has "defaultMode" (e.g. "light": the page stays in that mode until chosen);
 //                                      [data-brand="<b>"] (+ [data-theme]) with only what the brand changes
 //         <out>/tokens.resolved.json   every token per combination: path, type, tier, css value
 // Exit codes: 0 written · 1 a token file is broken (bad alias, cycle, missing mode file) · 2 usage.
@@ -27,7 +28,7 @@ export function buildCss(system, resolved = resolveAll(system)) {
   css += block(`:root, [data-theme="${first}"]`, vars[first]);
   for (const m of rest) {
     css += block(`[data-theme="${m}"]`, vars[m]);
-    if (m === 'dark') css += `@media (prefers-color-scheme: dark) {\n${block(':root:not([data-theme])', vars[m]).replace(/^/gm, '  ').trimEnd()}\n}\n`;
+    if (m === 'dark' && !system.config.defaultMode) css += `@media (prefers-color-scheme: dark) {\n${block(':root:not([data-theme])', vars[m]).replace(/^/gm, '  ').trimEnd()}\n}\n`;
   }
   for (const b of Object.keys(system.brands)) {
     for (const m of system.modes) {

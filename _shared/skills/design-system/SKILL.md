@@ -68,7 +68,7 @@ Playwright lookup). Run them with the system folder as first argument.
 
 | Script | Does | Exit 1 when |
 |---|---|---|
-| `build-tokens.mjs <sys>` | `build/tokens.css` (`:root` = first mode, `[data-theme]`, `prefers-color-scheme`, `[data-brand]` blocks with only what a brand changes) + `build/tokens.resolved.json` | an alias points nowhere, a cycle, a mode file is missing |
+| `build-tokens.mjs <sys>` | `build/tokens.css` (`:root` = first mode, `[data-theme]`, `prefers-color-scheme` unless system.json sets `"defaultMode"` (then the page stays in that mode until `data-theme` is set), `[data-brand]` blocks with only what a brand changes) + `build/tokens.resolved.json` | an alias points nowhere, a cycle, a mode file is missing |
 | `check-system.mjs <sys> [--require-approved]` | completeness: roles x modes, sources, tier rules, brand rules, component specs and states, required files, reference images, approval | any of those is missing |
 | `contrast.mjs <sys>` | WCAG 2.2 for every pair in `checks/contrast-pairs.json`, in every mode and brand; translucent surfaces over the WORST point of their backdrop (`over` token stops or an `overImage` PNG); APCA Lc reported, never gating | a pair is under its `min` (4.5 text, 3 large text / UI) |
 | `token-audit.mjs <sys> <files/dirs> [--strict]` | colour, font family, font size, radius literals not in the system, with file:line and the nearest token; `--strict` (for code) also flags a matching literal outside a `--x:` declaration | any finding |

@@ -303,7 +303,7 @@ ${source ? prose(`<p class="source"><b>Source</b> ${inline(source)}</p>`) : ''}<
 ${tokensCss}
 /* Page chrome: every value below is a token of this system (site roles in system.json). */
 :root{color-scheme:light}
-${modes.includes('dark') ? ':root[data-theme="dark"]{color-scheme:dark}\n@media (prefers-color-scheme: dark){:root:not([data-theme]){color-scheme:dark}}' : ''}
+${modes.includes('dark') ? ':root[data-theme="dark"]{color-scheme:dark}' + (system.config?.defaultMode ? '' : '\n@media (prefers-color-scheme: dark){:root:not([data-theme]){color-scheme:dark}}') : ''}
 *{box-sizing:border-box}
 body{margin:0;background:${v(role.ground, 'Canvas')};color:${v(role.text, 'CanvasText')};${font(type.body)};-webkit-print-color-adjust:exact;print-color-adjust:exact}
 a{color:${v(role.accent, 'inherit')}}

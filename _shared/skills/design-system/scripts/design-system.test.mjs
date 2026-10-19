@@ -58,6 +58,14 @@ test('build: light on :root, dark under data-theme and prefers-color-scheme, com
   assert.equal(json.sets.dark['text.body'].css, '#f4f3fa');
 });
 
+test('build: system.json defaultMode leaves the prefers-color-scheme block out (light stays until dark is chosen)', () => {
+  const dir = system();
+  editJson(join(dir, 'system.json'), (j) => { j.defaultMode = 'light'; });
+  const css = readFileSync(build(dir).cssFile, 'utf8');
+  assert.doesNotMatch(css, /prefers-color-scheme/);
+  assert.match(css, /\[data-theme="dark"\] \{[^}]*--bg-ground: #0f0e18;/);
+});
+
 test('build: a bad alias fails with the token named; exit 1 from the CLI', () => {
   const dir = system();
   editJson(join(dir, 'tokens', 'components.tokens.json'), (j) => { j.button.bg.$value = '{accent.nope}'; });
