@@ -30,6 +30,8 @@ Deliverables of a setup, in order: (1) inventory, (2) layout decision per backen
 "Feature ideas · <Company>" seeded with findings, (8) summary + open questions for Christian.
 Never push to any live repo's `main`/`dev`; the root repo is pushed only after Christian names it.
 
+**Every project has a knowledge base (Christian, 2026-10-21) - it is part of the setup, not a follow-up.** A setup is not done until `knowledge-base/` has `README.md` (rules + complete index), `project-card.md` (what it is, owner/customer, repos+branches+hosting, stack, tracking, dated decisions, open topics, lessons/incidents, glossary pointer, sources, known gaps) and one product page per app/site/repo, every fact with its source, and the project's `companies.json` entry sets `knowledgeBase` + `knowledgeIndex` to existing paths. A project that is not a Dev Manager company is listed in the agent-cluster repo's `config/knowledge-bases.json`. `node scripts/knowledge-base-check.mjs` in the agent-cluster repo (part of `services-check`) fails the landing otherwise.
+
 ## Step 1 — inventory before anything else
 
 - `gh repo list <org> --limit 100` and read **every** repo's manifest before cloning:
@@ -80,7 +82,7 @@ nested distribution folder, add it to that repo's `.git/info/exclude` (local, no
   per competitor under `market/competitors/`, sourced from public info only with URL + fetch date,
   plus a maintained `market/competitors.md` comparison table — never customer/prospect data (Tap2Link
   2026-09-18 is the worked example).
-- **`agents/dev-manager/companies.json`**: one entry per project; repo paths = the nested paths for
+- **`agents/dev-manager/companies.json`**: one entry per project, with `knowledgeBase` + `knowledgeIndex` pointing at the folder and `CLAUDE.md` created above (the knowledge-base check refuses an entry without them); repo paths = the nested paths for
   Flow packages; `build`/`test` commands that run on this machine or an honest `echo "not run: …"`;
   `denyPaths` for env/cloudbuild/k8s/compose/`files/`/`Configuration/Settings.yaml`/keys.
 - **Skill scope** `C:\ai\skills\venture-labs\<project>\` with `.claude-plugin/plugin.json` +
