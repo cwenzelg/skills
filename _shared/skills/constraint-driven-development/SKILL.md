@@ -103,7 +103,7 @@ Last reviewed: 2026-08-08 by @addy
 
 - No new suppression comments: `@ts-ignore`, `eslint-disable`, `# noqa`, `# type: ignore`
 - No unimplemented stubs: `throw new Error("Not implemented")`, empty `catch {}`
-- No skipped or deleted tests without a reason in the commit message
+- No skipped or deleted tests without a reason in the commit message. A rebuild the spec names (the component goes away or is replaced) may delete or merge that component's tests, even with fewer cases left, as long as every acceptance criterion keeps a test; a test whose code still exists and simply disappears stays an error
 - No secrets in source
 - This file does not get weakened to make a change pass
 

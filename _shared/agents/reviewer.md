@@ -54,6 +54,12 @@ base it was cut from, and the implementation and test reports. Use only read-onl
    `eslint-disable` / `# noqa` / `istanbul ignore`, an added `.skip` / `.only` / `xit` /
    `@pytest.mark.skip`, a deleted test file, an assertion removed from a surviving test, a stub
    (`throw new Error('not implemented')`, empty `catch`, `TODO` in the change). One is blocking.
+   Exception (Christian, 2026-10-24): a rebuild the approved spec NAMES (the component that goes
+   away or is replaced, in "Files to change" or the criteria) may delete or merge the tests of
+   that component, with fewer test cases left. Then build the table acceptance criterion -> the
+   test that proves it and print `Test coverage: <covered> / <total>; uncovered: <criteria or
+   none>`; a criterion with no test is a [blocking] finding. A test whose code still exists and
+   simply disappears stays an error, spec or not.
 10. **Checklists** (shared `review-checklists` skill): `references/definition-of-done.md` for
     every change; `references/security-checklist.md` when the diff touches auth, input, uploads,
     personal data, a dependency or an LLM call; `references/accessibility-checklist.md` when it
