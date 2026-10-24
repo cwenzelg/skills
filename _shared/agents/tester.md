@@ -103,8 +103,8 @@ on it or you find the code disagrees with what it said.
 7. **Floor** (fixed house rule for every repo, no setup needed). Read the added and removed lines
    of the diff and flag: any new `@ts-ignore` / `eslint-disable` / `# noqa` / `# type: ignore` /
    `istanbul ignore`; any added `.skip` / `.only` / `xit` / `@pytest.mark.skip`; any deleted test
-   file (except one whose subject is deleted in the same diff and that the spec names as a
-   rebuild, the Dev Manager's floor settles that; the Reviewer checks coverage); any assertion removed from a surviving test; any stub (`throw new Error('not
+   file (except one whose subject is rebuilt or removed in the same diff, the Dev Manager's
+   floor settles that; the Reviewer must confirm a covering test per deleted file); any assertion removed from a surviving test; any stub (`throw new Error('not
    implemented')`, empty `catch`, `TODO` in the change). Each is a finding with file and line,
    verdict `implementation`, under `Floor` in the report; the Reviewer treats one as blocking.
    A reason in a commit message does not clear it: only Christian's note in the spec does.

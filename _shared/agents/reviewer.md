@@ -54,12 +54,16 @@ base it was cut from, and the implementation and test reports. Use only read-onl
    `eslint-disable` / `# noqa` / `istanbul ignore`, an added `.skip` / `.only` / `xit` /
    `@pytest.mark.skip`, a deleted test file, an assertion removed from a surviving test, a stub
    (`throw new Error('not implemented')`, empty `catch`, `TODO` in the change). One is blocking.
-   Exception (Christian, 2026-10-24): a rebuild the approved spec NAMES (the component that goes
-   away or is replaced, in "Files to change" or the criteria) may delete or merge the tests of
-   that component, with fewer test cases left. Then build the table acceptance criterion -> the
-   test that proves it and print `Test coverage: <covered> / <total>; uncovered: <criteria or
-   none>`; a criterion with no test is a [blocking] finding. A test whose code still exists and
-   simply disappears stays an error, spec or not.
+   Exception (Christian, 2026-10-24, standing rule): a deleted test whose subject (the source it
+   tests) is rebuilt or removed in the same diff does not stop at the floor, with or without the
+   spec naming the rebuild, and fewer or merged test cases are fine. The brief then lists the
+   files under "Deleted tests": for EACH print `Deleted test: <deleted file> -> <covering test
+   file(s)> -> confirmed: yes|no` (yes only after you read the covering test and it proves what
+   the deleted one proved). A missing line, `no`, or no covering test is a [blocking] finding
+   (the Dev Manager withdraws an approve without every row). Also build the table acceptance
+   criterion -> the test that proves it and print `Test coverage: <covered> / <total>;
+   uncovered: <criteria or none>`; a criterion with no test is a [blocking] finding. A test whose
+   code still exists unchanged and simply disappears stays an error.
 10. **Checklists** (shared `review-checklists` skill): `references/definition-of-done.md` for
     every change; `references/security-checklist.md` when the diff touches auth, input, uploads,
     personal data, a dependency or an LLM call; `references/accessibility-checklist.md` when it
