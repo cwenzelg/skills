@@ -29,6 +29,7 @@ import { execFile } from 'node:child_process';
 import dns from 'node:dns/promises';
 import { Resolver } from 'node:dns/promises';
 import tls from 'node:tls';
+import { bannerVerdict, parseDeviceAccess } from './l6-verdict.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCRIPT_VERSION = '1';
@@ -161,7 +162,7 @@ function loadThirdParties() {
   const vendors = hostT.rows.filter((r) => !/^anything else$/i.test(r[0])).map((r) => ({
     patterns: ticks(r[0]), vendor: r[1], what: r[2], essential: /^yes/i.test(r[3]),
     names: quoted(r[4]).length ? quoted(r[4]) : [r[1].replace(/\s*\(.*\)$/, '')],
-    keys: ticks(r[5] || ''),
+    keys: ticks(r[5] || ''), deviceAccess: parseDeviceAccess(r[6]),
   }));
   const cookieClasses = cookieT.rows.map((r) => ({ cls: r[0], patterns: ticks(r[1]).map((p) => new RegExp('^' + p.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i')) }));
   return { vendors, cookieClasses };
@@ -303,7 +304,7 @@ async function auditSite(site) {
   // (3) browser: fresh context, home, pre-consent listing -------------------------------
   let ctx = null, page = null;
   const requests = []; const respStatus = {};
-  let preStorage = null, banner = null, homeMeta = null, routeList = [];
+  let iframeHosts = [], preStorage = null, banner = null, homeMeta = null, routeList = [];
   let browserErrorSite = null;
   preConsentRequests = [];
   const bReason = browserError || (!reachable ? `home unreachable: ${home.error}` : null);
@@ -326,6 +327,7 @@ async function auditSite(site) {
       const st2 = await page.evaluate(SNIP.cookiesAndStorage);
       const cookies2 = await ctx.cookies();
       preStorage.afterScroll = { cookies: cookies2.map((c) => c.name), localStorage: st2.localStorage.map((k) => k[0]), sessionStorage: st2.sessionStorage.map((k) => k[0]) };
+      iframeHosts = page.frames().filter((f) => f !== page.mainFrame()).map((f) => { try { return new URL(f.url()).hostname; } catch { return ''; } }).filter(Boolean);
       preConsentRequests = requests.slice(); // the L4/L6 host list: home load + scroll, before any click or navigation
       homeMeta = await page.evaluate(SNIP.meta);
       const rendered = await page.evaluate(SNIP.anchors);
@@ -473,7 +475,7 @@ async function auditSite(site) {
     wr(dir, 'L4-hosts.txt', Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([h, n]) => `${String(n).padStart(7)} https://${h}`).join('\n'));
     const third = Object.keys(counts).filter((h) => etld1(h) !== ownDomain);
     const byVendor = new Map();
-    for (const h of third) { const sample = reqs.find((r) => hostOf(r.url) === h).url; const v = vendorFor(sample); const key = v ? v.vendor : `unknown: ${h}`; if (!byVendor.has(key)) byVendor.set(key, { vendor: key, known: !!v, hosts: [], essential: v ? v.essential : false, names: v ? v.names : [h, etld1(h)], requests: 0 }); const e = byVendor.get(key); e.hosts.push(h); e.requests += counts[h]; }
+    for (const h of third) { const sample = reqs.find((r) => hostOf(r.url) === h).url; const v = vendorFor(sample); const key = v ? v.vendor : `unknown: ${h}`; if (!byVendor.has(key)) byVendor.set(key, { vendor: key, known: !!v, hosts: [], essential: v ? v.essential : false, deviceAccess: v ? v.deviceAccess : 'unknown', names: v ? v.names : [h, etld1(h)], requests: 0 }); const e = byVendor.get(key); e.hosts.push(h); e.requests += counts[h]; }
     if (hosting) { const hv = TP.vendors.find((v) => v.vendor === hosting); byVendor.set(`${hosting} (hosting)`, { vendor: `${hosting} (hosting)`, known: true, hosts: [], essential: true, names: hv ? hv.names : [hosting], requests: 0, hosting: true }); }
     const text = (legalTexts.datenschutz?.text || '').toLowerCase();
     vendorRows = [...byVendor.values()].map((e) => { const searched = [...e.names, ...e.hosts]; const hit = text ? searched.find((n) => text.includes(n.toLowerCase())) : null; return { ...e, searched, named: !!hit, namedBy: hit || null }; });
@@ -497,18 +499,14 @@ async function auditSite(site) {
   });
 
   await B('L6', 'banner blocks until consent (hosts before consent)', async () => {
-    const nonEss = vendorRows.filter((v) => !v.essential && !v.hosting);
-    const l5bad = (checks.L5?.evidence?.nonEssential || []).length > 0;
-    const f = wr(dir, 'L6-banner.json', { banner, nonEssentialVendorsBeforeConsent: nonEss.map((v) => ({ vendor: v.vendor, hosts: v.hosts, requests: v.requests })) });
-    const f2 = wr(dir, 'L6-hosts-before-consent.json', vendorRows.map((v) => ({ vendor: v.vendor, essential: v.essential, hosts: v.hosts })));
+    const l5ev = checks.L5?.evidence || {};
+    const r6 = bannerVerdict({ vendorRows, l5NonEssentialKeys: l5ev.nonEssential || [], l5UnclassifiedKeys: l5ev.unclassified || [], hasBanner: !!(banner && banner.length), iframeHosts });
+    const nonEss = r6.triggers;
+    const f = wr(dir, 'L6-banner.json', { banner, bannerTriggers: r6.triggers.map((v) => ({ vendor: v.vendor, deviceAccess: v.deviceAccess, hosts: v.hosts, requests: v.requests })), cookielessBeforeConsent: r6.cookieless.map((v) => ({ vendor: v.vendor, hosts: v.hosts, requests: v.requests })), iframeHosts });
+    const f2 = wr(dir, 'L6-hosts-before-consent.json', vendorRows.map((v) => ({ vendor: v.vendor, essential: v.essential, deviceAccess: v.deviceAccess, hosts: v.hosts })));
     const hasBanner = banner && banner.length > 0;
-    const notes = [hasBanner ? `banner candidate: ${short(banner[0].text, 120)}` : 'no banner found', 'the after-accept diff and "reject as easy as accept" are human checks - the script never clicks'];
-    let verdict = 'pass', severity = null, summary;
-    if (nonEss.length) { verdict = 'fail'; severity = 'blocker (presence)'; summary = `${nonEss.length} non-essential third part${nonEss.length > 1 ? 'ies' : 'y'} contacted before any consent (${nonEss.map((v) => v.vendor).join(', ')}), ${hasBanner ? 'banner present' : 'no banner'}`; }
-    else if (l5bad) { verdict = 'fail'; severity = 'blocker (presence)'; summary = 'non-essential storage before consent (see L5)'; }
-    else if (hasBanner) { verdict = 'fail'; severity = 'note'; summary = 'banner shown although nothing non-essential is set or contacted (banner without need)'; }
-    else summary = 'no banner needed: nothing non-essential set or contacted before consent';
-    put(check('L6', 'banner blocks until consent (hosts before consent)', verdict, severity, summary, { banner: hasBanner, bannerText: hasBanner ? banner[0].text : null, nonEssentialVendors: nonEss.map((v) => v.vendor), nonEssentialHosts: nonEss.flatMap((v) => v.hosts), essentialVendors: vendorRows.filter((v) => v.essential).map((v) => v.vendor) }, [], notes), rel(f), rel(f2), rel('L6-home-first-load.png'));
+    const notes = [hasBanner ? `banner candidate: ${short(banner[0].text, 120)}` : 'no banner found', 'the after-accept diff and "reject as easy as accept" are human checks - the script never clicks', ...r6.notes];
+    put(check('L6', 'banner blocks until consent (hosts before consent)', r6.verdict, r6.severity, r6.summary, { banner: hasBanner, bannerText: hasBanner ? banner[0].text : null, nonEssentialVendors: nonEss.map((v) => v.vendor), nonEssentialHosts: nonEss.flatMap((v) => v.hosts), cookielessVendors: r6.cookieless.map((v) => v.vendor), cookielessHosts: r6.cookieless.flatMap((v) => v.hosts), iframeHosts, essentialVendors: vendorRows.filter((v) => v.essential).map((v) => v.vendor) }, [], notes), rel(f), rel(f2), rel('L6-home-first-load.png'));
   });
 
   await B('A1', 'lang attribute', async () => {

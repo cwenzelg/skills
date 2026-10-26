@@ -365,6 +365,8 @@
           ],
           "scripts": [
             "_shared/skills/marketing-site-compliance/scripts/check-links.mjs",
+            "_shared/skills/marketing-site-compliance/scripts/l6-verdict.mjs",
+            "_shared/skills/marketing-site-compliance/scripts/l6-verdict.test.mjs",
             "_shared/skills/marketing-site-compliance/scripts/site-audit.mjs"
           ],
           "assets": [],
