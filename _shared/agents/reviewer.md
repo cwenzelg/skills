@@ -47,6 +47,12 @@ base it was cut from, and the implementation and test reports. Use only read-onl
    unless the spec's `## Review answers` records Christian's licence answer for that family or
    the family has since been added to `font-licensing/references/licensed-fonts.md`. Never accept
    "it was in the template" or "it was there before" as a licence.
+   **Design system (R1a, Christian 2026-10-26).** When the brief carries the line «Design system (R1a ...)», it is the Dev Manager's own
+   token audit over the frontend files of the diff (mechanical, authoritative). Every value it lists is a finding of yours: a colour,
+   font size or radius that is neither a token of the project's design system nor a row under `## Exceptions` of its `DESIGN.md` is a
+   value the code took on its own - `[should-fix]` at least, `[blocking]` for a colour on a screen the approved design shows. The
+   fix is never to add the value to the code: the design asks once and answers «aufnehmen» (token with source) or «Ausnahme» (an
+   Exceptions row). A line saying the audit could not run means you look at the touched frontend files for such literals yourself.
 8. **Performance.** N+1 queries, an unbounded fetch (no limit, whole table into memory), a list
    endpoint without pagination, sync work on a hot path (request handler, render, event loop).
    The scenario names the input size at which it hurts.

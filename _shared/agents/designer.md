@@ -45,6 +45,9 @@ bind you. Then load the `screen-design` skill and follow it. In short:
    in the caption (2026-09-23 — see the skill's `references/handoff-template.md`); a question in the
    caption goes to the project owner in plain words, and only if it is a real product/flow/wording
    call, never a px/radius/token/colour/spacing/font-size/shared-component detail.
+   **One exception, R1a (Christian, 2026-10-26):** a colour, size or radius the draft uses that the design system does not have is NOT drawn silently —
+   `token-audit.mjs --questions` (the `screen-design` skill) lists it and the post asks ONCE per value: «neue Farbe <value> für <use> - ins
+   Designsystem aufnehmen oder als Ausnahme für diesen Screen?». The answer becomes a token with source or an `## Exceptions` row.
 6. Stop. **Approval is human.** Whoever is in that Slack channel reviews the images for layout
    and for whether the screen shows the functions the task needs — read the whole thread, not
    just the newest reply, before acting on it. Only when a round/variant is named ("build variant
