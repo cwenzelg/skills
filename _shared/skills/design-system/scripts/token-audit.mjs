@@ -10,14 +10,21 @@
 // --strict: additionally every literal outside a custom-property declaration (--x: ...) is a
 //   finding even when it matches - the gate for code, which must use var(--...) / the theme.
 // A line containing "design-system-ignore" is skipped (say why on that line).
+// R1a (references/open-points.md): a colour, font size or radius that is neither a token nor a listed exception of DESIGN.md
+//   ("## Exceptions": screen, value, reason, who, when - valid for the screen whose name is in the file path, or `--screen <name>`)
+//   is a finding with r1a:true. `--questions` prints each such value as the ONE question the design asks
+//   («neue Farbe <value> für <use> - ins Designsystem aufnehmen oder als Ausnahme für diesen Screen?») and exits 0 when only
+//   those remain (a font family outside the system still blocks: exit 1) - the round is posted with the questions in it.
+//   `--log <file>` appends one JSON line per R1a finding (the measurement, docs/plans/improvement-ledger.md); `--context <label>`.
 // Scans .html .htm .css .scss .less .vue .svelte .jsx .tsx .js .ts .mjs; skips node_modules,
 // .git, dist, build. Exit codes: 0 clean · 1 findings · 2 usage or broken system.
 
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { appendFileSync, existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { colorLiterals, deltaE, parseColor } from './lib/color.mjs';
 import { GENERIC, loadSystem, resolveAll } from './lib/tokens.mjs';
+import { exceptionRows, r1aQuestionFor } from './lib/openpoints.mjs';
 
 const EXTS = new Set(['.html', '.htm', '.css', '.scss', '.less', '.vue', '.svelte', '.jsx', '.tsx', '.js', '.ts', '.mjs']);
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.nuxt', '.next', '.output']);
@@ -86,6 +93,13 @@ function* walk(target) {
   }
 }
 
+/** The CSS property (or `line N`) a literal sits in - the «use» of an R1a question. */
+const useOf = (line, literal) => {
+  const i = line.indexOf(literal);
+  const m = i >= 0 ? line.slice(0, i).match(/([\w-]+)\s*:[^:;{}]*$/) : null;
+  return m ? m[1] : 'this line';
+};
+
 /** Audits text; returns findings [{ line, kind, value, message }]. */
 export function auditText(text, allowed, { strict = false } = {}) {
   const findings = [];
@@ -97,7 +111,7 @@ export function auditText(text, allowed, { strict = false } = {}) {
     for (const lit of colorLiterals(line)) {
       const near = nearestColor(allowed, lit.color);
       if (!near || near.d > 1) {
-        findings.push({ line: n, kind: 'colour', value: lit.text, message: `colour ${lit.text} is not in the system${near ? `; nearest: ${near.path} (${near.css}, ΔE ${near.d.toFixed(1)})` : ''}` });
+        findings.push({ line: n, kind: 'colour', r1a: true, use: useOf(line, lit.text), value: lit.text, message: `colour ${lit.text} is not in the system${near ? `; nearest: ${near.path} (${near.css}, ΔE ${near.d.toFixed(1)})` : ''}` });
       } else if (strict && !isDecl) {
         findings.push({ line: n, kind: 'colour', value: lit.text, message: `colour literal ${lit.text} - use the token ${near.path} instead of its value` });
       }
@@ -117,7 +131,7 @@ export function auditText(text, allowed, { strict = false } = {}) {
       if (v == null) continue;
       if (!allowed.fontSizes.has(v)) {
         const near = nearestNumber(allowed.fontSizes, v);
-        findings.push({ line: n, kind: 'size', value: m[1] ?? m[2], message: `font size ${m[1] ?? m[2]} is not on the type scale${near ? `; nearest: ${near[1]} (${near[0]}px)` : ''}` });
+        findings.push({ line: n, kind: 'size', r1a: true, use: useOf(line, m[1] ?? m[2]), value: m[1] ?? m[2], message: `font size ${m[1] ?? m[2]} is not on the type scale${near ? `; nearest: ${near[1]} (${near[0]}px)` : ''}` });
       } else if (strict && !isDecl) findings.push({ line: n, kind: 'size', value: m[1] ?? m[2], message: `font size literal ${m[1] ?? m[2]} - use the type token` });
     }
     for (const m of line.matchAll(/border-radius\s*:\s*([^;}"<]+)/g)) {
@@ -128,7 +142,7 @@ export function auditText(text, allowed, { strict = false } = {}) {
         if (v == null || v === 0) continue;
         if (allowed.radii.size && !allowed.radii.has(v)) {
           const near = nearestNumber(allowed.radii, v);
-          findings.push({ line: n, kind: 'radius', value: part, message: `radius ${part} is not in the system${near ? `; nearest: ${near[1]} (${near[0]}px)` : ''}` });
+          findings.push({ line: n, kind: 'radius', r1a: true, use: useOf(line, part), value: part, message: `radius ${part} is not in the system${near ? `; nearest: ${near[1]} (${near[0]}px)` : ''}` });
         }
       }
     }
@@ -136,39 +150,89 @@ export function auditText(text, allowed, { strict = false } = {}) {
   return findings;
 }
 
+const slug = (x) => String(x).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+/** Does a listed exception cover this finding in this file? Same value (colour ΔE < 1, size/radius in px) and the exception's screen is `*`/`alle` or named in the file path / `--screen`. */
+export function exceptionFor(finding, file, exceptions, screen) {
+  const where = slug(`${file} ${screen ?? ''}`);
+  for (const e of exceptions) {
+    const s = slug(e.screen);
+    if (!(s === '' || s === 'alle' || s === 'all' || where.includes(s))) continue;
+    if (finding.kind === 'colour') {
+      const c = parseColor(finding.value);
+      if (c && e.color && deltaE(c, e.color) < 1) return e;
+    } else if (finding.kind === 'size' || finding.kind === 'radius') {
+      const v = px(finding.value);
+      if (v != null && e.number === v) return e;
+    }
+  }
+  return null;
+}
+
 export function audit(systemDir, targets, opts = {}) {
   const system = loadSystem(systemDir);
   const allowed = allowedValues(system);
+  let exceptions = [];
+  try { exceptions = exceptionRows(readFileSync(join(systemDir, 'DESIGN.md'), 'utf8')).rows; } catch { /* no DESIGN.md: no exceptions */ }
   const results = [];
+  const excepted = [];
   for (const t of targets) {
     if (!existsSync(t)) throw new Error(`not found: ${t}`);
     for (const file of walk(t)) {
       if (file.startsWith(join(systemDir, 'build'))) continue;
-      for (const f of auditText(readFileSync(file, 'utf8'), allowed, opts)) results.push({ file, ...f });
+      for (const f of auditText(readFileSync(file, 'utf8'), allowed, opts)) {
+        const ex = f.r1a ? exceptionFor(f, file, exceptions, opts.screen) : null;
+        if (ex) excepted.push({ file, ...f, exception: `${ex.screen}: ${ex.value} (${ex.who}, ${ex.when})` });
+        else results.push({ file, ...f });
+      }
     }
   }
-  return { system: system.name, findings: results };
+  return { system: system.name, findings: results, excepted };
+}
+
+/** The distinct R1a questions of a report: one per (kind, value), the use of the first finding. */
+export function r1aQuestions(report) {
+  const seen = new Map();
+  for (const f of report.findings) if (f.r1a && !seen.has(`${f.kind}:${f.value}`)) seen.set(`${f.kind}:${f.value}`, { kind: f.kind, value: f.value, use: f.use, file: f.file, line: f.line, question: r1aQuestionFor(f.kind, f.value, f.use) });
+  return [...seen.values()];
 }
 
 function main(argv) {
-  const pos = argv.filter((a) => !a.startsWith('--'));
+  const opt = (name) => { const i = argv.indexOf(name); return i >= 0 ? argv[i + 1] : undefined; };
+  const valueArgs = new Set([opt('--screen'), opt('--log'), opt('--context')].filter(Boolean));
+  const pos = argv.filter((a) => !a.startsWith('--') && !valueArgs.has(a));
   if (pos.length < 2 || argv.includes('--help')) {
-    console.error('usage: node token-audit.mjs <system folder> <file or folder>... [--strict] [--json]');
+    console.error('usage: node token-audit.mjs <system folder> <file or folder>... [--strict] [--json] [--questions] [--screen <name>] [--log <file> --context <label>]');
     return argv.includes('--help') ? 0 : 2;
   }
   let report;
   try {
-    report = audit(resolve(pos[0]), pos.slice(1).map((p) => resolve(p)), { strict: argv.includes('--strict') });
+    report = audit(resolve(pos[0]), pos.slice(1).map((p) => resolve(p)), { strict: argv.includes('--strict'), screen: opt('--screen') });
   } catch (e) {
     console.error(`error ${e.message}`);
     return 2;
   }
-  if (argv.includes('--json')) console.log(JSON.stringify(report, null, 2));
+  const questions = r1aQuestions(report);
+  const log = opt('--log');
+  if (log && report.findings.some((f) => f.r1a)) {
+    const ts = new Date().toISOString();
+    const lines = report.findings.filter((f) => f.r1a).map((f) => JSON.stringify({ ts, system: report.system, context: opt('--context') ?? 'audit', kind: f.kind, value: f.value, use: f.use, file: relative(process.cwd(), f.file), line: f.line }));
+    try { appendFileSync(log, `${lines.join('\n')}\n`); } catch (e) { console.error(`warn  could not write the R1a log ${log}: ${e.message}`); }
+  }
+  const ask = argv.includes('--questions');
+  if (argv.includes('--json')) console.log(JSON.stringify({ ...report, questions }, null, 2));
   else {
-    for (const f of report.findings) console.log(`${relative(process.cwd(), f.file)}:${f.line}: ${f.message}`);
+    for (const f of report.findings) console.log(`${relative(process.cwd(), f.file)}:${f.line}: ${f.message}${f.r1a ? ' [R1a]' : ''}`);
+    if (report.excepted.length) console.log(`${report.excepted.length} value(s) covered by a listed exception`);
+    if (ask && questions.length) {
+      console.log('R1a - ask ONCE, in the round post (the answer: «aufnehmen» = a token with source, «Ausnahme» = an entry under "## Exceptions"):');
+      for (const q of questions) console.log(`  - ${q.question}   (${relative(process.cwd(), q.file)}:${q.line})`);
+    }
     console.log(`${report.findings.length} finding(s) against ${report.system}`);
   }
-  return report.findings.length ? 1 : 0;
+  // with --questions, new colours/sizes/radii are questions to post, not failures: only the rest blocks
+  const blocking = ask ? report.findings.filter((f) => !f.r1a) : report.findings;
+  return blocking.length ? 1 : 0;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) process.exitCode = main(process.argv.slice(2));

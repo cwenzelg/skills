@@ -3,7 +3,7 @@
 
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { after, test } from 'node:test';
@@ -16,7 +16,8 @@ import { blankImage, decodePng, encodePng } from './lib/png.mjs';
 import { SPECIMEN_SECTIONS, approvalOf, sectionIds } from './lib/contract.mjs';
 import { loadSystem } from './lib/tokens.mjs';
 import { specimenHtml } from './specimen.mjs';
-import { allowedValues, audit, auditText } from './token-audit.mjs';
+import { designGaps, exceptionRows, openPointRows } from './lib/openpoints.mjs';
+import { allowedValues, audit, auditText, r1aQuestions } from './token-audit.mjs';
 import { compareImages } from './visual-compare.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -253,7 +254,7 @@ test('specimen: every role, both modes, the switch and the reference images', ()
 test('specimen: passes its own audit, shows open points, component specs and the brand switch', () => {
   const dir = system({ complete: true });
   const designFile = join(dir, 'DESIGN.md');
-  writeFileSync(designFile, readFileSync(designFile, 'utf8') + '\n## Open points for review\n\n| # | Question | Today |\n|---|---|---|\n| O1 | Which green for text, #18765B or #0E7656? | web uses #18765B |\n');
+  writeFileSync(designFile, readFileSync(designFile, 'utf8').replace('| # | Question | Today | entschieden nach |\n|---|---|---|---|\n', (m) => `${m}| O1 | Which green for text, #18765B or #0E7656? | web uses #18765B | R5 |\n`));
   cpSync(join(dir, 'tokens', 'brands', '_template.tokens.json'), join(dir, 'tokens', 'brands', 'acme.tokens.json'));
   editJson(join(dir, 'tokens', 'brands', 'acme.tokens.json'), (j) => {
     j.color.accent['600'].$value = '#eb1a24';
@@ -411,4 +412,64 @@ test('contract: a light-only system (system.json modes ["light"]) owes no dark t
   const two = system({ complete: true });
   rmSync(join(two, 'tokens', 'semantic.dark.tokens.json'));
   assert.ok(completeness(two).gaps.some((g) => /semantic\.dark\.tokens\.json/.test(g)));
+});
+
+const OPEN = (rows) => `## Open points\n\n| # | Question | Today | entschieden nach |\n|---|---|---|---|\n${rows}\n\n`;
+const EXC = (rows) => `## Exceptions\n\n| Screen | Value | Reason | Who | When |\n|---|---|---|---|---|\n${rows}\n\n`;
+
+test('open points: every row needs R1-R6 or «für <owner>»; a table without the column fails; exceptions need all five fields', () => {
+  assert.deepEqual(designGaps(OPEN('| O1 | q | t | R3 |\n| O2 | q | t | R4 - darker grey |\n| O5 | q | options | für Christian: Geschmack |')), []);
+  assert.deepEqual(designGaps(OPEN('')), [], 'no rows, no gap');
+  const bad = designGaps(OPEN('| O1 | q | t | |\n| O2 | q | t | R7 |\n| O3 | q | t | maybe later |'));
+  assert.equal(bad.length, 3);
+  assert.match(bad[0], /open point O1 has no valid «entschieden nach»/);
+  const legacy = designGaps('## Open points for Christian\n\n| # | Question | Today |\n|---|---|---|\n| O1 | q | t |\n');
+  assert.match(legacy[0], /no column «entschieden nach»/);
+  assert.equal(openPointRows(OPEN('| O1 | q | t | R3 |')).rows[0].class.rule, 'R3');
+  assert.equal(openPointRows(OPEN('| O5 | q | t | für Christian: Geschmack |')).rows[0].class.owner, 'Christian');
+
+  assert.deepEqual(designGaps(EXC('| Angebotsvergleich | #1d9a6c | status badge | Christian | 2026-10-27 |')), []);
+  assert.deepEqual(designGaps(EXC('| - | - | - | - | - |')), [], 'a placeholder row is no exception');
+  const e = designGaps(EXC('| Angebotsvergleich | #1d9a6c | | Christian | gestern |\n| X | red-ish | r | me | 2026-10-27 |'));
+  assert.match(e[0], /lacks reason, when/);
+  assert.match(e[1], /neither a colour nor a size/);
+  assert.equal(exceptionRows(EXC('| A | 12px | r | w | 2026-10-27 |')).rows[0].number, 12);
+});
+
+test('check-system: an open point without its classification and an incomplete exception are errors', () => {
+  const dir = system({ complete: true });
+  const design = readFileSync(join(dir, 'DESIGN.md'), 'utf8');
+  assert.equal(checkSystem(dir).errors.filter((x) => /DESIGN\.md (open|exception)/.test(x)).length, 0, 'the starter section is empty and valid');
+  writeFileSync(join(dir, 'DESIGN.md'), `${design}\n${OPEN('| O1 | q | t | |')}${EXC('| S | #123456 | | w | 2026-10-27 |')}`);
+  const errs = checkSystem(dir).errors.filter((x) => /DESIGN\.md (open|exception)/.test(x));
+  assert.equal(errs.length, 2, errs.join('\n'));
+  assert.ok(!completeness(dir).complete);
+});
+
+test('token-audit R1a: a new value is a finding with the question; a listed exception passes on its screen only; --questions exits 0 for them', () => {
+  const dir = system({ complete: true });
+  const design = readFileSync(join(dir, 'DESIGN.md'), 'utf8');
+  writeFileSync(join(dir, 'DESIGN.md'), `${design}\n${EXC('| Angebotsvergleich | #1d9a6c | status badge | Christian | 2026-10-27 |')}`);
+  const a = join(work, `r1a-${n}`, 'angebotsvergleich');
+  const b = join(work, `r1a-${n}`, 'start');
+  for (const d of [a, b]) mkdirSync(d, { recursive: true });
+  writeFileSync(join(a, 'v.html'), '.x{color:#1d9a6c} .y{background:#fe3a11}');
+  writeFileSync(join(b, 'v.html'), '.x{color:#1d9a6c}');
+  const ra = audit(dir, [a]);
+  assert.equal(ra.findings.length, 1, 'only the colour that is no exception');
+  assert.equal(ra.excepted.length, 1);
+  assert.equal(ra.findings[0].r1a, true);
+  assert.equal(r1aQuestions(ra)[0].question, 'neue Farbe #fe3a11 für background - ins Designsystem aufnehmen oder als Ausnahme für diesen Screen?');
+  assert.equal(audit(dir, [b]).findings.length, 1, 'the same value on another screen is still a finding');
+  assert.equal(audit(dir, [b], { screen: 'Angebotsvergleich' }).findings.length, 0, '--screen names the screen');
+  const log = join(work, `r1a-${n}.jsonl`);
+  const cli = run('token-audit.mjs', [dir, a, '--questions', '--log', log, '--context', 'design-round']);
+  assert.equal(cli.status, 0, cli.stdout + cli.stderr);
+  assert.match(cli.stdout, /neue Farbe #fe3a11 für background/);
+  const row = JSON.parse(readFileSync(log, 'utf8').trim());
+  assert.equal(row.kind, 'colour');
+  assert.equal(row.context, 'design-round');
+  assert.equal(run('token-audit.mjs', [dir, a]).status, 1, 'without --questions it still blocks');
+  writeFileSync(join(a, 'f.html'), '.z{font-family: Comic Sans MS}');
+  assert.equal(run('token-audit.mjs', [dir, a, '--questions']).status, 1, 'a foreign font family still blocks');
 });

@@ -115,7 +115,19 @@ replaced, and the optional Artifact "Design" type.
    `visual-compare.mjs --screen <variant>.html --reference <closest reference/<mode>/ screen>
    --system <system> --out "<round folder>/compare-<letter>.png"` - in light and dark. A non-zero
    exit (a colour, size or radius outside the system, or a font family the system does not have)
-   blocks the round: fix the variant and rerun, never post it anyway. Look at each compare sheet
+   blocks the round: fix the variant and rerun, never post it anyway.
+   **R1a - no new value without the system** (Christian, 2026-10-26; design-system skill
+   `references/open-points.md`): a new screen adds no colour, size or radius the system lacks. Run the
+   audit as `token-audit.mjs <system> "<round folder>" --questions --context design-round --log
+   ~/ai/agent-cluster/.state/r1a/events.jsonl`; for every value it lists, first try to redraw with a
+   token. When the screen truly needs the value, it is NOT drawn silently: the round post carries ONE
+   question per value in this wording (German, add the English line in an English channel): «neue Farbe
+   `<value>` für `<use>` - ins Designsystem aufnehmen oder als Ausnahme für diesen Screen?» (for a size
+   or radius: «neuer Wert ...»). Never ask twice for a value already answered: the system's tokens and
+   its `## Exceptions` table (screen, value, reason, who, when) are checked first. The answer is
+   applied in the same turn: «aufnehmen» = a token in `tokens/` with `source` = his answer (rebuild,
+   `check-system.mjs`, specimen); «Ausnahme» = a row under `## Exceptions` in `DESIGN.md`. Then rerun
+   the audit without `--questions`: it must exit 0. Look at each compare sheet
    next to the render; a variant that does not read as the reference at a glance is redrawn, not
    posted.
 7. Reuse `draft/assets/` across screens; extract a new asset from the app only when none exists.

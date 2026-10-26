@@ -5,7 +5,7 @@ One design system per product direction, in the project's own workspace (next to
 ```
 design-system/<name>/                 # e.g. design-system/harbor/
   system.json                         { name, modes, fontImports, roles: { ground, text } }
-  DESIGN.md                           entry point: character, always/never rules, file map, status (< ~120 lines)
+  DESIGN.md                           entry point: character, always/never rules, open points (each «entschieden nach» R1-R6 or «für <owner>»), exceptions (R1a), file map, status (< ~120 lines); `references/open-points.md`
   llms.txt                            one line per file, for agents
   tokens/                             DTCG 2025.10 - the ONLY source of values
     primitives.tokens.json            tier 1: every raw value, each with $extensions["skill.design-system"].source

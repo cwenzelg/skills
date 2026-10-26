@@ -126,7 +126,15 @@ export function openPoints(design, heading) {
   if (!key) return { key: null, items: [] };
   const body = design.get(key);
   const rows = body.split('\n').filter((l) => /^\|/.test(l) && !/^\|[\s:|-]+\|?\s*$/.test(l)).map((l) => l.replace(/^\||\|$/g, '').split('|').map((c) => c.trim()));
-  if (rows.length > 1) return { key, items: rows.slice(1).map(([id, q, ...rest]) => ({ id, q, more: rest.filter(Boolean).join(' · ') })) };
+  if (rows.length > 1) {
+    // a column «entschieden nach» (references/open-points.md) is shown as «entschieden nach R3», not as one more loose cell
+    const basis = rows[0].findIndex((h) => /^entschieden nach/i.test(h));
+    return { key, items: rows.slice(1).map((cells) => {
+      const [id, q, ...rest] = cells.filter((_, i) => i !== basis);
+      const b = basis >= 0 ? cells[basis] : '';
+      return { id, q, more: [...rest.filter(Boolean), b ? (/^f(ü|ue)r /i.test(b) ? b : `entschieden nach ${b}`) : ''].filter(Boolean).join(' · ') };
+    }) };
+  }
   const items = body.split('\n').filter((l) => /^\s*(- |\d+\. )/.test(l)).map((l, i) => {
     const t = l.replace(/^\s*(- |\d+\. )/, '');
     const m = t.match(/^\*\*([^*]+)\*\*\s*[-:–]?\s*(.*)$/);

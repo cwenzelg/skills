@@ -22,6 +22,22 @@ cards, not in the chrome".>
 - Never <the most common way a screen loses this look - e.g. "white cards on a flat ground">.
 - <...>
 
+## Open points
+
+<!-- One row per question the sources do not settle. «entschieden nach» is R1-R6 (references/open-points.md) or «für <owner>: <reason>» (a taste
+     question, a brand colour, two approved screens that contradict each other). check-system.mjs fails a row without it. Delete this comment. -->
+
+| # | Question | Today | entschieden nach |
+|---|---|---|---|
+
+## Exceptions
+
+<!-- R1a: a value a screen uses that the system does not have, answered «Ausnahme» (never silently drawn, never silently kept in code). One row each;
+     check-system.mjs fails a row with a missing field, token-audit.mjs lets exactly this value pass on exactly this screen. -->
+
+| Screen | Value | Reason | Who | When |
+|---|---|---|---|---|
+
 ## Files
 
 | Read | When |
