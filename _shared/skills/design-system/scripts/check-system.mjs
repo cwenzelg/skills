@@ -2,7 +2,8 @@
 // check-system.mjs - is this design system complete and well-formed? The mechanical half of the
 // completeness checklist (references/checklist.md); contrast and the audit are their own scripts.
 //
-//   node check-system.mjs <system folder> [--require-approved] [--json]
+//   node check-system.mjs <system folder> [--require-approved] [--json | --completeness]
+//   --completeness  one JSON line {complete, gaps[], sections[]} for ANY folder (a hand-made one too), always exit 0
 //
 // Errors (exit 1):
 //   - a semantic role missing in one mode (every role needs a value in EVERY mode)
@@ -172,8 +173,13 @@ export function completeness(dir) {
 function main(argv) {
   const dirArg = argv.find((a) => !a.startsWith('--'));
   if (!dirArg || argv.includes('--help')) {
-    console.error('usage: node check-system.mjs <system folder> [--require-approved] [--json]');
+    console.error('usage: node check-system.mjs <system folder> [--require-approved] [--json | --completeness]');
     return argv.includes('--help') ? 0 : 2;
+  }
+  if (argv.includes('--completeness')) {
+    // never throws, exit 0 whatever the folder holds: the machine form for the Cluster Console and the cluster's design-systems-check
+    console.log(JSON.stringify(completeness(resolve(dirArg))));
+    return 0;
   }
   let report;
   try {
