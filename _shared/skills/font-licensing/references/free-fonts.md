@@ -45,6 +45,8 @@ downloaded `.woff2`) is still free under the same licence.
 | Raleway | OFL | Google Fonts | |
 | Merriweather | OFL | Google Fonts | |
 | Playfair Display | OFL | Google Fonts | |
+| Jost | OFL | Google Fonts (https://fonts.google.com/specimen/Jost; designer Owen Earl, source github.com/indestructible-type/Jost) | self-hosted woff2 of Stille (Bienenwanderung); keep `OFL.txt` next to the files; verified 2026-10-26 in google/fonts `ofl/jost/METADATA.pb` |
+| Cormorant Garamond | OFL | Google Fonts (https://fonts.google.com/specimen/Cormorant+Garamond) | Christian also stated it free on 2026-10-25 (table below) |
 | Ubuntu | UFL | Google Fonts | |
 | DejaVu Sans / Serif / Mono | Vera | OS packages | |
 
