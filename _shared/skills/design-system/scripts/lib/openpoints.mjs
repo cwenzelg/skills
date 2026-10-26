@@ -96,22 +96,33 @@ export function exceptionRows(designText) {
   return { heading, rows: out };
 }
 
-/** Plain-string gaps of DESIGN.md against the rule: an open point without its classification, an exception without its fields. */
-export function designGaps(designText) {
-  const gaps = [];
+/**
+ * DESIGN.md against the rule: `{ errors, warnings }` (plain strings). An open point WITHOUT its classification is an error when the table has the
+ * «entschieden nach» column (a row left empty or invalid) or its heading is «... for Christian» (the owner of the rule); a table of another owner
+ * without the column yet (Martin's lists) is a warning - the column is added when that owner's points are next worked on. An exception with a
+ * missing field is always an error.
+ */
+export function designFindings(designText) {
+  const errors = [];
+  const warnings = [];
   const op = openPointRows(designText);
   if (op.heading && op.rows.length) {
-    if (!op.hasColumn) gaps.push(`DESIGN.md "${op.heading}" has no column «entschieden nach» - every open point carries R1-R6 or «für <owner>: <reason>» (references/open-points.md)`);
-    else for (const r of op.rows) if (!r.class.ok) gaps.push(`DESIGN.md open point ${r.id || '?'} has no valid «entschieden nach» (R1-R6, or «für <owner>: <reason>»; got «${r.basis || 'nothing'}»)`);
+    if (!op.hasColumn) {
+      const msg = `DESIGN.md "${op.heading}" has no column «entschieden nach» - every open point carries R1-R6 or «für <owner>: <reason>» (references/open-points.md)`;
+      (/christian/i.test(op.heading) ? errors : warnings).push(msg);
+    } else for (const r of op.rows) if (!r.class.ok) errors.push(`DESIGN.md open point ${r.id || '?'} has no valid «entschieden nach» (R1-R6, or «für <owner>: <reason>»; got «${r.basis || 'nothing'}»)`);
   }
   for (const e of exceptionRows(designText).rows) {
     const missing = [['screen', e.screen], ['value', e.value], ['reason', e.reason], ['who', e.who]].filter(([, v]) => !v || EMPTY.test(v)).map(([k]) => k);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(e.when)) missing.push('when (YYYY-MM-DD)');
-    if (missing.length) gaps.push(`DESIGN.md exception ${e.n} (${e.value || '?'}) lacks ${missing.join(', ')} - an exception names screen, value, reason, who and when`);
-    else if (!e.color && e.number == null) gaps.push(`DESIGN.md exception ${e.n}: «${e.value}» is neither a colour nor a size/radius in px - state the exact value`);
+    if (missing.length) errors.push(`DESIGN.md exception ${e.n} (${e.value || '?'}) lacks ${missing.join(', ')} - an exception names screen, value, reason, who and when`);
+    else if (!e.color && e.number == null) errors.push(`DESIGN.md exception ${e.n}: «${e.value}» is neither a colour nor a size/radius in px - state the exact value`);
   }
-  return gaps;
+  return { errors, warnings };
 }
+
+/** The errors of `designFindings` (kept for callers that want a flat list). */
+export const designGaps = (designText) => designFindings(designText).errors;
 
 /** The R1a question for one new value (the fixed wording of Christian's decision, 2026-10-26). */
 export const r1aQuestion = (value, use) => `neue Farbe ${value} für ${use} - ins Designsystem aufnehmen oder als Ausnahme für diesen Screen?`;

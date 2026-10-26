@@ -45,7 +45,7 @@ The **Exceptions** section (`## Exceptions`, German heading `## Ausnahmen` also 
 | Angebotsvergleich | #1d9a6c | status badge "best offer", one use | Christian | 2026-10-27 |
 ```
 
-`check-system.mjs` fails an exception with a missing screen, value, reason, who or a date that is not `YYYY-MM-DD`. `token-audit.mjs` lets
+A table headed «Open points for Christian» without the column, or a row with an empty or unknown value in it, is an error; a table of another owner (e.g. «for Martin») without the column yet is a warning until that owner's points are next worked on. `check-system.mjs` fails an exception with a missing screen, value, reason, who or a date that is not `YYYY-MM-DD`. `token-audit.mjs` lets
 exactly this value pass on a file whose path names the screen (or with `--screen "<name>"`); the same value on another screen is still a finding.
 
 ## R1a in the work

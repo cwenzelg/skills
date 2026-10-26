@@ -16,7 +16,7 @@ import { blankImage, decodePng, encodePng } from './lib/png.mjs';
 import { SPECIMEN_SECTIONS, approvalOf, sectionIds } from './lib/contract.mjs';
 import { loadSystem } from './lib/tokens.mjs';
 import { specimenHtml } from './specimen.mjs';
-import { designGaps, exceptionRows, openPointRows } from './lib/openpoints.mjs';
+import { designFindings, designGaps, exceptionRows, openPointRows } from './lib/openpoints.mjs';
 import { allowedValues, audit, auditText, r1aQuestions } from './token-audit.mjs';
 import { compareImages } from './visual-compare.mjs';
 
@@ -425,6 +425,9 @@ test('open points: every row needs R1-R6 or «für <owner>»; a table without th
   assert.match(bad[0], /open point O1 has no valid «entschieden nach»/);
   const legacy = designGaps('## Open points for Christian\n\n| # | Question | Today |\n|---|---|---|\n| O1 | q | t |\n');
   assert.match(legacy[0], /no column «entschieden nach»/);
+  const martin = designFindings('## Open points for Martin\n\n| # | Question | Today |\n|---|---|---|\n| O1 | q | t |\n');
+  assert.deepEqual(martin.errors, [], 'another owner\'s legacy table is a warning, not a failure');
+  assert.match(martin.warnings[0], /no column «entschieden nach»/);
   assert.equal(openPointRows(OPEN('| O1 | q | t | R3 |')).rows[0].class.rule, 'R3');
   assert.equal(openPointRows(OPEN('| O5 | q | t | für Christian: Geschmack |')).rows[0].class.owner, 'Christian');
 
