@@ -37,6 +37,7 @@ import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildCss } from './build-tokens.mjs';
 import { colorLiterals } from './lib/color.mjs';
+import { SPECIMEN_SECTIONS } from './lib/contract.mjs';
 import { EXT, cssName, loadSystem, resolveAll } from './lib/tokens.mjs';
 
 const IMAGE = /\.(png|jpe?g|webp|gif)$/i;
@@ -295,7 +296,9 @@ ${source ? prose(`<p class="source"><b>Source</b> ${inline(source)}</p>`) : ''}<
 
   const modeButtons = ['', ...modes].map((m) => `<button type="button" data-mode="${esc(m)}" aria-pressed="${m === '' ? 'true' : 'false'}">${m ? esc(m[0].toUpperCase() + m.slice(1)) : 'System'}</button>`).join('');
   const brandButtons = brands.length ? `<div class="modes" role="group" aria-label="Brand"><button type="button" data-brand-pick="" aria-pressed="true">${esc(system.name)}</button>${brands.map((b) => `<button type="button" data-brand-pick="${esc(b)}" aria-pressed="false">${esc(b)}</button>`).join('')}</div>` : '';
-  const toc = [['character', 'Character and rules'], open.items.length && ['open', 'Open points'], ['colour', 'Colour'], recipeTiles && ['recipes', 'Grounds and effects'], ['type', 'Typography'], ['shape', 'Shape'], foundations && ['foundations', 'Foundations'], ['components', 'Components'], ['reference', 'Reference screens'], ['files', 'Files and checks']].filter(Boolean);
+  // the contract (lib/contract.mjs) decides which sections exist and in which order; the ones that depend on the system are filtered here
+  const present = { always: true, 'open-points': open.items.length > 0, recipes: Boolean(recipeTiles) };
+  const toc = SPECIMEN_SECTIONS.filter((x) => present[x.when]).map((x) => [x.id, x.label]);
   const line = v(role.line, 'currentColor');
   const muted = v(role.muted, 'inherit');
 
@@ -429,9 +432,9 @@ ${families ? `<div class="faces">${families}</div>` : ''}
 ${radii ? `<div class="shapes">${radii}</div>` : ''}
 ${shadows ? `<div class="shapes">${shadows}</div>` : ''}
 ${otherDims ? `<div class="tbl"><table><tbody>${otherDims}</tbody></table></div>` : ''}</section>
-${foundations ? `<section id="foundations"><span class="eyebrow">How to use it</span><h2>Foundations</h2><div class="rules">
-${foundations}
-</div></section>` : ''}
+<section id="foundations"><span class="eyebrow">How to use it</span><h2>Foundations</h2><div class="rules">
+${foundations || '<div class="tile"><p>No foundation files yet.</p></div>'}
+</div></section>
 <section id="components"><span class="eyebrow">Built from the roles</span><h2>Components</h2>
 <p class="lede">Every component in every mode${brands.length ? ' and brand' : ''}, side by side, next to its spec.</p>
 ${comps || '<p>No components yet.</p>'}

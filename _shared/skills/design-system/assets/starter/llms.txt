@@ -8,6 +8,8 @@
 ## Foundations
 - [foundations/color.md](foundations/color.md): colour roles, light/dark, brand slots
 - [foundations/typography.md](foundations/typography.md): typefaces and the type scale
+- [foundations/elevation.md](foundations/elevation.md): corners, lines, shadows, overlays
+- [foundations/iconography.md](foundations/iconography.md): the icon set, stroke and sizes
 
 ## Components
 - [components/button.md](components/button.md): primary action

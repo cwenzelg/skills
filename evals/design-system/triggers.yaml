@@ -5,6 +5,8 @@ positive:
   - "The new screens don't look like the approved Harbor design, build the theme properly"
   - "Audit the code for hardcoded colours and fonts that are not in our tokens"
   - "Build a style guide specimen page with all tokens and components"
+  - "The FU Connect design system looks too short next to Loop Studio, bring it to the same structure"
+  - "Why does the design system check say the specimen lacks a section"
 negative:
   - "Design the onboarding screen and post round 1 to Slack"
   - "Is this font licensed for commercial use"
