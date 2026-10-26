@@ -13,7 +13,7 @@ import { checkSystem, completeness } from './check-system.mjs';
 import { checkContrast, worstContrast } from './contrast.mjs';
 import { contrastRatio, parseColor } from './lib/color.mjs';
 import { blankImage, decodePng, encodePng } from './lib/png.mjs';
-import { SPECIMEN_SECTIONS, sectionIds } from './lib/contract.mjs';
+import { SPECIMEN_SECTIONS, approvalOf, sectionIds } from './lib/contract.mjs';
 import { loadSystem } from './lib/tokens.mjs';
 import { specimenHtml } from './specimen.mjs';
 import { allowedValues, audit, auditText } from './token-audit.mjs';
@@ -103,7 +103,7 @@ test('check-system: the bare starter fails on placeholders, specimen and referen
   assert.deepEqual(ok.errors, []);
   assert.equal(ok.approved, false);
   assert.ok(checkSystem(dir, { requireApproved: true }).errors.some((e) => /APPROVED\.md/.test(e)));
-  writeFileSync(join(dir, 'specimen', 'APPROVED.md'), 'Approved by the owner, 2026-10-14: "passt"');
+  writeFileSync(join(dir, 'specimen', 'APPROVED.md'), '# Approved\n\n- Approved by: Christian Wenzel, owner\n- When: 2026-10-14\n- Their words: «passt»\n');
   assert.deepEqual(checkSystem(dir, { requireApproved: true }).errors, []);
   assert.equal(run('check-system.mjs', [dir, '--require-approved']).status, 0);
 });
@@ -376,4 +376,39 @@ test('contract: a folder with no tokens at all (hand-made) is reported as gaps, 
   assert.ok(c.gaps.includes('missing specimen/index.html'));
   assert.ok(c.gaps.includes('missing system.json'));
   assert.equal(c.sections.every((s) => !s.present), true);
+});
+
+test('approval: only name + date + their words in the template format approve; the file existing, a placeholder or «nicht abgenommen» does not', () => {
+  const dir = system({ complete: true });
+  const file = join(dir, 'specimen', 'APPROVED.md');
+  writeFileSync(file, '# Approved\n\nnicht abgenommen\n');
+  assert.equal(approvalOf(dir), null);
+  assert.equal(checkSystem(dir).approved, false);
+  assert.ok(checkSystem(dir, { requireApproved: true }).errors.some((e) => /has no approval/.test(e)));
+  assert.equal(completeness(dir).approval, null);
+  writeFileSync(file, readFileSync(join(STARTER, '..', '..', 'references', 'approved-template.md'), 'utf8'));
+  assert.equal(approvalOf(dir), null, 'the unfilled template is not an approval');
+  writeFileSync(file, '# Approved\n\n- Approved by: Christian Wenzel, owner\n- When: 2026-10-14\n');
+  assert.equal(approvalOf(dir), null, 'no words, no approval');
+  writeFileSync(file, '# Approved\n\n## 2026-10-15 - PROVISIONAL\n\n- Approved by: Christian Wenzel, owner (VL)\n- When: 2026-10-15, about 22:00\n- Their words: «setze das mit der aktuellen Version um»\n');
+  assert.deepEqual(approvalOf(dir), { by: 'Christian Wenzel', when: '2026-10-15', words: 'setze das mit der aktuellen Version um', provisional: true });
+  assert.equal(completeness(dir).approval.by, 'Christian Wenzel');
+  assert.match(readFileSync(join(dir, 'specimen', 'index.html'), 'utf8'), /draft/, 'the specimen written before the approval still says draft');
+  writeFileSync(join(dir, 'specimen', 'index.html'), specimenHtml(loadSystem(dir), join(dir, 'specimen', 'index.html')));
+  assert.match(readFileSync(join(dir, 'specimen', 'index.html'), 'utf8'), /Design system · approved/);
+});
+
+test('contract: a light-only system (system.json modes ["light"]) owes no dark token file and no dark reference', () => {
+  const dir = system({ complete: true });
+  editJson(join(dir, 'system.json'), (j) => { j.modes = ['light']; });
+  rmSync(join(dir, 'tokens', 'semantic.dark.tokens.json'));
+  rmSync(join(dir, 'reference', 'dark'), { recursive: true });
+  build(dir);
+  writeFileSync(join(dir, 'specimen', 'index.html'), specimenHtml(loadSystem(dir), join(dir, 'specimen', 'index.html')));
+  const c = completeness(dir);
+  assert.deepEqual(c.gaps, []);
+  // and a two-mode system still owes it
+  const two = system({ complete: true });
+  rmSync(join(two, 'tokens', 'semantic.dark.tokens.json'));
+  assert.ok(completeness(two).gaps.some((g) => /semantic\.dark\.tokens\.json/.test(g)));
 });

@@ -37,7 +37,7 @@ import { basename, dirname, extname, join, relative, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { buildCss } from './build-tokens.mjs';
 import { colorLiterals } from './lib/color.mjs';
-import { SPECIMEN_SECTIONS } from './lib/contract.mjs';
+import { SPECIMEN_SECTIONS, approvalOf } from './lib/contract.mjs';
 import { EXT, cssName, loadSystem, resolveAll } from './lib/tokens.mjs';
 
 const IMAGE = /\.(png|jpe?g|webp|gif)$/i;
@@ -180,7 +180,7 @@ export function specimenHtml(system, outFile, { linkImages = false, fragment = f
   // --- documents ---
   const design = sections(readIf(join(system.dir, 'DESIGN.md')));
   const title = site.title ?? `${system.name} Design System`;
-  const approved = existsSync(join(system.dir, 'specimen', 'APPROVED.md'));
+  const approved = approvalOf(system.dir) !== null; // name + date + their words; the file existing is not an approval
   const open = openPoints(design, site.openPoints);
   const skip = new Set(['Character', 'Files', 'Status', open.key].filter(Boolean));
   const ruleTiles = [...design].filter(([k]) => !skip.has(k)).map(([k, body]) => `<div class="tile"><h4>${esc(k)}</h4>\n${md(body)}\n</div>`).join('\n');
