@@ -91,8 +91,11 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 - [ ] Sensitive fields excluded from every API response and log (`passwordHash`, reset tokens,
       internal ids where not needed)
 - [ ] Personal data of prospects and customers stays in our own Postgres / Twenty; it is never
-      copied into a fixture, a skill file, a prompt, a third-party service or a Slack message
-      beyond what the task needs
+      copied into a skill file, a prompt, a third-party service or a Slack message beyond what the
+      task needs. A copy of a database for a dev, test or support stack, a migration and a support
+      answer keep the REAL values - never anonymise, mask or pseudonymise them unless Christian
+      or the client asked for it for that case (NO-ANONYMISATION-BY-DEFAULT,
+      `docs/decisions/2026-10-27-no-anonymisation-by-default.md`); only credentials are never printed
 - [ ] Deletion on request is possible: a new table or store of personal data has a delete path
 - [ ] The lawful basis for a new list or data flow is written down (spec or knowledge base)
 - [ ] Transport is HTTPS everywhere; backups of personal data are encrypted
@@ -116,7 +119,7 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 - [ ] Production responses carry a code and a generic message, never a stack trace, an SQL
       string, a file path or an internal hostname
 - [ ] Errors are reported to Sentry per the shared `error-tracking` skill, with secrets and
-      personal data scrubbed before send
+      credentials scrubbed before send (personal data only where the client asked for it)
 
 ## Models and agents (the cluster's own rules)
 

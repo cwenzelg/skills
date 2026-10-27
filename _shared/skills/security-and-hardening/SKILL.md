@@ -394,6 +394,8 @@ Securing data is "can an attacker read it?" Privacy is "should *we* even hold it
 - **Get consent before collection or third-party sharing**, and make it auditable. Sending PII to an analytics/ad/LLM vendor is "sharing" — the user's choice gates it, and the vendor needs a data-processing agreement.
 - **Localize defaults, don't hardcode one region's law.** Data-residency and rules differ by user location; make the policy a configurable boundary, not an assumption.
 
+**This section is about what a product collects, not about copies of existing data.** A copy of a database for a dev, test or support stack, a migration, a log or a support answer keeps the real values; an agent never anonymises, masks or pseudonymises them on its own, only when Christian or the client asked for that case (credentials are never printed). `docs/decisions/2026-10-27-no-anonymisation-by-default.md` in the cluster repo.
+
 When data crosses a trust boundary, validate it as untrusted (see Input Validation above); when a privacy incident exposes personal data, the breach-notification clock is part of the postmortem — follow the `debugging-and-error-recovery` skill.
 
 ## Securing AI / LLM Features

@@ -46,8 +46,9 @@ registered      in agents/error-triage/config/projects.json with mode, site_id, 
 - **Register the project with the triage agent** (`config/projects.json`) in the same PR, with
   `company`/`repo` matching `agents/dev-manager/companies.json`, otherwise its issues are never
   seen.
-- Never paste event payloads containing personal data (user names, addresses, form contents)
-  into tickets, Notion rows or Slack; link the Sentry issue instead.
+- Do not paste whole event payloads into tickets, Notion rows or Slack; link the Sentry issue and
+  quote what the case needs with its real values (a support case needs the real name and values;
+  never mask them unless Christian or the client asked for it). Credentials are never quoted.
 
 ## Procedure for "add error tracking to <project>"
 

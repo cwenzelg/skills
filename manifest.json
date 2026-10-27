@@ -306,7 +306,7 @@
           "scope": "_shared",
           "description": "House standard for error tracking with Sentry in every Venture Labs project (Nuxt/Vue frontends, Spring Boot, Neos Flow and Strapi backends, static Netlify sites). Use when adding Sentry to a project, creating a Sentry project or DSN, fixing noisy or missing error reports, uploading source maps, tagging releases and environments, wiring alerts, or when a task mentions error tracking, crash reporting, exceptions in production, Sentry, DSN, or the error-triage agent - even if the user does not name Sentry.",
           "path": "_shared/skills/error-tracking/SKILL.md",
-          "bodyLines": 89,
+          "bodyLines": 90,
           "references": [
             "_shared/skills/error-tracking/references/sentry-setup.md"
           ],
@@ -565,7 +565,7 @@
           "scope": "_shared",
           "description": "Hardens code against vulnerabilities. Use when handling user input, authentication, data storage, or external integrations. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.",
           "path": "_shared/skills/security-and-hardening/SKILL.md",
-          "bodyLines": 521,
+          "bodyLines": 523,
           "references": [
             "_shared/skills/security-and-hardening/references/security-checklist.md"
           ],

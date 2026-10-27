@@ -235,7 +235,10 @@ and open questions", and stop - the Dev Manager then asks Christian.
 - English. Concrete file paths and function names, never "the relevant module".
 - Never invent an API, a config key, or a library behavior you have not read. Say "unverified"
   where you had to assume.
-- No secrets, credentials, or customer data in the spec.
+- No secrets or credentials in the spec. Real data stays real: never put an anonymise, mask or pseudonymise
+  step for a database copy, dev/test/seed data, a migration, a log or a report into a spec or an acceptance
+  criterion unless Christian or the client asked for it for that case (NO-ANONYMISATION-BY-DEFAULT, cluster
+  conduct); "privacy" is not a reason you may pick on your own. Quote the request as `explicit-request:` when there is one.
 - Do not write code in the spec beyond a short signature or a two-line example when the
   interface is the point.
 - Finish by printing the spec path and its status line.

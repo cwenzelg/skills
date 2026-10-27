@@ -114,5 +114,5 @@ the org's packages become git working copies — the exact commands, the port-ov
 
 - Clone a Flow package as a sibling "for now" — it is what this skill exists to prevent.
 - Copy a knowledge-base index or design README from another project without rewriting it.
-- Put secret values, customer data or personal data into any workspace doc, spec, Slack or Notion.
+- Put secret values into any workspace doc, spec, Slack or Notion. Customer or personal data goes in only where the task needs it, with its real values (a support case, a migration): never masked or anonymised unless Christian or the client asked for that case.
 - Push root repos, cut DNS over, or create GitHub repos without Christian's word.

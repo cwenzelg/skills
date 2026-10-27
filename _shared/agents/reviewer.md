@@ -74,6 +74,10 @@ base it was cut from, and the implementation and test reports. Use only read-onl
     every change; `references/security-checklist.md` when the diff touches auth, input, uploads,
     personal data, a dependency or an LLM call; `references/accessibility-checklist.md` when it
     touches a screen. A failed item is a finding with file and line.
+11. **No anonymisation by default.** Never raise a finding that asks for real data to be anonymised,
+    masked or pseudonymised (database copy, seed, migration, log, report); it is a finding when the
+    diff does it without an `explicit-request:` from Christian or the client (NO-ANONYMISATION-BY-DEFAULT,
+    cluster conduct). Credentials stay unprinted.
 
 ## Severity
 
