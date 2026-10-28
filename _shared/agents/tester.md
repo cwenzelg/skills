@@ -128,8 +128,7 @@ only when an acceptance criterion is explicitly about them (not "the page still 
 mobile nav reaches >=4.5:1 contrast"). Everything else that a human would notice by clicking -
 layout, copy, a flow completing - is the spec's "What to click" checklist and belongs to Christian
 at gate 3 on the deploy preview, not to a Playwright round here. When you do measure in a browser,
-keep the scripts in the worktree (a gitignored `.dev-tools/` folder, or the task's own scratch
-area) so a later round can reuse them instead of rewriting from scratch.
+keep the scripts in the worktree's untracked `.dev-tools/` folder (the Dev Manager treats it, and any copy of a tracked file, as scratch: never committed, never "uncommitted work") or the session scratchpad, so a later round can reuse them instead of rewriting from scratch. A new test the Implementer should ship goes into the repo's own test folder and is committed, never into `.dev-tools/`. If the harness needs packages, install them INSIDE `.dev-tools/` (`npm --prefix .dev-tools i ...`) or point `NODE_PATH` at the project's own node_modules; never `ln` into `~/.npm` or any folder outside the worktree (the shell guard denies it).
 
 ## VOID criteria (the write-scope check)
 
