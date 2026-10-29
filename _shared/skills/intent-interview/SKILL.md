@@ -1,9 +1,9 @@
 ---
-name: interview-me
+name: intent-interview
 description: Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified ("build me X" without "for whom" or "why now"), when the user explicitly invokes ("interview me", "grill me", "are we sure?", "stress-test my thinking"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.
 ---
 
-# Interview Me
+# Intent Interview
 
 ## Overview
 
@@ -110,16 +110,15 @@ Yes / no / refine?
 
 Including "Out of scope" is non-negotiable. Half of misalignment is silent disagreement about what is *not* being built.
 
-### Step 5: Confirm — explicit yes, not "whatever you think"
+### Step 5: Confirm — read whether they agree, in context
 
-The gate is an explicit "yes." The following are **not** yes:
+Read the reply for intent against the restate you just wrote: does the user agree with *this* outcome, user, success line and scope? Agreement can come in any words ("sounds good", "yes, that's it", "go", a thumbs-up, starting to talk about the next step). What matters is what they mean, never which phrase they used. When the reply leaves you unsure, ask once, concretely. Typical unclear cases:
 
-- "Whatever you think is best." → The user is delegating, which means they don't have 95% confidence either. Re-ask with two concrete options framed as a choice.
-- "Sounds good." → Ambiguous. Ask: "Anything you'd refine?" Silence isn't confirmation.
-- "Sure, let's go." → Often a polite exit, not an endorsement. Same follow-up.
-- Silence followed by "okay let's start." → The user has given up on the interview, not converged. Stop and ask whether you've missed something.
+- "Whatever you think is best." → The user is delegating, not agreeing with the content, which means they don't have 95% confidence either. Ask once with two concrete options framed as a choice.
+- A reply that agrees but adds a condition or a change → that is a correction, not agreement: fold it in and restate.
+- Silence followed by "okay let's start." → The user may have given up on the interview rather than converged. Ask once whether you've missed something.
 
-If they correct you, fold the correction in and restate. Loop until you get an explicit yes.
+If they correct you, fold the correction in and restate. Loop until the reply, read in context, agrees with the restate; one clarifying question per unclear reply, never a demand for a particular word.
 
 ### The 95% Confidence Stop
 
@@ -133,7 +132,7 @@ This is a checkable test, not a vibe. It also has a floor: if you've gone severa
 
 ## Output
 
-The output of this skill is a **confirmed statement of intent**: the restate from Step 4, with an explicit yes from Step 5. That's the deliverable. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
+The output of this skill is a **confirmed statement of intent**: the restate from Step 4, with the user's agreement from Step 5 (read in context). That's the deliverable. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
 
 If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/intent/[topic].md`. Only save if they confirm.
 
@@ -141,7 +140,7 @@ If the user wants the intent to persist (a multi-session project, a handoff to a
 
 A short before-and-after.
 
-**Without `interview-me`:**
+**Without `intent-interview`:**
 
 ```
 User:  build me a dashboard for our metrics
@@ -150,7 +149,7 @@ Agent: <starts proposing chart libraries and layouts>
 
 The agent has assumed: who it's for, what metrics, what "for our team" means, what success looks like. None of these are stated. Every assumption is a place the user can later say "that's not what I meant."
 
-**With `interview-me`:**
+**With `intent-interview`:**
 
 ```
 User: build me a dashboard for our metrics
@@ -196,14 +195,15 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 | "I should give them several options to pick from" | Options work when the user knows what they want and is choosing between trade-offs. They don't know what they want yet. Listing options widens the search; asking narrows it. |
 | "If I attach my guess, I'm leading them" | Leading is the point. Reacting is faster than generating from scratch. The risk is sycophancy, not leading; mitigate by being visibly willing to be wrong. |
 | "We've talked enough, I get it" | Test it: can you predict their reaction to the next three questions? If not, you don't get it yet. |
-| "The user said yes, we're done" | If the yes followed a vague restate or an open-ended "sounds good," the yes is hollow. Restate concretely and re-confirm. |
+| "The user agreed, we're done" | Agreement to a vague restate agrees to nothing concrete. The fix is a concrete restate, not a stricter word: restate concretely, then read their reply again. |
 
 ## Red Flags
 
 - Three or more questions in a single message: that's batching, not interviewing
 - A question without your hypothesis attached: that's surveying, not committing
 - Accepting "whatever you think is best" as a terminal answer
-- Producing a spec, plan, or task list before the user has explicitly confirmed your restate
+- Producing a spec, plan, or task list before the user's reply, read in context, agrees with your restate
+- Asking again after a reply that clearly agrees in other words ("sounds good", "go") — that is a second ask, not care
 - Questions framed as "what would be best practice?" instead of "what do you actually want?"
 - The user gives a sophistication-signaling answer ("scalable", "clean", "modern") and you accept it without probing whether it's what they actually want
 - Three or more rounds without your confidence visibly rising: you're asking the wrong questions, step back and reframe
@@ -213,13 +213,17 @@ Two questions in, the agent has discovered the actual ask isn't "a dashboard." I
 
 ## Verification
 
-After applying interview-me:
+After applying intent-interview:
 
 - [ ] An explicit hypothesis with a confidence number was stated in the first turn
 - [ ] Every confidence number below ~70% was accompanied by a one-line reason (what's still unresolved or missing)
 - [ ] Questions were asked one at a time, each with the agent's guess attached
 - [ ] At least one "what would you actually want if you didn't have to justify it?" probe ran when the user gave a sophistication-signaling or convention-signaling answer
 - [ ] A concrete restate (Outcome / User / Why now / Success / Constraint / Out of scope) was written back to the user
-- [ ] The user confirmed the restate with an explicit yes (not "whatever you think," not "sounds good," not silence)
+- [ ] The user's reply, read in context, agreed with the restate (any wording; "whatever you think" and silence got one clarifying question)
 - [ ] At the stop point, the agent could predict reactions to the next three questions it would ask
 - [ ] Any handoff to a downstream skill (`idea-refine`, `spec-driven-development`) was framed in terms of the confirmed intent, not the original underspecified ask
+
+## Origin
+
+Adapted 2026-10-29 from `interview-me` in addyosmani/agent-skills (commit `48cb1168`, MIT, `LICENSE.txt` kept), no longer vendored. Changed here: Step 5 and the checks read the user's agreement for intent in context and ask once when unclear, instead of waiting for one particular word (Christian, 2026-10-29: consent is always read for intent, never tied to a wording; agent-cluster T166, `scripts/consent-wording-check.mjs`).

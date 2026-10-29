@@ -1,4 +1,4 @@
-# Trigger evals for _shared/skills/interview-me (vendored, addyosmani/agent-skills).
+# Trigger evals for _shared/skills/intent-interview (adapted from addyosmani/agent-skills interview-me).
 # positive: should rank this skill first. negative: must not rank it first. Run: npm run triggers
 positive:
   - "Interview me about this before we plan anything, my ask is underspecified"

@@ -344,19 +344,15 @@
           }
         },
         {
-          "name": "interview-me",
+          "name": "intent-interview",
           "scope": "_shared",
           "description": "Extracts what the user actually wants instead of what they think they should want. Achieves this through one-question-at-a-time interview until ~95% confidence about the underlying intent. Use when an ask is underspecified (\"build me X\" without \"for whom\" or \"why now\"), when the user explicitly invokes (\"interview me\", \"grill me\", \"are we sure?\", \"stress-test my thinking\"), or when you catch yourself silently filling in ambiguous requirements before any plan, spec, or code exists.",
-          "path": "_shared/skills/interview-me/SKILL.md",
-          "bodyLines": 222,
+          "path": "_shared/skills/intent-interview/SKILL.md",
+          "bodyLines": 226,
           "references": [],
           "scripts": [],
           "assets": [],
-          "upstream": {
-            "repo": "https://github.com/addyosmani/agent-skills.git",
-            "path": "skills/interview-me",
-            "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a"
-          }
+          "upstream": null
         },
         {
           "name": "marketing-site-compliance",
@@ -698,7 +694,6 @@
           "bodyLines": 95,
           "references": [],
           "scripts": [
-            "_shared/skills/xlsx/scripts/office/__pycache__/soffice.cpython-312.pyc",
             "_shared/skills/xlsx/scripts/office/helpers/__init__.py",
             "_shared/skills/xlsx/scripts/office/helpers/pptx_chart.py",
             "_shared/skills/xlsx/scripts/office/helpers/pptx_slide.py",

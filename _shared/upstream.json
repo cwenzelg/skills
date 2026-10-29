@@ -71,13 +71,6 @@
       "commit": "41bbe19d1a1a7eaab5e7bb9050a417e5c6cffc8f",
       "added": "2026-09-04"
     },
-    "interview-me": {
-      "scope": "_shared",
-      "repo": "addyosmani/agent-skills",
-      "path": "skills/interview-me",
-      "commit": "48cb1168aeaaa70dfc2bbf709eddfa2a8ed8129a",
-      "added": "2026-09-06"
-    },
     "mcp-builder": {
       "scope": "_shared",
       "repo": "anthropics/skills",
