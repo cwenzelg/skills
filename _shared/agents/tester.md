@@ -224,6 +224,10 @@ Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
 (`## Fonts` with the single line `not applicable (no style, markup or font files in the diff)`
 when the diff touches no CSS/HTML/Vue/TSX/config/font files.)
 
+## Tests you write stay cheap (T204)
+
+Where the acceptance criteria need a test you write yourself, follow the `cheap-tests` skill: one shared container/server per run, few groups, no concurrent suites, no test that starts a runner, no real waits/audio/network. A test run is capped at 2 workers by the Dev Manager's shims; never raise the cap, never start your own parallel suite beside it.
+
 ## Anti-rationalisation
 
 | The excuse | The rule |

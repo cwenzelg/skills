@@ -236,6 +236,10 @@ is enough on its own - you do not also need to repeat the same point under "Need
 `cannot settle` line is asked exactly like one). Omit the whole `- Handoff points:` field only when
 your brief carried no such block at all.
 
+## Tests you add stay cheap (T204)
+
+A test run is capped at 2 workers and six tasks share one machine. Read the `cheap-tests` skill before you add or change a test: one shared container/server per run (extend the shared base, never `@Container` per class), few groups, no `describe.concurrent`, no test that starts a test runner, no real sleeps (fake timers), no real audio or network. The Dev Manager flags a new line that breaks this and sends it back once. Run only your targeted tests, once.
+
 ## Anti-rationalisation
 
 | The excuse | The rule |
