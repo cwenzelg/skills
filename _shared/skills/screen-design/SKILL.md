@@ -135,9 +135,11 @@ replaced, and the optional Artifact "Design" type.
    `assets/`.
 8. Post the images to the project's design Slack channel (named in `PROJECT.md`) via the Dev
    Manager's `POST /design/post` (`{company, screen, round, taskId, imagePath, caption}` — mechanics
-   in `references/canvas-tooling.md`): the overview image first, which becomes the thread root; each
-   variant's render(s) as follow-up calls, which thread automatically under the same
-   screen+round. **A round is only ever started from a Dev Manager task**, so `taskId` is required
+   in `references/canvas-tooling.md`): the overview image first, which becomes the thread root; then ALL desktop frames in
+   variant order (A, B, C ...), then ALL mobile frames in the same order, then any extra frames (states,
+   details) grouped the same way - never A desktop, A mobile, B desktop ... (Christian Arns, 2026-11-02:
+   paging through then shows the differences between the variants); each as a follow-up call, which
+   threads automatically under the same screen+round. **A round is only ever started from a Dev Manager task**, so `taskId` is required
    for a screen's first round and the route refuses it otherwise (Christian, 2026-09-26:
    "Designrunde nur aus einem task raus" — `docs/decisions/2026-09-26-designer-round-only-from-a-task.md`
    in the agent-cluster repo). If there is no task yet, the task is filed first; do not post the
