@@ -93,6 +93,19 @@ nested distribution folder, add it to that repo's `.git/info/exclude` (local, no
 - **Summary** for Christian: what exists, questions/decisions, what did not work — into the
   morning-review doc or the plan doc, and CORE_MEMORY.
 
+## A new web frontend: favicon + head metadata (FRONTEND-HEAD, Christian 2026-11-03)
+
+Scaffolding a new web frontend repo (Vite, Nuxt, Next or static site) includes this in its FIRST slice, not as a later polish task
+(VL Finance shipped without it). The Dev Manager's Technical Tester fails a new frontend repo that lacks it.
+
+- Favicon set: `favicon.svg` or `favicon.ico`, `apple-touch-icon.png` (180x180), a web manifest (`site.webmanifest`) with an `icons` array
+  (192 and 512), `<meta name="theme-color">`; use the project's logo from `design/`.
+- Head: `<title>` (or the framework's title template), meta description.
+- PUBLIC site: `og:title`, `og:description`, `og:image` (1200x630, absolute URL), `twitter:card`. Walk `marketing-site-compliance` (S5, S11) for the rest of a public site.
+- INTERNAL app (`*.intern.*`, admin, console, anything behind a login): `noindex` (robots meta, or `robots.txt` with `Disallow: /`) instead of Open Graph.
+- Prove it: `node scripts/frontend-head-check.mjs <repo-dir> [--audience public|internal]` in the agent-cluster repo exits 0 (read-only, no network;
+  one line per gap). Write the audience and the favicon source into the project's knowledge base `project-card.md`.
+
 ## Worked example — MachineMaster (proven 2026-09-05)
 
 ```

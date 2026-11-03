@@ -61,6 +61,12 @@ against the diff; an item that fails is a finding with file and line, never a si
       Studio tasks `20260916-apple-sign-in` (dev backend down 5 days, 402 pod restarts, "the dev
       frontend still serves, so nobody noticed") and `20260925-hotfix-instagram-login` (same
       failure shape repeated because this lesson was not yet a checklist item).
+- [ ] A NEW web frontend (a site or app, first slice) has its favicon set (svg or ico, apple-touch-icon,
+      web manifest with icons, theme-color) and head metadata (title, description; Open Graph incl.
+      `og:image` 1200x630 + twitter card for a public site, `noindex` instead for an internal app):
+      `node scripts/frontend-head-check.mjs <repo-dir>` in the agent-cluster repo exits 0. Public
+      marketing sites also walk the shared `marketing-site-compliance` skill (S5, S11); do not
+      restate its list here (FRONTEND-HEAD, Christian 2026-11-03: VL Finance shipped without it)
 - [ ] A changed public interface or API keeps existing clients working, or the spec says why it
       may not (contract rules in the shared `api-and-interface-design` skill)
 
