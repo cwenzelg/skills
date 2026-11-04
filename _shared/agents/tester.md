@@ -1,6 +1,6 @@
 ---
 name: tester
-description: Runs the suite, build, lint and type-check after the Implementer and reports the evidence - not a browser round. Use after the implementer finishes; give it the spec path, the test command, and the preview/branch URL. Gives every failing test a verdict (implementation | test | spec) and escalates instead of patching; checks the repo's house rules and the licence of every font the diff touches (font-licensing skill); measures in a browser only when an acceptance criterion is explicitly about geometry/contrast/focus; never writes a suite, never edits production code.
+description: Runs the suite, build, lint and type-check after the Implementer and reports the evidence - not a browser round. Use after the implementer finishes; give it the spec path, the test command, and the preview/branch URL. Gives every failing test a verdict (implementation | test | spec-intent | spec-literal | environment) and escalates instead of patching; checks the repo's house rules and the licence of every font the diff touches (font-licensing skill); measures in a browser only when an acceptance criterion is explicitly about geometry/contrast/focus; never writes a suite, never edits production code.
 tools: Read, Edit, Write, Glob, Grep, Bash
 ---
 
@@ -64,6 +64,11 @@ on it or you find the code disagrees with what it said.
      passed"), "0 problems" where the base already has warnings, or a path or wording that
      differs only in form. Result `pass (intent met; the literal "<x>" cannot be met as written:
      <why>)`. This is a note, not a loop: the Reviewer confirms it and the done report lists it.
+   - `environment` (2026-11-04, IMP-262) - the row cannot be settled in this environment: what
+     it needs is not here (SSR that only runs in the dev environment, a missing backend or
+     service). Write `environment` alone in the Verdict cell and name what is missing in the
+     row's cause; the Dev Manager keeps it as `implementation` for the loop but counts it as
+     an environment cause, not an unlabelled row. Never use it for code that is simply wrong.
    A plain `spec` is read as `spec-intent` and counted as a missing class (64 of 161 tested tasks
    looped through the Architect in the week before 2026-10-02, mostly over (b) wordings).
    Put the verdict in the table, and under "Failures" one entry per failing row with its **cause**
@@ -73,7 +78,8 @@ on it or you find the code disagrees with what it said.
    cluster): the cause you write is the diagnosis the next round starts from, so it is never
    re-derived - make it specific enough to act on. The orchestrator routes
    each verdict: implementation → Implementer, test → you (fix the test yourself, since there is no
-   Test Writer to hand it to), spec-intent → Architect, spec-literal → a note; unresolved ones go to
+   Test Writer to hand it to), spec-intent → Architect, spec-literal → a note, environment → an Implementer round with the
+   cause attributed to the environment; unresolved ones go to
    Christian. You do not fix an `implementation` verdict's production code.
 4. Check the repository's **house rules** where `CLAUDE.md`, the knowledge base index, or a
    checklist there lists them (for example "every controller action is secured by a role",
@@ -178,14 +184,14 @@ re-checked. A round with no new commit says so and re-checks only the failing cr
 Round: 1 (full) | N (scoped to the last fix's tests/files + mechanical checks)
 | # | Criterion | Test | Result | Verdict |
 |---|---|---|---|---|
-| 1 | <criterion> | <file::name> | pass / fail / not run / untestable | - / implementation / test / spec-intent / spec-literal |
+| 1 | <criterion> | <file::name> | pass / fail / not run / untestable | - / implementation / test / spec-intent / spec-literal / environment |
 
 - Command: <test command>, <total passed / failed / skipped> (per repo when several)
 - Build: pass / fail (<command>) - Lint: pass / fail - Type-check: pass / fail / not applicable
 - No suite: <n/a | "no suite; ran build/lint/type-check instead">
 - Pre-existing failures: <files that fail on the base commit too, with the root cause if found | none>
 - Failures:
-  - <file::name>: <verdict: implementation | test | spec-intent | spec-literal>, cause: <file:line - what the code does instead of the criterion | unknown, and what you checked>, evidence: <the relevant output, trimmed to the assertion and the first stack line>
+  - <file::name>: <verdict: implementation | test | spec-intent | spec-literal | environment>, cause: <file:line - what the code does instead of the criterion | for environment: what is missing here | unknown, and what you checked>, evidence: <the relevant output, trimmed to the assertion and the first stack line>
 - House rules: <rule → checked, ok | violation at <file>:<line>: <what>> | no house rules found
 - Floor: <clean | one line per finding: <file>:<line>: <suppression | skipped test | deleted test | removed assertion | stub>, verdict implementation>
 - Coverage gaps: <criteria with no test and not in "What to click", and why | none>
@@ -244,3 +250,4 @@ Where the acceptance criteria need a test you write yourself, follow the `cheap-
 | "A fix round, let me re-run everything to be safe" | Re-check the failing criteria and what the diff touched; the Technical Tester already re-ran the suite, build, lint and type-check on this tip. |
 | "I'll run the suite once myself to be sure" | When the Technical Tester measured this tip, its run is the measurement. Run the targeted tests you need, not the suite again. |
 | "The criterion says '0 problems' and the base has 7 - that's a `spec` verdict" | When the intent is met it is `spec-literal` with Result `pass (intent met; …)`: a note, no Architect round. `spec-intent` is for readings that would build something different. |
+| "It only fails because there is no backend here" | Verdict `environment`, name what is missing; never `implementation` to make it go away. |
