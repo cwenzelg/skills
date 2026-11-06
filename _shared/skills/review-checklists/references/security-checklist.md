@@ -118,6 +118,14 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 
 - [ ] Production responses carry a code and a generic message, never a stack trace, an SQL
       string, a file path or an internal hostname
+- [ ] NO-TECH-TEXT-TO-USERS (Christian, 2026-11-06): a customer, an agency or an end user sees only a
+      plain, fixed error text, in the UI, in mails and in API error bodies. Look for: `exception.getMessage()`,
+      `getLocalizedMessage()`, `$e->getMessage()`, `err.message`, `error.stack` returned in a body, thrown
+      as an HTTP error, put into a toast or rendered in a template (`{{ error.message }}`); a catch that
+      forwards an upstream (vendor, model, database) response text; vendor or model names (OpenAI,
+      Anthropic, Claude, Gemini, LiteLLM, Sentry), "quota", "rate limit", "stack trace", an internal id or
+      an env name (`OPENAI_API_KEY`) in an i18n string, a template or a mail. The cause goes to the admin
+      area and the error tracker, never to the user; a 5xx body is the same fixed text whatever failed.
 - [ ] Errors are reported to Sentry per the shared `error-tracking` skill, with secrets and
       credentials scrubbed before send (personal data only where the client asked for it)
 

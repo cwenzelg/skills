@@ -239,6 +239,7 @@ and open questions", and stop - the Dev Manager then asks Christian.
   step for a database copy, dev/test/seed data, a migration, a log or a report into a spec or an acceptance
   criterion unless Christian or the client asked for it for that case (NO-ANONYMISATION-BY-DEFAULT, cluster
   conduct); "privacy" is not a reason you may pick on your own. Quote the request as `explicit-request:` when there is one.
+- A spec with an error path names the fixed text the user sees and where the cause is logged (admin area, Sentry); never a raw backend, exception or vendor message to a customer, agency or end user (NO-TECH-TEXT-TO-USERS, cluster conduct).
 - Do not write code in the spec beyond a short signature or a two-line example when the
   interface is the point.
 - Finish by printing the spec path and its status line.

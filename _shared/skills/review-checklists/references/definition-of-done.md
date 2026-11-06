@@ -35,6 +35,10 @@ against the diff; an item that fails is a finding with file and line, never a si
 - [ ] No stub: `throw new Error('not implemented')`, `UnsupportedOperationException`, empty
       `catch`, `TODO` / `FIXME` in the change
 - [ ] No secret, token, credential or customer record in the diff, in a fixture, or in a log line
+- [ ] NO-TECH-TEXT-TO-USERS: no user-facing path (UI, mail, API error body) shows a raw exception message,
+      stack trace, vendor or model name, quota or rate limit, internal id or env name; the user gets one
+      plain fixed text, the cause goes to the admin area and Sentry (see the security checklist, "Error
+      handling", for what to look for)
 
 ## Quality
 

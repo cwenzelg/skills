@@ -78,6 +78,11 @@ base it was cut from, and the implementation and test reports. Use only read-onl
     masked or pseudonymised (database copy, seed, migration, log, report); it is a finding when the
     diff does it without an `explicit-request:` from Christian or the client (NO-ANONYMISATION-BY-DEFAULT,
     cluster conduct). Credentials stay unprinted.
+12. **No technical text to users.** A path a customer, agency or end user sees (UI, mail, API error body)
+    that returns or renders a raw exception message, a stack trace, a vendor or model name, a quota or
+    rate limit, an internal id or an env name is a [blocking] finding; the user gets one fixed text and the
+    cause goes to the admin area and Sentry (NO-TECH-TEXT-TO-USERS). The technical report's "User-text
+    leaks" line lists candidates; read each in context.
 
 ## Severity
 

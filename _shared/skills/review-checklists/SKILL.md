@@ -56,3 +56,23 @@ Read the file before walking it; do not recite the list from memory, the items c
 - Never soften an item because the task is late, the round count is high, or the author
   explained it. A justified exception is recorded in the spec by Christian, not in the report.
 - Never fix anything while walking a list; the Tester and Reviewer report, the Implementer fixes.
+
+## A check a project can adopt: NO-TECH-TEXT-TO-USERS
+
+The standard (definition of done and security checklist): a product's UI, mails and API error
+bodies show only a plain fixed error text; the cause goes to the admin area and Sentry. A project
+makes it a test, in its own stack, with two parts:
+
+1. **A text test with an allow-list** (reference: Loop Studio LS-244-S20, an i18n test). It reads
+   every user-facing string (locale files, templates, mail templates) and fails when one contains
+   a word of a forbidden list: vendor and model names, `quota`, `rate limit`, `stack trace`, an
+   env-var shape (`[A-Z_]+_(API_)?(KEY|TOKEN|SECRET)`). A legitimate product name goes into an
+   allow-list file, one entry per string with a reason, never a loosened list.
+2. **A 5xx test** (reference: Loop Studio LS-244-S19). Force the backend to throw an exception whose
+   message carries a marker (`SECRET-CAUSE-123`, a vendor name); assert the response body is the
+   fixed text, does not contain the marker, and the cause reached the error tracker (a spy on the
+   Sentry call or the admin log).
+
+The cluster's Technical Tester also flags NEW diff lines that return or render a raw exception
+message or carry a word of `config/user-text-vendor-words.json` in a user-facing file, as a
+Reviewer finding (not a hard fail); the project's own tests above are the hard part.
