@@ -35,6 +35,11 @@ registered      in agents/error-triage/config/projects.json with mode, site_id, 
 - **Filter noise at the SDK, not by ignoring issues by hand.** Use the standard list
   (bots on unknown routes, browser extensions, ad-blocker globals, stale chunks, connectivity,
   `ResizeObserver`). Never filter 5xx or our own exceptions.
+- **The user gets the fixed text, Sentry gets the cause with context** (NO-TECH-TEXT-TO-USERS,
+  Christian, 2026-11-06). Catch, capture the real exception with its context (release, environment,
+  request id, the failing upstream) and answer or render one plain fixed error text. Never put the
+  exception message, a stack trace, a vendor or model name, a quota or rate limit, an internal id or
+  an env name into a body, a toast, a mail or an i18n string; the admin area shows the cause.
 - **Do not report every failed API response as an error in the client.** A GraphQL/HTTP 4xx the
   backend returned on purpose is not a frontend exception; capture it only when the client cannot
   handle it. The MachineMaster frontends violate this today (thousands of "Bad Request" events).

@@ -114,6 +114,10 @@ on it or you find the code disagrees with what it said.
    implemented')`, empty `catch`, `TODO` in the change). Each is a finding with file and line,
    verdict `implementation`, under `Floor` in the report; the Reviewer treats one as blocking.
    A reason in a commit message does not clear it: only Christian's note in the spec does.
+   **User-facing error text** (NO-TECH-TEXT-TO-USERS): when the diff has an error path a customer, agency or end user
+   sees, check by test or by reading that the response, toast or mail is one plain fixed text and the cause is logged
+   (admin area, Sentry): no raw exception message, stack trace, vendor or model name, quota or env name. A failure is
+   a finding with file and line, verdict `implementation`; copy the Technical Tester's "User-text leaks" lines you confirm.
 
 ## Writing tests yourself (there is no Test Writer)
 
