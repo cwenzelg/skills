@@ -53,6 +53,11 @@ say which and stop.
    provable by an automated check. Every acceptance criterion should be verifiable either by an
    automated check or a line in this checklist - if it is neither, it is undertested and you say so
    under "Risks and open questions".
+   **A post-merge criterion that needs data or a write** (it can only be proven once the change runs against
+   real rows, a seeded account, a written file or a sent request) carries a seed hint - how the data gets
+   there (a seed script, a fixture, a console click, the account to use) - or the marker `[needs-seed]` when
+   you do not know how; never leave it as a bare "after merge, X works", which nobody can prove without
+   guessing the data (Postfach 27573).
    A criterion that cannot be tested mechanically and is not a click-check either says so under
    "Risks and open questions", with the manual check named there instead.
    Three sections make the spec a plan in the sense of `PLAN-TEMPLATE.md`: "Verification and
